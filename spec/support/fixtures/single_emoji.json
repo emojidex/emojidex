@@ -1,0 +1,19 @@
+{
+  "id": "impreza",
+  "code": "impreza",
+  "link": "null",
+  "is_wide": false,
+  "loops": 0,
+  "frames": [
+
+  ],
+  "frames_delay": [
+
+  ],
+  "category": "cars",
+  "tags": [
+    "cars",
+    "subaru",
+    "impreza"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "count": 1,
+    "total_count": 1,
+    "page": 1
+  },
+  "categories": [
+    {
+      "id": "cars",
+      "name": "cars",
+      "emoji_count": 1
+    }
+  ]
+}
