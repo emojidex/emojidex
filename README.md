@@ -1,6 +1,6 @@
-[![Gem Version](https://badge.fury.io/rb/emojidex.png)](http://badge.fury.io/rb/emojidex-toolkit)
-[![Build Status](https://travis-ci.org/Genshin/emojidex.png)](https://travis-ci.org/Genshin/emojidex-toolkit)
-[![Code Climate](https://codeclimate.com/github/Genshin/emojidex.png)](https://codeclimate.com/github/Genshin/emojidex-toolkit)
+[![Gem Version](https://badge.fury.io/rb/emojidex.png)](http://badge.fury.io/rb/emojidex)
+[![Build Status](https://travis-ci.org/emojidex/emojidex.png)](https://travis-ci.org/Genshin/emojidex)
+[![Code Climate](https://codeclimate.com/github/emojidex/emojidex.png)](https://codeclimate.com/github/emojidex/emojidex)
 emojidex
 ========
 emojidex core tools and scripts in Ruby. Provides a set of tools to utilize emojidex emoji right away in Ruby. Available as the "emojidex" gem.
