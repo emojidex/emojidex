@@ -6,7 +6,6 @@ module Emojidex
     def initialize
       super 
       if defined? Emojidex::Vectors
-        puts "vectors"
         load_local_collection Emojidex::Vectors.path + '/utf'
       else
         # TODO load from service
