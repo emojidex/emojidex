@@ -4,8 +4,12 @@ module Emojidex
   # listing and search of standard UTF emoji
   class UTF < Collection
     def initialize
-      super
-      load_local_collection File.expand_path('../../../emoji/utf', __FILE__)
+      super 
+      if defined? Eemojidex::Vectors
+        load_local_collection Emojidex::Vectors.path + '/utf'
+      else
+        # TODO load from service
+      end
     end
   end
 end

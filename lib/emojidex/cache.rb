@@ -1,5 +1,6 @@
 require 'json'
 require_relative 'defaults'
+require 'fileutils'
 
 module Emojidex
   # local caching functionality for collections

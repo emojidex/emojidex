@@ -9,6 +9,7 @@ group :development do
   gem 'guard-rspec'
   gem 'rubocop'
   gem 'guard-rubocop'
+  gem 'emojidex-vectors', path: '../emojidex-vectors'
 end
 
 group :test do
@@ -16,5 +17,4 @@ group :test do
   gem 'rspec'
   gem 'webmock'
   #gem 'emojidex-vectors', github: 'emojidex/emojidex-vectors'
-  gem 'emojidex-vectors', path: '../emojidex-vectors'
 end

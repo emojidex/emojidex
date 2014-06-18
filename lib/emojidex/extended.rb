@@ -5,7 +5,11 @@ module Emojidex
   class Extended < Collection
     def initialize
       super
-      load_local_collection File.expand_path('../../../emoji/extended', __FILE__)
+      if defined? Emojidex::Vectors
+        load_local_collection Emojidex::Vectors.path + '/extended'
+      else
+        # TODO load from service
+      end
     end
   end
 end
