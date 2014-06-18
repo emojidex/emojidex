@@ -15,5 +15,6 @@ group :test do
   gem 'coveralls', require: false
   gem 'rspec'
   gem 'webmock'
-  gem 'emojidex-vectors', github: 'emojidex/emojidex-vectors'
+  #gem 'emojidex-vectors', github: 'emojidex/emojidex-vectors'
+  gem 'emojidex-vectors', path: '../emojidex-vectors'
 end

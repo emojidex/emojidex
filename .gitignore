@@ -1,0 +1,11 @@
+*.swp
+*.swo
+*.orig
+Gemfile.lock
+*.gem
+spec/out/
+tmp/
+.DS_Store
+.ruby-gemset
+.ruby-version
+coverage
