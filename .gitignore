@@ -4,6 +4,7 @@
 Gemfile.lock
 *.gem
 spec/out/
+spec/support/tmpcache/
 tmp/
 .DS_Store
 .ruby-gemset
