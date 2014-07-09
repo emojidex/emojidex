@@ -15,6 +15,7 @@ end
 group :development, :test do
   #gem 'emojidex-vectors', path: '../emojidex-vectors'
   gem 'emojidex-vectors', github: 'emojidex/emojidex-vectors'
+  gem 'simplecov', :require => false
   gem 'rspec'
   gem 'webmock'
 end
