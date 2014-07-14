@@ -10,6 +10,7 @@ module Emojidex
   class Collection
     include Emojidex::Cache
     attr_accessor :emoji, :categories
+    attr_reader :source_path
     # Initialize Collection. You can pass a list of emoji to seed the collection
     def initialize(emoji_list = nil)
       @emoji = {}
