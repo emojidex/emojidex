@@ -11,7 +11,7 @@ module Emojidex
       @moji = details[:moji]
       @code, @code_ja = details[:code], details[:code_ja]
       @unicode = details[:unicode]
-      @category = details[:category].to_sym if details[:category] else :other
+      @category = details[:category] ? details[:category].to_sym : :other
       @tags = details[:tags].map { |tag| tag.to_sym } unless details[:tags].nil?
       @frames = details[:frames] || [@code]
       @delays = details[:delays] || [100]
