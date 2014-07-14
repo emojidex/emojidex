@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'emojidex'
-  s.version     = '0.0.8'
+  s.version     = '0.0.9'
   s.license     = 'GPL-3, AGPL-3'
   s.summary     = 'emojidex Ruby tools'
   s.description = 'emojidex emoji handling, search and lookup, listing and caching functionality and user info (favorites/etc).'
