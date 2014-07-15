@@ -1,5 +1,6 @@
 require 'json'
 require 'emojidex/emoji'
+require 'emojidex/collection_checker'
 require 'emojidex/collection'
 require 'emojidex/utf'
 require 'emojidex/extended'
