@@ -33,7 +33,17 @@ module Emojidex
         _svg_check_copy(moji) if formats.include? :svg
         _raster_check_copy(moji, :png, sizes) if formats.include? :png
       end
-      _update_index
+      cache_index
+    end
+
+    def cache_index(destination = nil)
+      destination = destination || @cache_dir
+      idx = Emojidex::Collection.new
+      idx.load_local_collection(destination) if FileTest.exist? "#{destination}/emoji.json"
+      idx.add_emoji @emoji.values
+      File.open("#{destination}/emoji.json", 'w') do |f|
+        f.write idx.emoji.values.to_json
+      end
     end
 
     private
@@ -54,15 +64,6 @@ module Emojidex
         src = @source_path + "/#{size}/#{moji.code}"
         FileUtils.cp "src.#{format}", (@cache_dir + "/#{size}") if FileTest.exist? "src.#{format}"
         FileUtils.cp_r src, @cache_dir if File.directory? src
-      end
-    end
-
-    def _update_index
-      idx = Emojidex::Collection.new
-      idx.load_local_collection(@cache_dir) if FileTest.exist? "#{@cache_dir}/emoji.json"
-      idx.add_emoji @emoji.values
-      File.open("#{@cache_dir}/emoji.json", 'w') do |f|
-        f.write idx.emoji.values.to_json
       end
     end
   end
