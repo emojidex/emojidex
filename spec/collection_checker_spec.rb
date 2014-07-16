@@ -114,7 +114,7 @@ describe Emojidex::CollectionChecker do
       )
 
       expect(checker.collection_only_emojis).to be_empty
-      expect(checker.cache_only_emojis.size).to eq(@cache_sizes.size + 1)
+      expect(checker.cache_only_emojis.size).to eq(1)
     end
   end
 
