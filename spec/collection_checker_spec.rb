@@ -39,7 +39,7 @@ describe Emojidex::CollectionChecker do
         @cache_utf_dir,
         @cache_sizes
       )
-      
+
       expect(checker.collection_only_emojis).to be_empty
       expect(checker.cache_only_emojis).to be_empty
     end
@@ -64,7 +64,7 @@ describe Emojidex::CollectionChecker do
         @cache_extended_dir,
         @cache_sizes
       )
-      
+
       expect(checker.collection_only_emojis).to be_empty
       expect(checker.cache_only_emojis).to be_empty
     end
@@ -77,7 +77,7 @@ describe Emojidex::CollectionChecker do
         @cache_all_dir,
         @cache_sizes
       )
-      
+
       expect(checker.collection_only_emojis).to be_empty
       expect(checker.cache_only_emojis).to be_empty
     end
@@ -102,9 +102,9 @@ describe Emojidex::CollectionChecker do
     end
 
     it 'Create cache only emoji.' do
-      File.open("#{@cache_extended_dir}/hoge.svg", "w").close()
+      File.open("#{@cache_extended_dir}/hoge.svg", 'w').close
       @cache_sizes.each do |size|
-        File.open("#{@cache_extended_dir}/#{size}/hoge.png", "w").close()
+        File.open("#{@cache_extended_dir}/#{size}/hoge.png", 'w').close
       end
 
       checker = Emojidex::CollectionChecker.new(
@@ -115,6 +115,7 @@ describe Emojidex::CollectionChecker do
 
       expect(checker.collection_only_emojis).to be_empty
       expect(checker.cache_only_emojis.size).to eq(1)
+      expect(checker.cache_only_emojis.values[0].size).to eq(@cache_sizes.size + 1)
     end
   end
 
