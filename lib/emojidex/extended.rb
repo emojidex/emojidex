@@ -8,7 +8,7 @@ module Emojidex
       if defined? Emojidex::Vectors
         load_local_collection Emojidex::Vectors.path + '/extended'
       else
-        # TODO load from service
+        # TODO: load from service
       end
     end
   end

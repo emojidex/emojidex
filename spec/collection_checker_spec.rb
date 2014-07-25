@@ -20,33 +20,33 @@ describe Emojidex::CollectionChecker do
     @extended_collection.cache!(cache_dir: @cache_all_dir, sizes: @cache_sizes)
   end
 
-  describe 'Check utf collection.' do
-    it 'Check source directory.' do
+  describe 'Checking the UTF collection' do
+    it 'verifies the source directory' do
       checker = Emojidex::CollectionChecker.new(
         [@utf_collection],
-        @source_utf_dir,
+        @utf_collection.source_path,
         nil,
         [':svg']
       )
 
-      expect(checker.collection_only_emojis).to be_empty
-      expect(checker.cache_only_emojis).to be_empty
+      expect(checker.index_only_emoji).to be_empty
+      expect(checker.asset_only_emoji).to be_empty
     end
 
-    it 'Check cache directory.' do
+    it 'verifies the asset[cache] directory' do
       checker = Emojidex::CollectionChecker.new(
         [@utf_collection],
         @cache_utf_dir,
         @cache_sizes
       )
 
-      expect(checker.collection_only_emojis).to be_empty
-      expect(checker.cache_only_emojis).to be_empty
+      expect(checker.index_only_emoji).to be_empty
+      expect(checker.asset_only_emoji).to be_empty
     end
   end
 
-  describe 'Check extended collection.' do
-    it 'Check source directory.' do
+  describe 'Check Extended collection' do
+    it 'verifies the source directory' do
       checker = Emojidex::CollectionChecker.new(
         [@extended_collection],
         @source_extended_dir,
@@ -54,37 +54,37 @@ describe Emojidex::CollectionChecker do
         [':svg']
       )
 
-      expect(checker.collection_only_emojis).to be_empty
-      expect(checker.cache_only_emojis).to be_empty
+      expect(checker.index_only_emoji).to be_empty
+      expect(checker.asset_only_emoji).to be_empty
     end
 
-    it 'Check cache directory.' do
+    it 'verifies the asset[cache] directory' do
       checker = Emojidex::CollectionChecker.new(
         [@extended_collection],
         @cache_extended_dir,
         @cache_sizes
       )
 
-      expect(checker.collection_only_emojis).to be_empty
-      expect(checker.cache_only_emojis).to be_empty
+      expect(checker.index_only_emoji).to be_empty
+      expect(checker.asset_only_emoji).to be_empty
     end
   end
 
-  describe 'Check all collection.' do
-    it 'Check cache directory.' do
+  describe 'Check both UTF and Extended collections together' do
+    it 'verifies the cache directory.' do
       checker = Emojidex::CollectionChecker.new(
         [@utf_collection, @extended_collection],
         @cache_all_dir,
         @cache_sizes
       )
 
-      expect(checker.collection_only_emojis).to be_empty
-      expect(checker.cache_only_emojis).to be_empty
+      expect(checker.index_only_emoji).to be_empty
+      expect(checker.asset_only_emoji).to be_empty
     end
   end
 
-  describe 'Create illegal case.' do
-    it 'Create collection only emoji.' do
+  describe 'Checking when an emoji has been added to the index with no assets' do
+    it 'has one instance of index_only_emoji, and no asset_only_emoji' do
       @utf_collection.add_emoji([Emojidex::Emoji.new(
         code: 'hoge',
         code_ja: 'hoge',
@@ -97,11 +97,13 @@ describe Emojidex::CollectionChecker do
         @cache_sizes
       )
 
-      expect(checker.collection_only_emojis.size).to eq(1)
-      expect(checker.cache_only_emojis).to be_empty
+      expect(checker.index_only_emoji.size).to eq(1)
+      expect(checker.asset_only_emoji).to be_empty
     end
+  end
 
-    it 'Create cache only emoji.' do
+  describe 'Checks for when there are emoji assets that do not exist in the index' do
+    it 'has an extra emoji asset without an index entry' do
       File.open("#{@cache_extended_dir}/hoge.svg", 'w').close
       @cache_sizes.each do |size|
         File.open("#{@cache_extended_dir}/#{size}/hoge.png", 'w').close
@@ -113,9 +115,9 @@ describe Emojidex::CollectionChecker do
         @cache_sizes
       )
 
-      expect(checker.collection_only_emojis).to be_empty
-      expect(checker.cache_only_emojis.size).to eq(1)
-      expect(checker.cache_only_emojis.values[0].size).to eq(@cache_sizes.size + 1)
+      expect(checker.index_only_emoji).to be_empty
+      expect(checker.asset_only_emoji.size).to eq(1)
+      expect(checker.asset_only_emoji.values[0].size).to eq(@cache_sizes.size + 1)
     end
   end
 
