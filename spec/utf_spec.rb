@@ -63,4 +63,15 @@ describe Emojidex::UTF do
       FileUtils.rm_rf tmp_cache_path # cleanup
     end
   end
+
+  describe 'cache_index' do
+    it 'caches the collection index to the specified location' do
+      tmp_cache_path = File.expand_path('../support/tmpcache', __FILE__)
+      FileUtils.mkdir_p(tmp_cache_path)
+      utf.cache_index tmp_cache_path
+      expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
+
+      FileUtils.rm_rf tmp_cache_path
+    end
+  end
 end

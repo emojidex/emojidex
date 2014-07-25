@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'emojidex'
-  s.version     = '0.0.9'
+  s.version     = '0.0.10'
   s.license     = 'GPL-3, AGPL-3'
   s.summary     = 'emojidex Ruby tools'
   s.description = 'emojidex emoji handling, search and lookup, listing and caching functionality and user info (favorites/etc).'
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'info@emojidex.com'
   s.files       = `git ls-files`.split("\n")
   s.require_paths = ['lib']
-  s.homepage    = 'http://dev.emojidex.com'
+  s.homepage    = 'http://developer.emojidex.com'
 
   s.add_dependency 'faraday',             '0.8.9'
   s.add_dependency 'faraday_middleware',  '0.9.0'
