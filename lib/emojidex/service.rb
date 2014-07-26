@@ -13,12 +13,12 @@ module Emojidex
     # sends an API search, adding results with add_emoji
     # returns a collection, and adds results to the @emoji array
     def search(criteria = {})
-      # TODO *NOTE try and replicate regex search functionality by passing regex to server
+      # TODO: *NOTE try and replicate regex search functionality by passing regex to server
     end
 
     # directly retrieves the emoji with the given code
     def find_by_code(code)
-      # TODO
+      # TODO: perform a query on emojidex API
     end
 
     # emoji on the emojidex service make no language distinctions
@@ -27,6 +27,6 @@ module Emojidex
       find_by_code(code)
     end
 
-    # TODO override or add caching functionality to retrieve sized png or svg from service
+    # TODO: override or add caching functionality to retrieve sized png or svg from service
   end
 end
