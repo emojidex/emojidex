@@ -39,6 +39,14 @@ describe Emojidex::CollectionChecker do
       expect(checker.asset_only).to be_empty
     end
 
+    it 'checs to see if a size of an asset exists' do
+      checker = Emojidex::CollectionChecker.new(col_good, {sizes: [:px64]})
+
+      expect(checker).to be_an_instance_of(Emojidex::CollectionChecker)
+      expect(checker.index_only).to eq(4)
+      expect(checker.asset_only).to be_empty
+    end
+
     it 'checks for and identifies missing assets' do
       checker = Emojidex::CollectionChecker.new(col_missing_assets, {sizes: @sizes})
 
