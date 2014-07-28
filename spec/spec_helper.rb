@@ -62,3 +62,9 @@ end
 def fixture(file)
   File.new(fixture_path + '/' + file)
 end
+
+def sample_collection(name)
+  e =Emojidex::Collection.new
+  e.load_local_collection(File.expand_path("../support/sample_collections/#{name}", __FILE__))
+  e
+end

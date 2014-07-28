@@ -55,7 +55,8 @@ describe Emojidex::UTF do
   describe '.cache!' do
     it 'caches emoji to local storage cache' do
       tmp_cache_path = File.expand_path('../support/tmpcache', __FILE__)
-      utf.cache!(cache_dir: tmp_cache_path)
+      utf.cache!(cache_path: tmp_cache_path)
+      expect(ENV['EMOJI_CACHE']).to eq(utf.cache_path)
       expect(File.exist? tmp_cache_path).to be_truthy
       expect(File.exist? tmp_cache_path + '/sushi.svg').to be_truthy
       expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy

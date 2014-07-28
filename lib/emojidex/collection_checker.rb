@@ -5,14 +5,19 @@ require_relative 'defaults.rb'
 module Emojidex
   # Check collections for presence of image assets and discrepencies in emoji indexes.
   class CollectionChecker
-    attr_reader :index_only_emoji, :asset_only_emoji
+    attr_reader :index_only, :asset_only
 
-    def initialize(collections, asset_dir, sizes = Defaults.sizes, formats = Defaults.formats)
-      @index_only_emoji = {}
-      @asset_only_emoji = {}
-      asset_files = create_asset_file_list(asset_dir, sizes, formats)
-      check_collection_only(collections, asset_files, sizes, formats)
-      check_assets_only(collections, asset_files)
+    def initialize(collections, options = {})
+      collections = *collections
+      @index_only = {}
+      @asset_only = {}
+      asset_path = options[:asset_path] || collections.first.source_path
+      sizes = options[:sizes] || Defaults.sizes.keys
+      formats = options[:formats] || Defaults.formats
+
+      asset_files = create_asset_file_list(asset_path, sizes, formats)
+      check_for_index_only(collections, asset_files, sizes, formats)
+      check_for_asset_only(collections, asset_files)
     end
 
     private
@@ -37,13 +42,13 @@ module Emojidex
       result
     end
 
-    def check_collection_only(collections, asset_files, sizes, formats)
+    def check_for_index_only(collections, asset_files, sizes, formats)
       collections.each do |collection|
         collection.emoji.values.each do |emoji|
           tmp = []
           tmp += create_svg_array(emoji, asset_files) if formats.include?(':svg')
           tmp += create_png_array(emoji, asset_files, sizes) if formats.include?(':png')
-          @index_only_emoji[emoji.code.to_sym] = tmp unless tmp.empty?
+          @index_only[emoji.code.to_sym] = tmp unless tmp.empty?
         end
       end
     end
@@ -63,15 +68,15 @@ module Emojidex
       result
     end
 
-    def check_assets_only(collections, asset_files)
+    def check_for_asset_only(collections, asset_files)
       asset_files.each do |_key, value|
         code = File.basename(value, '.*')
 
         next if find_emoji_from_collections(collections, code)
 
         symbol = code.to_sym
-        @asset_only_emoji[symbol] = [] if @asset_only_emoji[symbol].nil?
-        @asset_only_emoji[symbol] << value
+        @asset_only[symbol] = [] if @asset_only[symbol].nil?
+        @asset_only[symbol] << value
       end
     end
 

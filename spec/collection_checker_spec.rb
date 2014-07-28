@@ -4,135 +4,64 @@ require 'spec_helper'
 describe Emojidex::CollectionChecker do
 
   before(:all) do
-   # @utf_collection = Emojidex::UTF.new
-   # @extended_collection = Emojidex::Extended.new
-   # @cache_root_dir = File.expand_path('../support/tmpcache', __FILE__)
-   # @cache_utf_dir = "#{@cache_root_dir}/utf"
-   # @cache_extended_dir = "#{@cache_root_dir}/extended"
-   # @cache_all_dir = "#{@cache_root_dir}/all"
-   # @source_utf_dir = "#{Emojidex::Vectors.path}/utf"
-   # @source_extended_dir = "#{Emojidex::Vectors.path}/extended"
-
-   # @cache_sizes = [:px32]
-   # @utf_collection.cache!(cache_dir: @cache_utf_dir, sizes: @cache_sizes)
-   # @utf_collection.cache!(cache_dir: @cache_all_dir, sizes: @cache_sizes)
-   # @extended_collection.cache!(cache_dir: @cache_extended_dir, sizes: @cache_sizes)
-   # @extended_collection.cache!(cache_dir: @cache_all_dir, sizes: @cache_sizes)
+   @sizes = [:px32]
   end
 
-  let(:collection_good) do
+
+
+
+  let(:col_good) do
+    sample_collection 'good'
   end
 
-  let(:collection_missing_assets) do
+  let(:col_missing_assets) do
+    sample_collection 'missing_assets'
   end
 
-  let(:collection_missing_index) do # just missing entries in index, not missing the actual index
+  let(:col_missing_index) do # just missing entries in index, not missing the actual index
+    sample_collection 'missing_index'
   end
 
   describe 'Spec Collections' do
     it 'load cleanly' do
-      expect(@collection_good).to be_an_instance_of(Emojidex::Collection)
+      expect(col_good).to be_an_instance_of(Emojidex::Collection)
+      expect(col_missing_assets).to be_an_instance_of(Emojidex::Collection)
+      expect(col_missing_index).to be_an_instance_of(Emojidex::Collection)
     end
   end
-#
-#      checker = Emojidex::CollectionChecker.new(
-#        [@utf_collection],
-#        @utf_collection.source_path,
-#        nil,
-#        [':svg']
-#      )
-#
-#      expect(checker.index_only_emoji).to be_empty
-#      expect(checker.asset_only_emoji).to be_empty
-#    it 'verifies the asset[cache] directory' do
-#      checker = Emojidex::CollectionChecker.new(
-#        [@utf_collection],
-#        @cache_utf_dir,
-#        @cache_sizes
-#      )
-#
-#      expect(checker.index_only_emoji).to be_empty
-#      expect(checker.asset_only_emoji).to be_empty
-#    end
-#  end
-#
-#  describe 'Check Extended collection' do
-#    it 'verifies the source directory' do
-#      checker = Emojidex::CollectionChecker.new(
-#        [@extended_collection],
-#        @source_extended_dir,
-#        nil,
-#        [':svg']
-#      )
-#
-#      expect(checker.index_only_emoji).to be_empty
-#      expect(checker.asset_only_emoji).to be_empty
-#    end
-#
-#    it 'verifies the asset[cache] directory' do
-#      checker = Emojidex::CollectionChecker.new(
-#        [@extended_collection],
-#        @cache_extended_dir,
-#        @cache_sizes
-#      )
-#
-#      expect(checker.index_only_emoji).to be_empty
-#      expect(checker.asset_only_emoji).to be_empty
-#    end
-#  end
-#
-#  describe 'Check both UTF and Extended collections together' do
-#    it 'verifies the cache directory.' do
-#      checker = Emojidex::CollectionChecker.new(
-#        [@utf_collection, @extended_collection],
-#        @cache_all_dir,
-#        @cache_sizes
-#      )
-#
-#      expect(checker.index_only_emoji).to be_empty
-#      expect(checker.asset_only_emoji).to be_empty
-#    end
-#  end
-#
-#  describe 'Checking when an emoji has been added to the index with no assets' do
-#    it 'has one instance of index_only_emoji, and no asset_only_emoji' do
-#      @utf_collection.add_emoji([Emojidex::Emoji.new(
-#        code: 'hoge',
-#        code_ja: 'hoge',
-#        category: 'hoge'
-#      )])
-#
-#      checker = Emojidex::CollectionChecker.new(
-#        [@utf_collection],
-#        @cache_utf_dir,
-#        @cache_sizes
-#      )
-#
-#      expect(checker.index_only_emoji.size).to eq(1)
-#      expect(checker.asset_only_emoji).to be_empty
-#    end
-#  end
-#
-#  describe 'Checks for when there are emoji assets that do not exist in the index' do
-#    it 'has an extra emoji asset without an index entry' do
-#      File.open("#{@cache_extended_dir}/hoge.svg", 'w').close
-#      @cache_sizes.each do |size|
-#        File.open("#{@cache_extended_dir}/#{size}/hoge.png", 'w').close
-#      end
-#
-#      checker = Emojidex::CollectionChecker.new(
-#        [@extended_collection],
-#        @cache_extended_dir,
-#        @cache_sizes
-#      )
-#
-#      expect(checker.index_only_emoji).to be_empty
-#      expect(checker.asset_only_emoji.size).to eq(1)
-#      expect(checker.asset_only_emoji.values[0].size).to eq(@cache_sizes.size + 1)
-#    end
-#  end
 
-  after(:all) do
-    FileUtils.rm_rf @cache_root_dir
+  describe '.new' do
+    it 'creates a valid CollectionChecker instance and checks a valid collection' do
+      checker = Emojidex::CollectionChecker.new(col_good, {sizes: @sizes})
+
+      expect(checker).to be_an_instance_of(Emojidex::CollectionChecker)
+      expect(checker.index_only).to be_empty
+      expect(checker.asset_only).to be_empty
+    end
+
+    it 'checks for and identifies missing assets' do
+      checker = Emojidex::CollectionChecker.new(col_missing_assets, {sizes: @sizes})
+
+      expect(checker.asset_only).to be_empty
+      expect(checker.index_only.size).to eq(2)
+      expect(checker.index_only).to eq(
+        {:nut_and_bolt=>["nut_and_bolt"], :purple_heart=>["px32/purple_heart"]})
+    end
+
+    it 'checks for and identifies missing index entries' do
+      checker = Emojidex::CollectionChecker.new(col_missing_index, {sizes: @sizes})
+
+      expect(checker.index_only).to be_empty
+      expect(checker.asset_only.size).to eq(1)
+      expect(checker.asset_only).to eq(
+        {purple_heart: ["purple_heart.svg", "px32/purple_heart.png"]})
+    end
+    it 'checks collections against a specified asset directory' do
+      checker = Emojidex::CollectionChecker.new([col_missing_index, col_missing_assets],
+                                                {sizes: @sizes, asset_path: col_good.source_path})
+
+      expect(checker.index_only).to be_empty
+      expect(checker.asset_only).to be_empty
+    end
   end
 end
