@@ -54,7 +54,7 @@ module Emojidex
       response = connection.send(method.to_sym, path, params)
       response.env
     rescue Faraday::Error::ClientError, JSON::ParserError
-     raise Emojidex::Error
+      raise Emojidex::Error
     end
   end
 end

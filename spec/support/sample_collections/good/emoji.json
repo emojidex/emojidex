@@ -1,0 +1,30 @@
+[
+  {
+    "moji": "👄",
+    "code": "mouth",
+    "code_ja": "口",
+    "category": "people",
+    "unicode": "1f444"
+  },
+  {
+    "moji": "🔩",
+    "code": "nut_and_bolt",
+    "code_ja": "ボルト＆ナット",
+    "category": "tools",
+    "unicode": "1f529"
+  },
+  {
+    "moji": "💜",
+    "code": "purple_heart",
+    "code_ja": "ハート(紫)",
+    "category": "abstract",
+    "unicode": "1f49c"
+  },
+  {
+    "moji": "👯",
+    "code": "woman_with_bunny_ears",
+    "code_ja": "バニーガール",
+    "category": "people",
+    "unicode": "1f46f"
+  }
+]
