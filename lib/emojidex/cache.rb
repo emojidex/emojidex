@@ -63,7 +63,7 @@ module Emojidex
     def _raster_check_copy(moji, format, sizes)
       sizes.each do |size|
         src = @source_path + "/#{size}/#{moji.code}"
-        FileUtils.cp "src.#{format}", (@cache_path + "/#{size}") if FileTest.exist? "src.#{format}"
+        FileUtils.cp "#{src}.#{format}", (@cache_path + "/#{size}") if FileTest.exist? "#{src}.#{format}"
         FileUtils.cp_r src, @cache_path if File.directory? src
       end
     end
