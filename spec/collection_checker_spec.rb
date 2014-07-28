@@ -53,7 +53,7 @@ describe Emojidex::CollectionChecker do
       expect(checker.asset_only).to be_empty
       expect(checker.index_only.size).to eq(2)
       expect(checker.index_only).to eq(
-        {:nut_and_bolt=>["nut_and_bolt"], :purple_heart=>["px32/purple_heart"]})
+        {nut_and_bolt: ["nut_and_bolt.svg"], purple_heart: ["px32/purple_heart.png"]})
     end
 
     it 'checks for and identifies missing index entries' do
