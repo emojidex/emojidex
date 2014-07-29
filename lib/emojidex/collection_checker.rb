@@ -35,6 +35,7 @@ module Emojidex
 
     def create_file_list(dir, ext, prefix)
       result = {}
+      return result unless Dir.exists?(dir)
       Dir.foreach(dir) do |file|
         result["#{prefix}#{File.basename(file, '.*')}".to_sym] =
           "#{prefix}#{file}" if File.extname(file) == ext
