@@ -56,7 +56,8 @@ module Emojidex
 
     def create_svg_array(emoji, asset_files)
       result = []
-      result << emoji.code if asset_files[emoji.code.to_sym].nil?
+      asset_file = asset_files[emoji.code.to_sym]
+      result << "#{emoji.code}.svg" if asset_files[emoji.code.to_sym].nil?
       result
     end
 
@@ -64,7 +65,7 @@ module Emojidex
       result = []
       sizes.each do |size|
         name = "#{size}/#{emoji.code}"
-        result << name if asset_files[name.to_sym].nil?
+        result << "#{name}.png" if asset_files[name.to_sym].nil?
       end
       result
     end
