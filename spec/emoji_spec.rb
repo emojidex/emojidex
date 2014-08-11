@@ -44,20 +44,4 @@ describe Emojidex::Emoji do
       expect(JSON.parse(emoji.to_json)).to be_an_instance_of(Hash)
     end
   end
-
-  describe '.frames' do
-    it 'holds an array of source frames' do
-      expect(emoji.frames).to be_an_instance_of(Array)
-    end
-  end
-
-  describe '.delays' do
-    it 'holds an array of delays between frames' do
-      expect(emoji.delays).to be_an_instance_of(Array)
-    end
-
-    it 'defaults to 100ms when nothing is specified' do
-      expect(emoji.delays[0]).to eq(100)
-    end
-  end
 end
