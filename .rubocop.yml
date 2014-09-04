@@ -9,3 +9,7 @@ AccessorMethodName:
 
 LineLength:
   Max: 99
+
+AllCops:
+  Excludes:
+    - 'Guardfile'
