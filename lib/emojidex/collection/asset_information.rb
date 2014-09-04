@@ -11,7 +11,7 @@ module Emojidex
 
   def get_checksum(moji, formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
     sums = {}
-    sums[:svg] = _checksum_for_file() if formats.contain :svg
+    sums[:svg] = _checksum_for_file("#{@vector_path}/#{moji.code}.svg") if formats.contain :svg
   end
 
   def generate_paths(formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
