@@ -4,11 +4,13 @@ require 'json'
 require_relative 'emoji'
 require_relative 'categories'
 require_relative 'collection/cache'
+require_relative 'collection/asset_information'
 
 module Emojidex
   # listing and search of standard UTF emoji
   class Collection
     include Emojidex::CollectionCache
+    include Emojidex::CollectionAssetInformation
     attr_accessor :emoji, :categories
     attr_reader :source_path
     # Initialize Collection. You can pass a list of emoji to seed the collection
