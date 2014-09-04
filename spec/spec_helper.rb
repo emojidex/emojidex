@@ -4,6 +4,7 @@
 require 'rspec'
 require 'webmock/rspec'
 require 'emojidex'
+require 'emojidex/collection'
 require 'emojidex/vectors'
 
 WebMock.disable_net_connect!(allow_localhost: true)
