@@ -6,10 +6,14 @@ module Emojidex
     def initialize
       super
       if defined? Emojidex::Vectors
-        load_local_collection Emojidex::Vectors.path + '/utf'
-      else
-        # TODO: load from service
+        @vector_source_path = Emojidex::Vectors.path + '/utf/'
+        load_local_collection @vector_source_path
       end
+      if defined? Emojidex::Rasters
+        @raster_source_path = Emojidex::Rasters.path + '/utf/'
+        load_local_collection @raster_source_path
+      end
+      # TODO: load from service
     end
   end
 end

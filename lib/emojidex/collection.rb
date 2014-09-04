@@ -12,7 +12,7 @@ module Emojidex
     include Emojidex::CollectionCache
     include Emojidex::CollectionAssetInformation
     attr_accessor :emoji, :categories
-    attr_reader :source_path
+    attr_reader :source_path, :vector_source_path, :raster_source_path
     # Initialize Collection. You can pass a list of emoji to seed the collection
     def initialize(emoji_list = nil)
       @emoji = {}
