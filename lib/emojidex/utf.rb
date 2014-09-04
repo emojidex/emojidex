@@ -10,7 +10,7 @@ module Emojidex
         load_local_collection @vector_source_path
       end
       if defined? Emojidex::Rasters
-        @raster_source_path = Emojidex::Rasters.path + '/utf'
+        @raster_source_path = Emojidex::Rasters.path + '/utf/'
         load_local_collection @raster_source_path
       end
       # TODO: load from service

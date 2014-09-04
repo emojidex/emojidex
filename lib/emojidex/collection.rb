@@ -26,9 +26,9 @@ module Emojidex
     end
 
     # each override to map each functionality to the emoji hash values
-    def each
+    def each(&block)
       return @emoji.values.each unless block_given?
-      @emoji.values.each { |emoji| yield emoji }
+      @emoji.values.each(&block)
     end
 
     # select override to map select functionality to the emoji hash values
