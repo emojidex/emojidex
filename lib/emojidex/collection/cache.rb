@@ -47,6 +47,13 @@ module Emojidex
       end
     end
 
+    def write_index(destination)
+      idx = @emoji.values.to_json
+      idx = JSON.parse idx
+      idx.each { |moji| moji.delete_if{ |k, v| v.nil? }}
+      File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.to_json }
+    end
+
     private
 
     def _svg_check_copy(moji)

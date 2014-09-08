@@ -82,6 +82,17 @@ describe Emojidex::Collection do
     end
   end
 
+  describe '.write_index' do
+    it 'writes a cleaned index to the specified location' do
+      tmp_cache_path = File.expand_path('../support/tmpcache', __FILE__)
+      FileUtils.mkdir_p(tmp_cache_path)
+      collection.cache_index tmp_cache_path
+      expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
+
+      FileUtils.rm_rf tmp_cache_path
+    end
+  end
+
   describe '.generate_checksums' do
     it 'generates checksums for assets' do
       expect(collection.generate_checksums).to be_an_instance_of(Array)

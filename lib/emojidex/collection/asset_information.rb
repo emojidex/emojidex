@@ -11,11 +11,11 @@ module Emojidex
 
     def get_checksums(moji, formats, sizes)
       sums = {}
-      sums[:svg] = _checksum_for_file("#{@vector_path}/#{moji.code}.svg") if formats.include? :svg
+      sums[:svg] = _checksum_for_file("#{@vector_source_path}/#{moji.code}.svg") if formats.include? :svg
       if formats.include? :png
         sums[:png] = {}
         sizes.keys.each do |size|
-          sums[:png][size] = _checksum_for_file("#{@vector_path}/#{size}/#{moji.code}.png")
+          sums[:png][size] = _checksum_for_file("#{@raster_source_path}/#{size}/#{moji.code}.png")
         end
       end
       sums
@@ -29,12 +29,12 @@ module Emojidex
 
     def get_paths(moji, formats, sizes)
       paths = {}
-      path = "#{@vector_path}/#{moji.code}.svg"
+      path = "#{@vector_source_path}/#{moji.code}.svg"
       paths[:svg] = path if File.exist? path
       if formats.include? :png
         paths[:png] = {}
         sizes.keys.each do |size|
-          path = "#{@vector_path}/#{size}/#{moji.code}.png"
+          path = "#{@raster_source_path}/#{size}/#{moji.code}.png"
           paths[:png][size] = path if File.exist? path
         end
       end
