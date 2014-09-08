@@ -1,11 +1,12 @@
-#
-# Emojidex::Emoji
-#
+require_relative 'emoji/asset_information'
+
 module Emojidex
   # emoji base class
   class Emoji
     attr_accessor :moji, :category, :code, :unicode,
                   :tags, :emoticon
+
+    include Emojidex::EmojiAssetInformation
 
     def initialize(details = {})
       @moji = details[:moji]

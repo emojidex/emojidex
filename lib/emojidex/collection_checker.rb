@@ -24,8 +24,8 @@ module Emojidex
 
     def create_asset_file_list(dir, sizes, formats)
       result = {}
-      result.merge!(create_file_list(dir, '.svg', '')) if formats.include?(':svg')
-      if formats.include?(':png')
+      result.merge!(create_file_list(dir, '.svg', '')) if formats.include?(:svg)
+      if formats.include?(:png)
         sizes.each do |size|
           result.merge!(create_file_list("#{dir}/#{size}", '.png', "#{size}/"))
         end
@@ -47,8 +47,8 @@ module Emojidex
       collections.each do |collection|
         collection.emoji.values.each do |emoji|
           tmp = []
-          tmp += create_svg_array(emoji, asset_files) if formats.include?(':svg')
-          tmp += create_png_array(emoji, asset_files, sizes) if formats.include?(':png')
+          tmp += create_svg_array(emoji, asset_files) if formats.include?(:svg)
+          tmp += create_png_array(emoji, asset_files, sizes) if formats.include?(:png)
           @index_only[emoji.code.to_sym] = tmp unless tmp.empty?
         end
       end

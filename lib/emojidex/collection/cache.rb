@@ -1,10 +1,10 @@
 require 'json'
-require_relative 'defaults'
 require 'fileutils'
+require_relative '../defaults'
 
 module Emojidex
   # local caching functionality for collections
-  module Cache
+  module CollectionCache
     attr_reader :cache_path
 
     def setup_cache(path = nil)
