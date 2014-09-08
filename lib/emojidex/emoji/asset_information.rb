@@ -2,16 +2,19 @@
 module Emojidex
   # Asset information for emoji
   module EmojiAssetInformation
-    attr_accessor :assets, :base_path
+    attr_accessor :checksums, :paths
 
-    # returns asset path / returns nil if no asset is available
-    def asset_path(format = :png, size = :px32)
-      # TODO
+    # returns asset checksum
+    def checksum?(format, variant = nil)
+      puts @checksums
+      return @checksums[format][variant] unless variant.nil?
+      @checksums[format]
     end
 
-    # returns asset path, first obtaining and caching an asset if needed
-    def asset_path!(format = :png, size = :px32)
-      # TODO
+    # returns asset path
+    def path?(format, variant = nil)
+      return @paths[format][variant] unless variant.nil?
+      @paths[format]
     end
   end
 end

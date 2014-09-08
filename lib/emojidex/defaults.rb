@@ -7,7 +7,7 @@ module Emojidex
     end
 
     def self.formats
-      [':svg', ':png']
+      [:svg, :png]
     end
   end
 end

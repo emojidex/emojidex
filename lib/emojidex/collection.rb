@@ -14,14 +14,17 @@ module Emojidex
     attr_accessor :emoji, :categories
     attr_reader :source_path, :vector_source_path, :raster_source_path
     # Initialize Collection. You can pass a list of emoji to seed the collection
-    def initialize(emoji_list = nil)
+    def initialize(emoji_list = nil, local_load_path = nil)
       @emoji = {}
+      load_local_collection(local_load_path) unless local_load_path.nil?
       add_emoji(emoji_list) unless emoji_list.nil?
     end
 
     # Loads an emoji collection on local storage
     def load_local_collection(path)
       @source_path = File.expand_path(path)
+      @vector_path = @source_path if @vector_path.nil?
+      @raster_path = @raster_path if @raster_path.nil?
       json = IO.read(@source_path + '/emoji.json')
       list = JSON.parse(json, symbolize_names: true)
       add_emoji(list)
