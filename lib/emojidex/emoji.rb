@@ -11,7 +11,7 @@ module Emojidex
     def initialize(details = {})
       @moji = details[:moji]
       @code, @code_ja = details[:code], details[:code_ja]
-      @unicode = details[:unicode], @full_name = details[:full_name]
+      @unicode, @full_name = details[:unicode], details[:full_name]
       @emoticon = details[:emoticon]
       @category = details[:category] ? details[:category].to_sym : :other
       @tags = details[:tags].map { |tag| tag.to_sym } unless details[:tags].nil?
