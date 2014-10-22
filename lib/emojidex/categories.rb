@@ -13,6 +13,27 @@ module Emojidex
       end
     end
 
+    # each override to map each functionality to the categories hash
+    def each(&block)
+      @categories.values.each(&block)
+    end
+
+    # select override to map select functionality to the categories hash
+    def select(&block)
+      @categories.values.select(&block)
+    end
+
+    # map override to map each functionality to the categories hash
+    def map(&block)
+      @categories.values.map(&block)
+    end
+
+    # collect override to map each functionality to the categories hash
+    def collect(&block)
+      @categories.values.collect(&block)
+    end
+
+    # loads categories from a JSON hash object / JSON text
     def load_categories(json)
       raw = JSON.parse(json, symbolize_names: true)
       raw = raw[:categories]
@@ -24,6 +45,8 @@ module Emojidex
       end
     end
 
+    # loads standard categories local to the emojidex package
+    # *automatically called on initialize if no options are passed
     def load_standard_categories
       load_categories(IO.read(
           File.expand_path('../../../emoji/categories.json', __FILE__)))
