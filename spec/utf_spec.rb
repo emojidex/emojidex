@@ -31,7 +31,7 @@ describe Emojidex::UTF do
 
   describe '.find_by_code' do
     it 'finds and returns an emoji by code' do
-      ss = utf.find_by_code('shooting_star')
+      ss = utf.find_by_code('stars')
       expect(ss).to be_an_instance_of(Emojidex::Emoji)
     end
 
