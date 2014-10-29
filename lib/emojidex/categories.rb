@@ -4,7 +4,6 @@ module Emojidex
   # Holds a master list of categories
   class Categories
     attr_accessor :categories
-    attr_reader :code, :en, :ja
 
     def initialize(categories_json = nil)
       if categories_json
