@@ -7,6 +7,11 @@ emojidex
 ========
 emojidex core tools and scripts in Ruby. Provides a set of tools to utilize emojidex emoji right away in Ruby. Available as the "emojidex" gem.
 
+Assets
+======
+You can find Vectors here: [emojidex-vectors](https://github.com/emojidex/emojidex-vectors)  
+You can find Rasters here: [emojidex-rasters](https://github.com/emojidex/emojidex-rasters)
+
 License
 =======
 emojidex and emojidex tools are licensed under the [emojidex Open License](https://www.emojidex.com/emojidex/emojidex_open_license).
