@@ -4,11 +4,6 @@ module Emojidex
     module Categories
       def categories(*args)
         response = get('/api/v1/categories.json', args)
-        response[:body]['categories']
-      end
-
-      def category(*args)
-        response = get('/api/v1/categories/category.json', args)
         response[:body]
       end
     end

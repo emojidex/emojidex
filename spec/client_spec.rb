@@ -5,7 +5,7 @@ describe Emojidex::Client do
   describe 'initialize' do
     it 'sets default host' do
       client = Emojidex::Client.new
-      expect(client.host).to eq 'https://www.emojidex.com/'
+      expect(client.host).to eq 'https://www.emojidex.com'
     end
 
     it 'sets custom host' do
@@ -17,7 +17,7 @@ describe Emojidex::Client do
   describe 'user_agent' do
     it 'sets user_agent' do
       client = Emojidex::Client.new
-      expect(client.user_agent).to eq 'Emojidex Toolkit Client'
+      expect(client.user_agent).to eq 'emojidex Ruby Client'
     end
   end
 

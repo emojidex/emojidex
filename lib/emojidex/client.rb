@@ -18,7 +18,7 @@ module Emojidex
     def initialize(opts = {})
       @api_key = opts[:api_key]
       @api_username = opts[:api_username]
-      @host = opts[:host] || 'https://www.emojidex.com/'
+      @host = opts[:host] || 'https://www.emojidex.com'
     end
 
     def connection_options
@@ -32,7 +32,7 @@ module Emojidex
     end
 
     def user_agent
-      @user_agent ||= 'Emojidex Toolkit Client'
+      @user_agent ||= 'emojidexRubyClient'
     end
 
     def get(path, params = {})
