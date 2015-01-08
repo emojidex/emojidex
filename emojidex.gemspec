@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.summary     = 'emojidex Ruby tools'
   s.description = 'emojidex emoji handling, search and lookup, listing and caching functionality' \
                   ' and user info (favorites/etc).'
-  s.authors     = ['Rei Kagetsuki', 'Jun Tohyama', 'Vassil Kalkov', 'Rika Yoshida']
+  s.authors     = ['Rei Kagetsuki']
   s.email       = 'info@emojidex.com'
   s.files       = `git ls-files`.split("\n")
   s.require_paths = ['lib']
