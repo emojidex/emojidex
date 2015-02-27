@@ -5,12 +5,14 @@ require_relative 'emoji'
 require_relative 'categories'
 require_relative 'collection/cache'
 require_relative 'collection/asset_information'
+require_relative 'collection/moji_data'
 
 module Emojidex
   # listing and search of standard UTF emoji
   class Collection
     include Emojidex::CollectionCache
     include Emojidex::CollectionAssetInformation
+    include Emojidex::CollectionMojiData
     attr_accessor :emoji, :categories,
                   :source_path, :vector_source_path, :raster_source_path
 
@@ -107,6 +109,7 @@ module Emojidex
         end
       end
       categorize
+      condense_moji_code_data
       @emoji
     end
 
