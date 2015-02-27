@@ -17,7 +17,7 @@ describe Emojidex::Client do
   describe 'user_agent' do
     it 'sets user_agent' do
       client = Emojidex::Client.new
-      expect(client.user_agent).to eq 'emojidex Ruby Client'
+      expect(client.user_agent).to eq 'emojidexRuby'
     end
   end
 

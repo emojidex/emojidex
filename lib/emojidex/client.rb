@@ -1,24 +1,14 @@
-require 'faraday'
-require 'faraday_middleware'
-
-require 'emojidex/api/categories'
-require 'emojidex/api/emoji'
-require 'emojidex/api/search/emoji'
-
 module Emojidex
-  # get the data from emojidex.com
+  # full client for emojidex
   class Client
-    attr_accessor :api_key, :api_username
     attr_reader :host
 
-    include Emojidex::API::Categories
-    include Emojidex::API::Emoji
-    include Emojidex::API::Search::Emoji
+   # include Emojidex::API::Categories
+   # include Emojidex::API::Emoji
+   # include Emojidex::API::Search::Emoji
 
     def initialize(opts = {})
-      @api_key = opts[:api_key]
-      @api_username = opts[:api_username]
-      @host = opts[:host] || 'https://www.emojidex.com'
+      @host = new Emojidex::ClientHost(opts)
     end
 
     def connection_options
@@ -32,7 +22,7 @@ module Emojidex
     end
 
     def user_agent
-      @user_agent ||= 'emojidexRubyClient'
+      @user_agent ||= 'emojidexRuby'
     end
 
     def get(path, params = {})
