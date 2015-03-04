@@ -6,7 +6,7 @@ module Emojidex
     attr_accessor :code, :en, :ja
 
     def initialize(details = {})
-      @code = details[:code]
+      @code = details[:code].to_sym
       @en = details[:en]
       @ja = details[:ja]
     end

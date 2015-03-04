@@ -54,11 +54,10 @@ module Emojidex
     # Retreives an Emoji object by the actual moji code/character code
     # Will likely only return moji from UTF collection
     def find_by_moji(moji)
-      result = nil
-      each do |emoji|
-        result = emoji if emoji[:moji] == moji
+      each do |m|
+        return m if m[:moji] == moji
       end
-      result
+      nil
     end
 
     alias_method :文字検索, :find_by_moji
@@ -73,12 +72,21 @@ module Emojidex
     # Only applies to collections that contain JA codes, this function is mapped to
     # find_by_code for all other implementations (such as client)
     def find_by_code_ja(code_ja)
-      each do |emoji|
-        return emoji if emoji[:code_ja] == code_ja
+      each do |m|
+        return m if m[:code_ja] == code_ja
       end
+      nil
     end
 
     alias_method :コード検索, :find_by_code_ja
+
+    def find_by_unicode(unicode)
+      unicode = unicode.downcase
+      each do |m|
+        return m if m[:unicode] == unicode
+      end
+      nil
+    end
 
     def search(criteria = {})
       Emojidex::Collection.new _sub_search(@emoji.values.dup, criteria)
