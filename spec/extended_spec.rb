@@ -95,13 +95,13 @@ describe Emojidex::Extended do
     end
 
     it 'returns all emoji containing the search term as a substring' do
-      expect(ext.search(code: 'round', category: 'symbols').emoji.count).to be > 12
+      expect(ext.search(code: 'square', category: 'symbols').emoji.count).to be > 12
     end
 
     it 'evaluates regular expressions' do
-      col = ext.search(code: 'Taurus.(?!round).+', category: 'symbols')
-      expect(col.find_by_code('Taurus_plain')).to be_an_instance_of Emojidex::Emoji
-      expect(col.find_by_code('Taurus_round')).to be_nil
+      col = ext.search(code: 'emoji(?!.*dex$).*', category: 'symbols')
+      expect(col.find_by_code('emoji')).to be_an_instance_of Emojidex::Emoji
+      expect(col.find_by_code('emojidex')).to be_nil
     end
   end
 end

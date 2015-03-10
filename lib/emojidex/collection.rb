@@ -110,10 +110,10 @@ module Emojidex
     def add_emoji(list)
       list.each do |moji_info|
         if moji_info.instance_of? Emojidex::Emoji
-          @emoji[moji_info.code.to_sym] = moji_info.dup
+          @emoji[moji_info.code.to_sym] = associate_variants(moji_info.dup)
         else
           emoji = Emojidex::Emoji.new moji_info
-          @emoji[emoji.code.to_sym] = emoji
+          @emoji[emoji.code.to_sym] = associate_variants(emoji)
         end
       end
       categorize
@@ -129,6 +129,18 @@ module Emojidex
     def categorize
       @categories = @emoji.values.map { |moji| moji.category }
       @categories.uniq!
+    end
+
+    def associate_variants(emoji_obj)
+      if emoji_obj.code.match(/"\(.*\)$"/) # this emoji is a variant
+        # check for base
+        base_code = emoji_obj.code.sub(/"\(.*\)$"/, '')
+        if @emoji[base_code].exist?
+          @emoji[base_code].variants << emoji_obj.code.to_sym
+          @emoji_obj.base = base_code.to_sym
+        end
+      end
+      emoji_obj
     end
 
     def _sub_search(list, criteria = {})
