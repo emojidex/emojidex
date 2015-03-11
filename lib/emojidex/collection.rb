@@ -5,12 +5,14 @@ require_relative 'emoji'
 require_relative 'categories'
 require_relative 'collection/cache'
 require_relative 'collection/asset_information'
+require_relative 'collection/moji_data'
 
 module Emojidex
   # listing and search of standard UTF emoji
   class Collection
     include Emojidex::CollectionCache
     include Emojidex::CollectionAssetInformation
+    include Emojidex::CollectionMojiData
     attr_accessor :emoji, :categories,
                   :source_path, :vector_source_path, :raster_source_path
 
@@ -52,11 +54,10 @@ module Emojidex
     # Retreives an Emoji object by the actual moji code/character code
     # Will likely only return moji from UTF collection
     def find_by_moji(moji)
-      result = nil
-      each do |emoji|
-        result = emoji if emoji[:moji] == moji
+      each do |m|
+        return m if m[:moji] == moji
       end
-      result
+      nil
     end
 
     alias_method :文字検索, :find_by_moji
@@ -71,12 +72,21 @@ module Emojidex
     # Only applies to collections that contain JA codes, this function is mapped to
     # find_by_code for all other implementations (such as client)
     def find_by_code_ja(code_ja)
-      each do |emoji|
-        return emoji if emoji[:code_ja] == code_ja
+      each do |m|
+        return m if m[:code_ja] == code_ja
       end
+      nil
     end
 
     alias_method :コード検索, :find_by_code_ja
+
+    def find_by_unicode(unicode)
+      unicode = unicode.downcase
+      each do |m|
+        return m if m[:unicode] == unicode
+      end
+      nil
+    end
 
     def search(criteria = {})
       Emojidex::Collection.new _sub_search(@emoji.values.dup, criteria)
@@ -107,6 +117,8 @@ module Emojidex
         end
       end
       categorize
+      associate_variants
+      condense_moji_code_data
       @emoji
     end
 
@@ -118,6 +130,19 @@ module Emojidex
     def categorize
       @categories = @emoji.values.map { |moji| moji.category }
       @categories.uniq!
+    end
+
+    def associate_variants
+      @emoji.values.each do |emoji_obj|
+        if emoji_obj.code.match(/\(.*\)$/) # this emoji is a variant
+          # check for base
+          base_code = emoji_obj.code.sub(/\(.*\)$/, '').to_sym
+          if @emoji.has_key? base_code
+            @emoji[base_code].variants << emoji_obj.code.to_sym
+            emoji_obj.base = base_code
+          end
+        end
+      end
     end
 
     def _sub_search(list, criteria = {})
