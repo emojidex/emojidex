@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Emojidex
+module Emojidex::Data
   # Category information
   class Category
     attr_accessor :code, :en, :ja

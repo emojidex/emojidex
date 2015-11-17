@@ -2,7 +2,7 @@ require 'json'
 require 'fileutils'
 require_relative '../defaults'
 
-module Emojidex
+module Emojidex::Data
   # local caching functionality for collections
   module CollectionCache
     attr_reader :cache_path
@@ -14,7 +14,7 @@ module Emojidex
       @cache_path = File.expand_path(path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/cache")
       ENV['EMOJI_CACHE'] = @cache_path
       FileUtils.mkdir_p(@cache_path)
-      Emojidex::Defaults.sizes.keys.each do |size|
+      Emojidex::Data::Defaults.sizes.keys.each do |size|
         FileUtils.mkdir_p(@cache_path + "/#{size}")
       end
       @cache_path
@@ -39,7 +39,7 @@ module Emojidex
 
     def cache_index(destination = nil)
       destination ||= @cache_path
-      idx = Emojidex::Collection.new
+      idx = Emojidex::Data::Collection.new
       idx.load_local_collection(destination) if FileTest.exist? "#{destination}/emoji.json"
       idx.add_emoji @emoji.values
       File.open("#{destination}/emoji.json", 'w') do |f|

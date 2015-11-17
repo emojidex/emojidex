@@ -1,6 +1,6 @@
 require_relative 'collection'
 
-module Emojidex
+module Emojidex::Data
   # listing and search of standard UTF emoji
   class UTF < Collection
     def initialize

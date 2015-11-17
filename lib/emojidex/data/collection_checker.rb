@@ -1,8 +1,7 @@
-
 require 'find'
 require_relative 'defaults.rb'
 
-module Emojidex
+module Emojidex::Data
   # Check collections for presence of image assets and discrepencies in emoji indexes.
   class CollectionChecker
     attr_reader :index_only, :asset_only
@@ -12,8 +11,8 @@ module Emojidex
       @index_only = {}
       @asset_only = {}
       asset_path = options[:asset_path] || collections.first.source_path
-      sizes = options[:sizes] || Defaults.sizes.keys
-      formats = options[:formats] || Defaults.formats
+      sizes = options[:sizes] || Emojidex::Data::Defaults.sizes.keys
+      formats = options[:formats] || Emojidex::Data::Defaults.formats
 
       asset_files = create_asset_file_list(asset_path, sizes, formats)
       check_for_index_only(collections, asset_files, sizes, formats)

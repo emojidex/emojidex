@@ -2,26 +2,26 @@
 
 require 'spec_helper'
 
-describe Emojidex::Collection do
-  let(:collection) { Emojidex::Collection.new(nil, './spec/support/sample_collections/good') }
+describe Emojidex::Data::Collection do
+  let(:collection) { Emojidex::Data::Collection.new(nil, './spec/support/sample_collections/good') }
 
   describe '.load_local_collection' do
     it 'loads a local collection' do
-      expect(collection).to be_an_instance_of(Emojidex::Collection)
+      expect(collection).to be_an_instance_of(Emojidex::Data::Collection)
     end
   end
 
   describe '.each' do
     it 'provides each emoji' do
       collection.each do |emoji|
-        expect(emoji).to be_an_instance_of(Emojidex::Emoji)
+        expect(emoji).to be_an_instance_of(Emojidex::Data::Emoji)
       end
     end
   end
 
   describe '.find_by_moji' do
     it 'finds and returns an emoji object by UTF moji code' do
-      expect(collection.find_by_moji('👯')).to be_an_instance_of(Emojidex::Emoji)
+      expect(collection.find_by_moji('👯')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'returns nil when the moji code does not exist' do
@@ -31,14 +31,14 @@ describe Emojidex::Collection do
 
   describe '.文字検索' do
     it 'find_by_moji_codeをaliasして文字コードで検索する' do
-      expect(collection.文字検索('👯')).to be_an_instance_of(Emojidex::Emoji)
+      expect(collection.文字検索('👯')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 
   describe '.find_by_code' do
     it 'finds and returns an emoji by code' do
       ss = collection.find_by_code('nut_and_bolt')
-      expect(ss).to be_an_instance_of(Emojidex::Emoji)
+      expect(ss).to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'returns nil when a code does not exist' do
@@ -48,13 +48,13 @@ describe Emojidex::Collection do
 
   describe '.find_by_code_ja' do
     it 'finds and returns an emoji by Japanese code' do
-      expect(collection.find_by_code_ja('ハート(紫)')).to be_an_instance_of(Emojidex::Emoji)
+      expect(collection.find_by_code_ja('ハート(紫)')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 
   describe '.コード検索' do
     it 'find_by_code_jaをaliasして日本語の絵文字コードで検索する' do
-      expect(collection.コード検索('ハート(紫)')).to be_an_instance_of(Emojidex::Emoji)
+      expect(collection.コード検索('ハート(紫)')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 

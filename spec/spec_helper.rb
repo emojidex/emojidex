@@ -22,7 +22,7 @@ if ENV['TRAVIS'] || ENV['COVERAGE']
 end
 
 def sample_collection(name)
-  e =Emojidex::Collection.new
+  e = Emojidex::Data::Collection.new
   e.load_local_collection(File.expand_path("../support/sample_collections/#{name}", __FILE__))
   e
 end

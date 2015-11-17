@@ -1,6 +1,6 @@
 require_relative 'collection'
 
-module Emojidex
+module Emojidex::Data
   # listing and search of extended emoji from the emojidex set
   class Extended < Collection
     def initialize

@@ -1,4 +1,4 @@
-module Emojidex
+module Emojidex::Data
   # collects and condenses UTF moji codes within a collection
   module CollectionMojiData
     attr_reader :moji_code_string, :moji_code_index

@@ -1,9 +1,9 @@
 require 'digest/md5'
 
-module Emojidex
+module Emojidex::Data
   # Asset Information for Collections
   module CollectionAssetInformation
-    def generate_checksums(formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
+    def generate_checksums(formats = Emojidex::Data::Defaults.formats, sizes = Emojidex::Data::Defaults.sizes)
       @emoji.values.each do |moji|
         moji.checksums = get_checksums(moji, formats, sizes)
       end
@@ -21,7 +21,7 @@ module Emojidex
       sums
     end
 
-    def generate_paths(formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
+    def generate_paths(formats = Emojidex::Data::Defaults.formats, sizes = Emojidex::Data::Defaults.sizes)
       @emoji.values.each do |moji|
         moji.paths = get_paths(moji, formats, sizes)
       end
