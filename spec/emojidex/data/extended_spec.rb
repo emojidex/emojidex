@@ -31,14 +31,14 @@ describe Emojidex::Extended do
 
   describe 'find_by_code_ja' do
     it 'finds and returns an emoji by Japanese code' do
-      expect(ext.find_by_code_ja('ユニコーン'))
+      expect(ext.find_by_code_ja('忍者'))
         .to be_an_instance_of(Emojidex::Emoji)
     end
   end
 
   describe 'コード検索' do
     it 'find_by_code_jaをaliasして日本語の絵文字コードで検索する' do
-      expect(ext.コード検索('ユニコーン')).to be_an_instance_of(Emojidex::Emoji)
+      expect(ext.コード検索('忍者')).to be_an_instance_of(Emojidex::Emoji)
     end
   end
 

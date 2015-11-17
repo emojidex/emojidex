@@ -12,6 +12,7 @@ describe Emojidex::Categories do
   describe '.category' do
     it 'is a proper hash and can be referenced by key' do
       expect(categories.categories[:transportation].en).to eq('Transportation')
+      expect(categories.categories[:transportation].ja).to eq('乗り物')
     end
   end
 

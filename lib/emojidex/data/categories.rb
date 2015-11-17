@@ -48,8 +48,7 @@ module Emojidex
     # loads standard categories local to the emojidex package
     # *automatically called on initialize if no options are passed
     def load_standard_categories
-      load_categories(IO.read(
-          File.expand_path('../../../emoji/categories.json', __FILE__)))
+      load_categories(IO.read(File.expand_path('../../../../emoji/categories.json', __FILE__)))
     end
   end
 end
