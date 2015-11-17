@@ -13,23 +13,6 @@ Assets
 You can find Vectors here: [emojidex-vectors](https://github.com/emojidex/emojidex-vectors)  
 You can find Rasters here: [emojidex-rasters](https://github.com/emojidex/emojidex-rasters)
 
-Notes / Caution
-===============
-
-Pre 1.8 or non 1.9+ compliant Ruby
-----------------------------------
-emojidex uses a variety of tricks and extensively utilizes UTF8/Unicode in ways most other code does not. As such, we do not recommend attempting 
-to run emojidex on non 1.9+ compliant Ruby variants, and instead recommend the latest official Ruby. If you are/must use a non 1.9+ official Ruby 
-and find an issue that can be remedied without imparing functionality or significantly impacting performance please notify us with an issue or 
-submit a pull request with a patch.
-
-jRuby
------
-From 1.9 on Ruby is an m17n compliant Code Set Independent languge. jRuby, however, does not fulfill this requirement and has a variety of issues 
-dealing with UTF8 code -and- content. It should be noted that this is NOT so much a fault of jRuby as it is the JRE/JVM, which simply imposes a 
-code set (which in many/most cases is NOT UTF8) on jRuby. Due to this, caution must be excercised when using jRuby. You must make absolutely sure 
-that the Java environment you are using is being run with UTF8 as the code set.
-
 License
 =======
 emojidex and emojidex tools are licensed under the [emojidex Open License](https://www.emojidex.com/emojidex/emojidex_open_license).
