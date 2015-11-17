@@ -14,6 +14,7 @@ end
 group :test do
   gem 'coveralls', require: false
   gem 'rspec'
+  gem 'codeclimate-test-reporter', require: nil
   #gem 'webmock'
   gem 'emojidex-vectors', github: 'emojidex/emojidex-vectors'
   gem 'emojidex-rasters', github: 'emojidex/emojidex-rasters'
