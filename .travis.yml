@@ -1,17 +1,18 @@
 language: ruby
 
-rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.5
-  - 2.2.0
-  - rbx
+sudo: false
 
-bundler_args: -j4 --without development
+rvm:
+  - 2.0.0
+  - 2.1
+  - 2.2.3
+  - ruby-head
+  - rbx
+  - jruby-head
 
 script:
   - bundle exec rspec
 
 addons:
   code_climate:
-    repo_token: 4f9c56a5c9a2e99acd8e8f06491940f9174c6fd1e22236539bb2cbc2fefd0e30
+    repo_token: 1b416949c15b406b4606ead9dc3b29821f3700555aa869e359820a23b95c32a8

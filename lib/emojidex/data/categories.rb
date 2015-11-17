@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Emojidex
+module Emojidex::Data
   # Holds a master list of categories
   class Categories
     attr_accessor :categories
@@ -40,7 +40,7 @@ module Emojidex
 
       @categories ||= {}
       raw.each do |category_info|
-        category = Emojidex::Category.new category_info
+        category = Emojidex::Data::Category.new category_info
         @categories[category.code.to_sym] = category
       end
     end
@@ -48,8 +48,7 @@ module Emojidex
     # loads standard categories local to the emojidex package
     # *automatically called on initialize if no options are passed
     def load_standard_categories
-      load_categories(IO.read(
-          File.expand_path('../../../emoji/categories.json', __FILE__)))
+      load_categories(IO.read(File.expand_path('../../../../emoji/categories.json', __FILE__)))
     end
   end
 end

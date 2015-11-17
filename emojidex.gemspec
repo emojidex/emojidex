@@ -1,12 +1,15 @@
 Gem::Specification.new do |s|
   s.name        = 'emojidex'
-  s.version     = '0.0.23'
+  s.version     = '0.1.0'
   s.license     = 'emojiOL'
   s.summary     = 'emojidex Ruby tools'
   s.description = 'emojidex emoji handling, search and lookup, listing and caching functionality' \
                   ' and user info (favorites/etc).'
   s.authors     = ['Rei Kagetsuki']
   s.email       = 'info@emojidex.com'
+
+  s.required_ruby_version = '>= 2.0'
+
   s.files       = `git ls-files`.split("\n")
   s.require_paths = ['lib']
   s.homepage    = 'http://developer.emojidex.com'

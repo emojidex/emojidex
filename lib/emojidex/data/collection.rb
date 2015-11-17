@@ -7,12 +7,12 @@ require_relative 'collection/cache'
 require_relative 'collection/asset_information'
 require_relative 'collection/moji_data'
 
-module Emojidex
+module Emojidex::Data
   # listing and search of standard UTF emoji
   class Collection
-    include Emojidex::CollectionCache
-    include Emojidex::CollectionAssetInformation
-    include Emojidex::CollectionMojiData
+    include Emojidex::Data::CollectionCache
+    include Emojidex::Data::CollectionAssetInformation
+    include Emojidex::Data::CollectionMojiData
     attr_accessor :emoji, :categories,
                   :source_path, :vector_source_path, :raster_source_path
 
@@ -89,14 +89,14 @@ module Emojidex
     end
 
     def search(criteria = {})
-      Emojidex::Collection.new _sub_search(@emoji.values.dup, criteria)
+      Emojidex::Data::Collection.new _sub_search(@emoji.values.dup, criteria)
     end
 
     # Get all emoji from this collection that are part of the specified category
     # Returns a new collection of only emoji in the specified category
     def category(category_code)
       categorized = @emoji.values.select { |moji| moji.category == category_code }
-      Emojidex::Collection.new categorized
+      Emojidex::Data::Collection.new categorized
     end
 
     # Check to see if there are emoji in this collection which have the specified categories
@@ -109,10 +109,10 @@ module Emojidex
     # After add categories are updated
     def add_emoji(list)
       list.each do |moji_info|
-        if moji_info.instance_of? Emojidex::Emoji
+        if moji_info.instance_of? Emojidex::Data::Emoji
           @emoji[moji_info.code.to_sym] = moji_info.dup
         else
-          emoji = Emojidex::Emoji.new moji_info
+          emoji = Emojidex::Data::Emoji.new moji_info
           @emoji[emoji.code.to_sym] = emoji
         end
       end

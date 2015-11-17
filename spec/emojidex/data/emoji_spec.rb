@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-describe Emojidex::Emoji do
+describe Emojidex::Data::Emoji do
   let(:emoji) do
-    Emojidex::Emoji.new moji: '🌠', code: 'shooting_star',
+    Emojidex::Data::Emoji.new moji: '🌠', code: 'shooting_star',
                         code_ja: '流れ星', category: 'cosmos',
                         unicode: '1f320', uri: '/dummy/uri'
   end

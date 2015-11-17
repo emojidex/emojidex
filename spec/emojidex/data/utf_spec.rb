@@ -2,20 +2,20 @@
 
 require 'spec_helper'
 
-describe Emojidex::UTF do
-  let(:utf) { Emojidex::UTF.new }
+describe Emojidex::Data::UTF do
+  let(:utf) { Emojidex::Data::UTF.new }
 
   describe '.each' do
     it 'provides each emoji' do
       utf.each do |emoji|
-        expect(emoji).to be_an_instance_of(Emojidex::Emoji)
+        expect(emoji).to be_an_instance_of(Emojidex::Data::Emoji)
       end
     end
   end
 
   describe '.find_by_moji' do
     it 'finds and returns an emoji object by UTF moji code' do
-      expect(utf.find_by_moji('🌠')).to be_an_instance_of(Emojidex::Emoji)
+      expect(utf.find_by_moji('🌠')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'returns nil when the moji code does not exist' do
@@ -25,14 +25,14 @@ describe Emojidex::UTF do
 
   describe '.文字検索' do
     it 'find_by_moji_codeをaliasして文字コードで検索する' do
-      expect(utf.文字検索('🌠')).to be_an_instance_of(Emojidex::Emoji)
+      expect(utf.文字検索('🌠')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 
   describe '.find_by_code' do
     it 'finds and returns an emoji by code' do
       ss = utf.find_by_code('stars')
-      expect(ss).to be_an_instance_of(Emojidex::Emoji)
+      expect(ss).to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'returns nil when a code does not exist' do
@@ -42,13 +42,13 @@ describe Emojidex::UTF do
 
   describe '.find_by_code_ja' do
     it 'finds and returns an emoji by Japanese code' do
-      expect(utf.find_by_code_ja('流れ星')).to be_an_instance_of(Emojidex::Emoji)
+      expect(utf.find_by_code_ja('流れ星')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 
   describe '.コード検索' do
     it 'find_by_code_jaをaliasして日本語の絵文字コードで検索する' do
-      expect(utf.コード検索('流れ星')).to be_an_instance_of(Emojidex::Emoji)
+      expect(utf.コード検索('流れ星')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 

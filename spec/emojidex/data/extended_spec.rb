@@ -2,13 +2,13 @@
 
 require 'spec_helper'
 
-describe Emojidex::Extended do
-  let(:ext) { Emojidex::Extended.new }
+describe Emojidex::Data::Extended do
+  let(:ext) { Emojidex::Data::Extended.new }
 
   describe '.each' do
     it 'provides each emoji' do
       ext.each do |emoji|
-        expect(emoji).to be_an_instance_of(Emojidex::Emoji)
+        expect(emoji).to be_an_instance_of(Emojidex::Data::Emoji)
       end
     end
   end
@@ -16,12 +16,12 @@ describe Emojidex::Extended do
   describe 'find_by_code' do
     it 'finds and returns an emoji by code' do
       expect(ext.find_by_code('combat_knife'))
-      .to be_an_instance_of(Emojidex::Emoji)
+      .to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'finds and returns an emoji by code, converting spaces to underscores' do
       expect(ext.find_by_code('combat knife'))
-      .to be_an_instance_of(Emojidex::Emoji)
+      .to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'returns nil when a code does not exist' do
@@ -31,20 +31,20 @@ describe Emojidex::Extended do
 
   describe 'find_by_code_ja' do
     it 'finds and returns an emoji by Japanese code' do
-      expect(ext.find_by_code_ja('ユニコーン'))
-        .to be_an_instance_of(Emojidex::Emoji)
+      expect(ext.find_by_code_ja('忍者'))
+        .to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 
   describe 'コード検索' do
     it 'find_by_code_jaをaliasして日本語の絵文字コードで検索する' do
-      expect(ext.コード検索('ユニコーン')).to be_an_instance_of(Emojidex::Emoji)
+      expect(ext.コード検索('忍者')).to be_an_instance_of(Emojidex::Data::Emoji)
     end
   end
 
   describe 'category' do
     it 'returns a collection of the specificed category' do
-      expect(categorized = ext.category(:tools)).to be_an_instance_of(Emojidex::Collection)
+      expect(categorized = ext.category(:tools)).to be_an_instance_of(Emojidex::Data::Collection)
       expect(categorized.emoji.count).to be > 1
     end
   end
@@ -100,7 +100,7 @@ describe Emojidex::Extended do
 
     it 'evaluates regular expressions' do
       col = ext.search(code: 'emoji(?!.*dex$).*', category: 'symbols')
-      expect(col.find_by_code('emoji')).to be_an_instance_of Emojidex::Emoji
+      expect(col.find_by_code('emoji')).to be_an_instance_of Emojidex::Data::Emoji
       expect(col.find_by_code('emojidex')).to be_nil
     end
   end
