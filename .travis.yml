@@ -1,13 +1,11 @@
 language: ruby
 
-rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.5
-  - 2.2.0
-  - rbx
+sudo: false
 
-bundler_args: -j4 --without development
+rvm:
+  - 2.2.3
+  - rbx
+  - jruby
 
 script:
   - bundle exec rspec
