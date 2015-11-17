@@ -1,7 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/emojidex.png)](http://badge.fury.io/rb/emojidex)
 [![Build Status](https://travis-ci.org/emojidex/emojidex.png)](https://travis-ci.org/emojidex/emojidex)
 [![Code Climate](https://codeclimate.com/github/emojidex/emojidex.png)](https://codeclimate.com/github/emojidex/emojidex)
-[![Coverage Status](https://coveralls.io/repos/emojidex/emojidex/badge.svg?branch=radical_refactor&service=github)](https://coveralls.io/github/emojidex/emojidex?branch=radical_refactor)
+[![Coverage Status](https://coveralls.io/repos/emojidex/emojidex/badge.svg?service=github)](https://coveralls.io/github/emojidex/emojidex)
 [![Inline docs](http://inch-ci.org/github/emojidex/emojidex.png?branch=master)](http://inch-ci.org/github/emojidex/emojidex)
 [![Gitter chat](https://badges.gitter.im/emojidex/emojidex.png)](https://gitter.im/emojidex/emojidex)
 emojidex
