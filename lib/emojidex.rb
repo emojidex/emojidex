@@ -1,4 +1,5 @@
 require_relative 'emojidex/data/emoji'
+require_relative 'emojidex/data/collection_checker'
 require_relative 'emojidex/data/collection'
 require_relative 'emojidex/data/utf'
 require_relative 'emojidex/data/extended'
