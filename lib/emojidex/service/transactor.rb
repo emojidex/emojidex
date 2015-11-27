@@ -1,4 +1,5 @@
 require 'faraday'
+require 'json'
 
 module Emojidex::Service
   class Transactor
@@ -21,22 +22,27 @@ module Emojidex::Service
 
     def self.get(endpoint, params = {})
       response = self.connect.get(
-        "#{api_url}#{endpoint}", params)
-      puts "RESPONSE: #{response}"
-      {}
+        "#{self.api_url}#{endpoint}", params)
+
+      begin
+        data = JSON.parse(response.body)
+      rescue
+        return {}
+      end
+      data
     end
 
     def self.connect
       return @@connection if @@connection
       @@connection = Faraday.new do |conn|
         conn.request :url_encoded
-        conn.response :logger
+        # conn.response :logger
         conn.adapter Faraday.default_adapter
       end
       @@connection
     end
 
-    def api_url()
+    def self.api_url()
       "#{@@settings[:api][:protocol]}://#{@@settings[:api][:host]}#{@@settings[:api][:prefix]}"
     end
 

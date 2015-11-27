@@ -20,6 +20,19 @@ describe Emojidex::Service::User do
       expect(Emojidex::Service::User.auth_status_codes[:unverified]).to be false
     end
 
+    it 'defaults to an unauthroized state' do
+      user = Emojidex::Service::User.new
+      expect(user.authorized?).to be false
+    end
 
+    it 'fails authorization with a bad token, passes with a good token' do
+      user = Emojidex::Service::User.new
+      expect(user.authorize('test', '12345')).to be false
+      expect(user.status).to eq :unverified
+
+      expect(user.authorize('test',
+                            '1798909355d57c9a93e3b82d275594e7c7c000db05021138')).to be false
+      expect(user.status).to eq :verified
+    end
   end
 end
