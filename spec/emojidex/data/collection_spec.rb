@@ -116,4 +116,21 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.path?(:png, :px64)).to be_nil
     end
   end
+
+  describe 'collections should chain combine' do
+    it 'chain combines' do
+      col = Emojidex::Data::Collection.new
+      col.emoji = {}
+      expect(col.emoji.count).to eq 0
+
+      col << Emojidex::Data::UTF.new
+      expect(col.emoji.count > 0).to be true
+      expect(col.emoji.count).to eq (Emojidex::Data::UTF.new()).emoji.count
+
+      col << Emojidex::Data::Extended.new
+      expect(col.emoji.count > (Emojidex::Data::UTF.new()).emoji.count).to be true
+      expect(col.emoji.count).to eq ((Emojidex::Data::UTF.new()).emoji.count + 
+                                     (Emojidex::Data::Extended.new()).emoji.count)
+    end
+  end
 end

@@ -1,15 +1,16 @@
-module Emojidex
-  # full client for emojidex
-  class Client
-    attr_reader :host
+require 'faraday'
 
-   # include Emojidex::API::Categories
-   # include Emojidex::API::Emoji
-   # include Emojidex::API::Search::Emoji
+module Emojidex::Service
+  class Transactor
+    @@settings = {
+      api: {
+      },
+      cdn: {
+      },
+      closed_net: false
+    }
 
-    def initialize(opts = {})
-      @host = new Emojidex::ClientHost(opts)
-    end
+    @@token = ''
 
     def connection_options
       @connection_options ||= {

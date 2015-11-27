@@ -14,6 +14,7 @@ module Emojidex::Data
         load_local_collection @raster_source_path
       end
       # TODO: load from service
+      @emoji
     end
   end
 end

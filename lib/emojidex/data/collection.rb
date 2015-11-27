@@ -21,6 +21,7 @@ module Emojidex::Data
       @emoji = {}
       load_local_collection(local_load_path) unless local_load_path.nil?
       add_emoji(emoji_list) unless emoji_list.nil?
+      @emoji
     end
 
     # Loads an emoji collection on local storage
@@ -137,7 +138,7 @@ module Emojidex::Data
         if emoji_obj.code.match(/\(.*\)$/) # this emoji is a variant
           # check for base
           base_code = emoji_obj.code.sub(/\(.*\)$/, '').to_sym
-          if @emoji.has_key? base_code
+          if @emoji.key? base_code
             @emoji[base_code].variants << emoji_obj.code.to_sym
             emoji_obj.base = base_code
           end
