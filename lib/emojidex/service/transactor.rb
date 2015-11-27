@@ -2,17 +2,50 @@ require 'faraday'
 
 module Emojidex::Service
   class Transactor
+
+    @@connection = nil
+
     @@settings = {
       api: {
+        host: 'www.emojidex.com',
+        prefix: '/api/v1/',
+        protocol: 'https'
       },
       cdn: {
+        host: 'cdn.emojidex.com',
+        prefix: '/emoji/',
+        protocol: 'http'
       },
       closed_net: false
     }
 
-    @@token = ''
+    def self.get(endpoint, params = {})
+      response = self.connect.get(
+        "#{api_url}#{endpoint}", params)
+      puts "RESPONSE: #{response}"
+      {}
+    end
 
-    def connection_options
+    def self.connect
+      return @@connection if @@connection
+      @@connection = Faraday.new do |conn|
+        conn.request :url_encoded
+        conn.response :logger
+        conn.adapter Faraday.default_adapter
+      end
+      @@connection
+    end
+
+    def api_url()
+      "#{@@settings[:api][:protocol]}://#{@@settings[:api][:host]}#{@@settings[:api][:prefix]}"
+    end
+
+    private
+    def user_agent
+      @user_agent ||= 'emojidexRuby'
+    end
+
+    def _setup_connection
       @connection_options ||= {
         url: @host,
         headers: {
@@ -22,24 +55,7 @@ module Emojidex::Service
       }
     end
 
-    def user_agent
-      @user_agent ||= 'emojidexRuby'
-    end
 
-    def get(path, params = {})
-      request(:get, path, params)
-    end
-
-    private
-
-    def connection
-      @connection ||= Faraday.new connection_options do |conn|
-        conn.request :url_encoded
-        conn.response :json
-        # conn.response :logger
-        conn.adapter Faraday.default_adapter
-      end
-    end
 
     def request(method, path, params = {})
       response = connection.send(method.to_sym, path, params)
