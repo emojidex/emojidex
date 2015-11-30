@@ -25,7 +25,7 @@ module Emojidex::Service
         "#{self.api_url}#{endpoint}", params)
 
       begin
-        data = JSON.parse(response.body)
+        data = JSON.parse(response.body, symbolize_names: true)
       rescue JSON::ParserError
         return {}
       end

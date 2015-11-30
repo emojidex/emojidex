@@ -25,14 +25,41 @@ describe Emojidex::Service::User do
       expect(user.authorized?).to be false
     end
 
-    it 'fails authorization with a bad token, passes with a good token' do
+    it 'fails authorization with a bad token' do
       user = Emojidex::Service::User.new
       expect(user.authorize('test', '12345')).to be false
       expect(user.status).to eq :unverified
+    end
 
+    it 'authorizes with a good token' do
+      user = Emojidex::Service::User.new
       expect(user.authorize('test',
                             '1798909355d57c9a93e3b82d275594e7c7c000db05021138')).to be true
       expect(user.status).to eq :verified
+    end
+
+    it 'fails to sync history when unauthorized' do
+      user = Emojidex::Service::User.new
+      expect(user.sync_history).to be false
+    end
+
+    it 'syncs history when authorized' do
+      user = Emojidex::Service::User.new
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      expect(user.sync_history).to be true
+      expect(user.history.emoji.length > 0).to be true
+    end
+
+    it 'fails to sync favorites when unauthorized' do
+      user = Emojidex::Service::User.new
+      expect(user.sync_favorites).to be false
+    end
+
+    it 'syncs history when authorized' do
+      user = Emojidex::Service::User.new
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      expect(user.sync_favorites).to be true
+      expect(user.favorites.emoji.length > 0).to be true
     end
   end
 end

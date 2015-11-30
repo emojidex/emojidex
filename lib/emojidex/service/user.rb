@@ -1,5 +1,6 @@
 require_relative '../../emojidex'
 require_relative 'transactor'
+require_relative 'collection'
 
 module Emojidex
   module Service
@@ -20,15 +21,47 @@ module Emojidex
         @premium_exp = nil
         @pro_exp = nil
         @status = :none
+        @history = Emojidex::Data::Collection.new
+        @favorites = Emojidex::Data::Collection.new
       end
 
       def login(user, password)
+        auth_response = Emojidex::Service::Transactor.get('users/authenticate',
+                                                          {user: user, password: password})
+        _process_auth_response(auth_response)
       end
 
       def authorize(username, token)
         auth_response = Emojidex::Service::Transactor.get('users/authenticate',
                                                           {username: username, token: token})
-        if auth_response['auth_status'] == 'verified'
+        _process_auth_response(auth_response)
+      end
+
+      def authorized?
+        @@auth_status_codes[@status]
+      end
+
+      def sync_favorites(limit = 50, detailed = true)
+        return false unless authorized?
+
+        @favorites = Emojidex::Service::Collection.new(
+          {endpoint: 'users/favorites', limit: limit, detailed: detailed,
+           username: @username, token: @token})
+        true
+      end
+
+      def sync_history(limit = 50, detailed = true)
+        return false unless authorized?
+
+        @history = Emojidex::Service::Collection.new(
+          {endpoint: 'users/history', limit: limit, detailed: detailed,
+           username: @username, token: @token})
+        true
+      end
+
+      private
+      def _process_auth_response(auth_response)
+        if auth_response[:auth_status] == 'verified'
           @status = :verified
           @username = auth_response[:auth_user]
           @token = auth_response[:auth_token]
@@ -37,7 +70,7 @@ module Emojidex
           @pro_exp = auth_response[:pro_exp]
           @premium_exp = auth_response[:premium_exp]
           return true
-        elsif auth_response['auth_status'] == 'unverified'
+        elsif auth_response[:auth_status] == 'unverified'
           @status = :unverified
         else
           @status = :failure
@@ -48,14 +81,6 @@ module Emojidex
         @pro_exp = nil
         @premium_exp = nil
         false
-      end
-
-      def authorized?
-        @@auth_status_codes[@status]
-      end
-
-      def sync_favorites()
-        #Transactor.get(
       end
     end
   end
