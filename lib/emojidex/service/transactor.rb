@@ -26,7 +26,7 @@ module Emojidex::Service
 
       begin
         data = JSON.parse(response.body)
-      rescue
+      rescue JSON::ParserError
         return {}
       end
       data

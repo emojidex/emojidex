@@ -31,7 +31,7 @@ describe Emojidex::Service::User do
       expect(user.status).to eq :unverified
 
       expect(user.authorize('test',
-                            '1798909355d57c9a93e3b82d275594e7c7c000db05021138')).to be false
+                            '1798909355d57c9a93e3b82d275594e7c7c000db05021138')).to be true
       expect(user.status).to eq :verified
     end
   end

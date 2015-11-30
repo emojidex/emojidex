@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'spec_helper'
+require 'emojidex/data/extended'
 
 describe Emojidex::Data::Extended do
   let(:ext) { Emojidex::Data::Extended.new }

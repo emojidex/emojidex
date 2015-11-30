@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'spec_helper'
+require 'emojidex/data/utf'
 
 describe Emojidex::Data::UTF do
   let(:utf) { Emojidex::Data::UTF.new }
