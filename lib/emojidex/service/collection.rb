@@ -42,7 +42,6 @@ module Emojidex
           add_emoji(page_moji[:emoji])
           return page_moji[:emoji]
         end
-        puts "ARRAY #{page_moji}"
         add_emoji(page_moji)
         return page_moji
       end

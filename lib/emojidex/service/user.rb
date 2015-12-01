@@ -21,7 +21,7 @@ module Emojidex
         @premium_exp = nil
         @pro_exp = nil
         @status = :none
-        @history = Emojidex::Data::Collection.new
+        @history = []
         @favorites = Emojidex::Data::Collection.new
       end
 
@@ -50,12 +50,13 @@ module Emojidex
         true
       end
 
-      def sync_history(limit = 50, detailed = true)
+      def sync_history(limit = 50, page = 1)
         return false unless authorized?
 
-        @history = Emojidex::Service::Collection.new(
-          {endpoint: 'users/history', limit: limit, detailed: detailed,
-           username: @username, token: @token})
+        @history = Emojidex::Service::Transactor.get('users/history',
+                          {limit: limit, page: page, username: @username, token: @token})
+        # TODO this is a temporary implementation of history. It will be revised after an
+        # API update.
         true
       end
 
