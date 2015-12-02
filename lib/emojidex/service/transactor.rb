@@ -58,7 +58,7 @@ module Emojidex
         when 200
           return # don't raise
         when 401
-          raise Error::Unauthroized.new
+          raise Error::Unauthorized.new
         when 422
           raise Error::UnprocessableEntity.new
         end

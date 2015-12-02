@@ -56,11 +56,11 @@ module Emojidex
       def sync_favorites(limit = 50, detailed = true)
         return false unless authorized?
 
-        begin 
+        begin
           res = Emojidex::Service::Collection.new(
             {endpoint: 'users/favorites', limit: limit, detailed: detailed,
              username: @username, auth_token: @auth_token})
-        rescue Error::Unauthroized
+        rescue Error::Unauthorized
           return false
         end
 
