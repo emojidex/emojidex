@@ -58,9 +58,9 @@ module Emojidex
         when 200
           return # don't raise
         when 401
-          raise Error::Unauthroized
+          raise Error::Unauthroized.new
         when 422
-          raise Error::UnprocessableEntity
+          raise Error::UnprocessableEntity.new
         end
       end
 
@@ -68,7 +68,7 @@ module Emojidex
         begin
           data = JSON.parse(body, symbolize_names: true)
         rescue JSON::ParserError
-          raise Error::InvalidJSON
+          raise Error::InvalidJSON.new
           return {}
         end
         data
