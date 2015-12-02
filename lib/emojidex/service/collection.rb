@@ -7,13 +7,13 @@ module Emojidex
     class Collection < Emojidex::Data::Collection
       attr_reader :endpoint, :page, :limit, :detailed
       @username
-      @token
+      @auth_token
 
       def initialize(opts = {})
         @emoji = opts[:emoji] || {}
 
         @username = opts[:username] || nil
-        @token = opts[:token] || nil
+        @auth_token = opts[:auth_token] || nil
 
         @endpoint = opts[:endpoint] || 'emoji'
         @page = opts[:page] || 0
@@ -29,7 +29,7 @@ module Emojidex
 
         opts = {page: @page, limit: @limit, detailed: @detailed}
         opts[:username] = @username unless @username.nil?
-        opts[:auth_token] = @token unless @token.nil?
+        opts[:auth_token] = @auth_token unless @auth_token.nil?
 
         page_moji = Emojidex::Service::Transactor.get(@endpoint, opts)
 

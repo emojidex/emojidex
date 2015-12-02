@@ -3,6 +3,13 @@ require 'emojidex/service/user'
 
 
 describe Emojidex::Service::User do
+  it 'has a set of auth status codes which define if a user is authorized' do
+    expect(Emojidex::Service::User.auth_status_codes.include? :verified).to be true
+    expect(Emojidex::Service::User.auth_status_codes.include? :unverified).to be true
+    expect(Emojidex::Service::User.auth_status_codes[:verified]).to be true
+    expect(Emojidex::Service::User.auth_status_codes[:unverified]).to be false
+  end
+
   describe 'initialize' do
     it 'sets defaults' do
       user = Emojidex::Service::User.new
@@ -13,18 +20,13 @@ describe Emojidex::Service::User do
       expect(user.premium_exp).to eq nil
     end
 
-    it 'has a set of auth status codes which define if a user is authorized' do
-      expect(Emojidex::Service::User.auth_status_codes.include? :verified).to be true
-      expect(Emojidex::Service::User.auth_status_codes.include? :unverified).to be true
-      expect(Emojidex::Service::User.auth_status_codes[:verified]).to be true
-      expect(Emojidex::Service::User.auth_status_codes[:unverified]).to be false
-    end
-
     it 'defaults to an unauthroized state' do
       user = Emojidex::Service::User.new
       expect(user.authorized?).to be false
     end
+  end
 
+  describe 'authorize' do
     it 'fails authorization with a bad token' do
       user = Emojidex::Service::User.new
       expect(user.authorize('test', '12345')).to be false
@@ -62,6 +64,17 @@ describe Emojidex::Service::User do
       user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
       expect(user.sync_favorites).to be true
       expect(user.favorites.emoji.length > 0).to be true
+    end
+
+    it 'refuses to add a favorite when not authorized' do
+      user = Emojidex::Service::User.new
+      expect(user.add_favorite('combat knife')).to be false
+    end
+
+    it 'adds a favorite when authorized' do
+      user = Emojidex::Service::User.new
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      expect(user.add_favorite('combat_knife')).to be true
     end
   end
 end
