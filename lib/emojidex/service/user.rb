@@ -28,9 +28,9 @@ module Emojidex
 
       def login(user, password)
         begin
-          auth_response = Emojidex::Service::Transactor.get('users/authenticate',
+          auth_response = Transactor.get('users/authenticate',
                             {user: user, password: password})
-        rescue Emojidex::Service::Error::Unauthorized
+        rescue Error::Unauthorized
           @status = :unverified
           return false
         end
@@ -39,7 +39,7 @@ module Emojidex
 
       def authorize(username, auth_token)
         begin
-          auth_response = Emojidex::Service::Transactor.get('users/authenticate',
+          auth_response = Transactor.get('users/authenticate',
                             {username: username, token: auth_token})
         rescue Error::Unauthorized
           @status = :unverified
@@ -60,7 +60,7 @@ module Emojidex
           res = Emojidex::Service::Collection.new(
             {endpoint: 'users/favorites', limit: limit, detailed: detailed,
              username: @username, auth_token: @auth_token})
-        rescue Emojidex::Service::Error::Unauthroized
+        rescue Error::Unauthroized
           return false
         end
 
@@ -72,10 +72,10 @@ module Emojidex
         return false unless authorized?
 
         begin
-          res = Emojidex::Service::Transactor.post('users/favorites',
+          res = Transactor.post('users/favorites',
                   {username: @username, auth_token: @auth_token,
                    emoji_code: Emojidex.EscapeCode(code)})
-        rescue Emojidex::Service::Error::Unauthorized, Emojidex::Service::Error::UnprocessableEntity
+        rescue Error::Unauthorized, Error::UnprocessableEntity
           return false
         end
         return true
@@ -88,7 +88,7 @@ module Emojidex
       def sync_history(limit = 50, page = 1)
         return false unless authorized?
 
-        @history = Emojidex::Service::Transactor.get('users/history',
+        @history = Transactor.get('users/history',
                     {limit: limit, page: page, username: @username, auth_token: @auth_token})
         # TODO this is a temporary implementation of history. It will be revised after an
         # API update.
