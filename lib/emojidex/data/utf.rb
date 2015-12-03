@@ -1,12 +1,16 @@
 require_relative 'collection'
 require_relative '../service/transactor'
 require_relative '../env_helper'
+require_relative 'collection/static_collection'
 
 module Emojidex::Data
   # listing and search of standard UTF emoji
   class UTF < Collection
+    include Emojidex::Data::StaticCollection
+
     def initialize
       super
+      @endpoint = 'utf_emoji'
       loaded = false
       if defined? Emojidex::Vectors
         @vector_source_path = Emojidex::Vectors.path + '/utf/'
@@ -20,17 +24,6 @@ module Emojidex::Data
       end
       load_from_server unless loaded
       @emoji
-    end
-
-    def load_from_server(detailed = true, locale = '??')
-      locale = Emojidex::EnvHelper.lang? if locale == '??'
-      begin
-        res = Emojidex::Service::Transactor.get('utf_emoji', {detailed: detailed, locale: locale})
-      rescue
-        return false
-      end
-      add_emoji(res)
-      return true
     end
   end
 end

@@ -93,4 +93,5 @@ describe Emojidex::Data::UTF do
       expect(utf.emoji.count > 0).to be true
     end
   end
+
 end
