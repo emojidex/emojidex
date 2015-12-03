@@ -105,4 +105,14 @@ describe Emojidex::Data::Extended do
       expect(col.find_by_code('emojidex')).to be_nil
     end
   end
+
+  describe 'load_from_server' do
+    it 'loads index from server' do
+      ext.emoji = {}
+      expect(ext.emoji.count == 0).to be true
+      expect(ext.load_from_server).to be true
+      expect(ext.emoji.count > 0).to be true
+    end
+  end
+
 end

@@ -1,3 +1,6 @@
+require_relative '../../service/transactor'
+require_relative '../../env_helper'
+
 module Emojidex::Data
   # mixin module to enable static collections
   module StaticCollection

@@ -1,6 +1,4 @@
 require_relative 'collection'
-require_relative '../service/transactor'
-require_relative '../env_helper'
 require_relative 'collection/static_collection'
 
 module Emojidex::Data
