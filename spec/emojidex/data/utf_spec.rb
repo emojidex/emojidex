@@ -84,4 +84,13 @@ describe Emojidex::Data::UTF do
       FileUtils.rm_rf tmp_cache_path
     end
   end
+
+  describe 'load_from_server' do
+    it 'loads index from server' do
+      utf.emoji = {}
+      expect(utf.emoji.count == 0).to be true
+      expect(utf.load_from_server).to be true
+      expect(utf.emoji.count > 0).to be true
+    end
+  end
 end

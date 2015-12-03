@@ -26,7 +26,7 @@ module Emojidex
         response = self.connect.get(
           "#{self.api_url}#{endpoint}", params)
 
-        self._status_raiser(response.status)
+        self._status_raiser(response)
         self._datafy_json(response.body)
       end
 
@@ -34,7 +34,7 @@ module Emojidex
         response = self.connect.post(
           "#{self.api_url}#{endpoint}", params)
 
-        self._status_raiser(response.status)
+        self._status_raiser(response)
         self._datafy_json(response.body)
       end
 
@@ -53,15 +53,21 @@ module Emojidex
       end
 
       private
-      def self._status_raiser(status)
-        case status
-        when 200
+      def self._status_raiser(response)
+        case response.status
+        when 200..299
           return # don't raise
         when 401
-          raise Error::Unauthorized.new
+          raise Error::Unauthorized.new(self._extract_status_line(response))
         when 422
-          raise Error::UnprocessableEntity.new
+          raise Error::UnprocessableEntity.new(self._extract_status_line(response))
         end
+      end
+      
+      def self._extract_status_line(response)
+          data = self._datafy_json(response.body)
+          status_line = (data.key?(:status) ? data[:status] : '')
+          status_line
       end
 
       def self._datafy_json(body)

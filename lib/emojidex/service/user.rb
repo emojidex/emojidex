@@ -75,7 +75,13 @@ module Emojidex
           res = Transactor.post('users/favorites',
                   {username: @username, auth_token: @auth_token,
                    emoji_code: Emojidex.EscapeCode(code)})
-        rescue Error::Unauthorized, Error::UnprocessableEntity
+        rescue Error::Unauthorized
+          return false
+        rescue Error::UnprocessableEntity => e
+          # TODO:API is currently returning this both when emoji already registered
+          # and when code is invalid. When already registerd it will return 202 on
+          # next update
+          return true if e.message == 'emoji already in user favorites'
           return false
         end
         return true
