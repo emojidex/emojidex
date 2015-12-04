@@ -1,5 +1,0 @@
-languages:
-  ruby: true
-
-exclude_paths:
-  - Guardfile
