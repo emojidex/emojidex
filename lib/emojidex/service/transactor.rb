@@ -53,6 +53,7 @@ module Emojidex
       end
 
       private
+
       def self._status_raiser(response)
         case response.status
         when 200..299
@@ -63,7 +64,7 @@ module Emojidex
           raise Error::UnprocessableEntity.new(self._extract_status_line(response))
         end
       end
-      
+
       def self._extract_status_line(response)
           data = self._datafy_json(response.body)
           status_line = (data.key?(:status) ? data[:status] : '')

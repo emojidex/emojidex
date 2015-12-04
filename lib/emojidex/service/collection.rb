@@ -6,8 +6,6 @@ module Emojidex
     # A modified collection class for collections tied to the emojidex service
     class Collection < Emojidex::Data::Collection
       attr_reader :endpoint, :page, :limit, :detailed
-      @username
-      @auth_token
 
       def initialize(opts = {})
         @emoji = opts[:emoji] || {}
