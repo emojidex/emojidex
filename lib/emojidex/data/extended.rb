@@ -9,18 +9,7 @@ module Emojidex::Data
     def initialize
       super
       @endpoint = 'extended_emoji'
-      loaded = false
-      if defined? Emojidex::Vectors
-        @vector_source_path = Emojidex::Vectors.path + '/extended/'
-        load_local_collection @vector_source_path
-        loaded = true
-      end
-      if defined? Emojidex::Rasters
-        @raster_source_path = Emojidex::Rasters.path + '/extended/'
-        load_local_collection @raster_source_path
-        loaded = true
-      end
-      load_from_server unless loaded
+      load_from_server unless check_and_load_static('extended')
       @emoji
     end
   end

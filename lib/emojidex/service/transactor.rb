@@ -75,7 +75,6 @@ module Emojidex
           data = JSON.parse(body, symbolize_names: true)
         rescue JSON::ParserError
           raise Error::InvalidJSON.new
-          return {}
         end
         data
       end

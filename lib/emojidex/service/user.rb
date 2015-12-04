@@ -16,11 +16,7 @@ module Emojidex
       end
 
       def initialize(opts = {})
-        @username = @auth_token = ''
-        @premium = false
-        @pro = false
-        @premium_exp = nil
-        @pro_exp = nil
+        clear_auth_data
         @status = :none
         @history = []
         @favorites = Emojidex::Data::Collection.new
@@ -74,7 +70,7 @@ module Emojidex
         begin
           res = Transactor.post('users/favorites',
                   {username: @username, auth_token: @auth_token,
-                   emoji_code: Emojidex.EscapeCode(code)})
+                   emoji_code: Emojidex.escape_code(code)})
         rescue Error::Unauthorized
           return false
         rescue Error::UnprocessableEntity => e
@@ -104,28 +100,37 @@ module Emojidex
       def add_history(code)
       end
 
+      def clear_auth_data()
+        @username = @auth_token = ''
+        @pro = false
+        @premium = false
+        @pro_exp = nil
+        @premium_exp = nil
+      end
+
       private
+
       def _process_auth_response(auth_response)
         if auth_response[:auth_status] == 'verified'
-          @status = :verified
-          @username = auth_response[:auth_user]
-          @auth_token = auth_response[:auth_token]
-          @pro = auth_response[:pro]
-          @premium = auth_response[:premium]
-          @pro_exp = auth_response[:pro_exp]
-          @premium_exp = auth_response[:premium_exp]
+          _set_verified_data(auth_response)
           return true
         elsif auth_response[:auth_status] == 'unverified'
           @status = :unverified
         else
           @status = :failure
         end
-        @username = @auth_token = ''
-        @pro = false
-        @premium = false
-        @pro_exp = nil
-        @premium_exp = nil
+        clear_auth_data
         false
+      end
+
+      def _set_verified_data(auth_response)
+        @status = :verified
+        @username = auth_response[:auth_user]
+        @auth_token = auth_response[:auth_token]
+        @pro = auth_response[:pro]
+        @premium = auth_response[:premium]
+        @pro_exp = auth_response[:pro_exp]
+        @premium_exp = auth_response[:premium_exp]
       end
     end
   end

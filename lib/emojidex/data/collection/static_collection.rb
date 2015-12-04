@@ -14,5 +14,20 @@ module Emojidex::Data
       add_emoji(res)
       return true
     end
+
+    def check_and_load_static(collection)
+      loaded = false
+      if defined? Emojidex::Vectors
+        @vector_source_path = Emojidex::Vectors.path + "/#{collection}/"
+        load_local_collection @vector_source_path
+        loaded = true
+      end
+      if defined? Emojidex::Rasters
+        @raster_source_path = Emojidex::Rasters.path + "/#{collection}/"
+        load_local_collection @raster_source_path
+        loaded = true
+      end
+      loaded
+    end
   end
 end

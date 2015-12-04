@@ -3,7 +3,7 @@ require_relative 'transactor'
 
 module Emojidex
   module Service
-    # a modified collection class for collections tied to the emojidex service
+    # A modified collection class for collections tied to the emojidex service
     class Collection < Emojidex::Data::Collection
       attr_reader :endpoint, :page, :limit, :detailed
       @username
@@ -20,7 +20,7 @@ module Emojidex
         @limit = opts[:limit] || 50
         @detailed = opts[:detailed] || false
 
-        more()
+        more
         @emoji
       end
 
@@ -35,7 +35,7 @@ module Emojidex
 
         if page_moji.is_a? Hash
           if !page_moji.key? :emoji
-            @page -= 1 #reset page beacuse we failed
+            @page -= 1 # reset page beacuse we failed
             return {}
           end
 
@@ -43,7 +43,7 @@ module Emojidex
           return page_moji[:emoji]
         end
         add_emoji(page_moji)
-        return page_moji
+        page_moji
       end
     end
   end
