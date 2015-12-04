@@ -1,4 +1,4 @@
-module Emojidex::Data
+module Emojidex
   # Global defines for emojidex
   class Defaults
     def self.sizes
