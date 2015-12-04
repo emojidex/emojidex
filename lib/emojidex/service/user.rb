@@ -10,7 +10,7 @@ module Emojidex
       attr_reader :username, :auth_token, :premium, :pro, :premium_exp, :pro_exp, :status
       attr_accessor :favorites, :history
 
-      @@auth_status_codes = {none: false, failure: false, unverified: false, verified: true}
+      @@auth_status_codes = { none: false, failure: false, unverified: false, verified: true }
       def self.auth_status_codes
         @@auth_status_codes
       end
@@ -25,7 +25,7 @@ module Emojidex
       def login(user, password)
         begin
           auth_response = Transactor.get('users/authenticate',
-                            {user: user, password: password})
+                            { user: user, password: password })
         rescue Error::Unauthorized
           @status = :unverified
           return false
@@ -36,7 +36,7 @@ module Emojidex
       def authorize(username, auth_token)
         begin
           auth_response = Transactor.get('users/authenticate',
-                            {username: username, token: auth_token})
+                            { username: username, token: auth_token })
         rescue Error::Unauthorized
           @status = :unverified
           return false
@@ -54,8 +54,8 @@ module Emojidex
 
         begin
           res = Emojidex::Service::Collection.new(
-            {endpoint: 'users/favorites', limit: limit, detailed: detailed,
-             username: @username, auth_token: @auth_token})
+            { endpoint: 'users/favorites', limit: limit, detailed: detailed,
+             username: @username, auth_token: @auth_token })
         rescue Error::Unauthorized
           return false
         end
@@ -69,8 +69,8 @@ module Emojidex
 
         begin
           res = Transactor.post('users/favorites',
-                  {username: @username, auth_token: @auth_token,
-                   emoji_code: Emojidex.escape_code(code)})
+                  { username: @username, auth_token: @auth_token,
+                   emoji_code: Emojidex.escape_code(code) })
         rescue Error::Unauthorized
           return false
         rescue Error::UnprocessableEntity => e
@@ -85,13 +85,28 @@ module Emojidex
 
       def remove_favorite(code)
         return false unless authorized?
+
+        begin
+          res = Transactor.delete('users/favorites',
+                  { username: @username, auth_token: @auth_token,
+                   emoji_code: Emojidex.escape_code(code) })
+        rescue Error::Unauthorized
+          return false
+        rescue Error::UnprocessableEntity => e
+          # TODO: API is currently returning this both when emoji already registered
+          # and when code is invalid. When already registerd it will return 200 on
+          # next update
+          return true if e.message == 'emoji not in user favorites'
+          return false
+        end
+        true
       end
 
-      def sync_history(limit = 50, page = 1)
+      def sync_history(limit = Emojidex::Defaults.limit, page = 1)
         return false unless authorized?
 
         @history = Transactor.get('users/history',
-                    {limit: limit, page: page, username: @username, auth_token: @auth_token})
+                    { limit: limit, page: page, username: @username, auth_token: @auth_token })
         # TODO: this is a temporary implementation of history. It will be revised after an
         # API update.
         true

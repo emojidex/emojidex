@@ -23,6 +23,7 @@ module Emojidex
         @emoji
       end
 
+      # Get the next page worth of emoji and add them to the collection
       def more()
         @page += 1
 

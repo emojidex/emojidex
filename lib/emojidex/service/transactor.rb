@@ -38,6 +38,14 @@ module Emojidex
         self._datafy_json(response.body)
       end
 
+      def self.delete(endpoint, params = {})
+        response = self.connect.delete(
+          "#{self.api_url}#{endpoint}", params)
+
+        self._status_raiser(response)
+        self._datafy_json(response.body)
+      end
+
       def self.connect
         return @@connection if @@connection
         @@connection = Faraday.new do |conn|

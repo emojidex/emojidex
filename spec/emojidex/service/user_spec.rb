@@ -76,5 +76,17 @@ describe Emojidex::Service::User do
       user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
       expect(user.add_favorite('combat_knife')).to be true
     end
+
+    it 'refuses to remove a favorite when not authorized' do
+      user = Emojidex::Service::User.new
+      expect(user.remove_favorite('combat_knife')).to be false
+    end
+
+    it 'removes a favorite when authorized' do
+      user = Emojidex::Service::User.new
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      user.add_favorite('combat_knife')
+      expect(user.remove_favorite('combat_knife')).to be true
+    end
   end
 end
