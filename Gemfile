@@ -12,9 +12,7 @@ group :development do
 end
 
 group :test do
-  gem 'coveralls', require: false
   gem 'rspec'
-  gem 'codeclimate-test-reporter', require: nil
   gem 'emojidex-vectors', github: 'emojidex/emojidex-vectors'
   gem 'emojidex-rasters', github: 'emojidex/emojidex-rasters'
 end

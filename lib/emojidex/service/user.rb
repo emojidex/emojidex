@@ -49,7 +49,7 @@ module Emojidex
         @@auth_status_codes[@status]
       end
 
-      def sync_favorites(limit = 50, detailed = true)
+      def sync_favorites(limit = Emojidex::Defaults.limit, detailed = true)
         return false unless authorized?
 
         begin

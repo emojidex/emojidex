@@ -1,5 +1,6 @@
 require_relative '../data/collection'
 require_relative 'transactor'
+require_relative '../defaults'
 
 module Emojidex
   module Service
@@ -15,7 +16,7 @@ module Emojidex
 
         @endpoint = opts[:endpoint] || 'emoji'
         @page = opts[:page] || 0
-        @limit = opts[:limit] || 50
+        @limit = opts[:limit] || Emojidex::Defaults.limit
         @detailed = opts[:detailed] || false
 
         more
@@ -25,14 +26,14 @@ module Emojidex
       def more()
         @page += 1
 
-        opts = {page: @page, limit: @limit, detailed: @detailed}
+        opts = { page: @page, limit: @limit, detailed: @detailed }
         opts[:username] = @username unless @username.nil?
         opts[:auth_token] = @auth_token unless @auth_token.nil?
 
         page_moji = Emojidex::Service::Transactor.get(@endpoint, opts)
 
         if page_moji.is_a? Hash
-          if !page_moji.key? :emoji
+          unless page_moji.key? :emoji
             @page -= 1 # reset page beacuse we failed
             return {}
           end

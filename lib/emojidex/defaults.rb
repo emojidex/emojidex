@@ -10,5 +10,13 @@ module Emojidex
     def self.formats
       [:svg, :png]
     end
+
+    def self.limit
+      50
+    end
+
+    def self.lang
+      'en'
+    end
   end
 end
