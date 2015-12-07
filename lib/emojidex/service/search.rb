@@ -50,10 +50,12 @@ module Emojidex
       # detailed: set to true to enable detailed results (defaults to false)
       # limit: sets the number of items per page (default Emojidex::Defaults.limit)
       # Returns a service Collection.
-      def self.advanced(code_term, categories = [], tags = [], opts = {})
-        opts[:code_term] = Emojidex.escape_code(code_term)
+      def self.advanced(code_cont, categories = [], tags = [], opts = {})
+        opts[:code_cont] = Emojidex.escape_code(code_cont)
         tags = [] << tags unless tags.class == Array
+        opts[:tags] = tags
         categories = [] << categories unless categories.class == Array
+        opts[:categories] = categories
         _do_search(opts)
       end
 
