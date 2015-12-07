@@ -1,5 +1,6 @@
 require 'json'
 require 'fileutils'
+require_relative '../../service/transactor'
 require_relative '../../defaults'
 
 module Emojidex
@@ -12,7 +13,7 @@ module Emojidex
         # check if cache dir is already set
         return @cache_path if @cache_path && path.nil?
         # setup cache
-        @cache_path = File.expand_path(path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/cache")
+        @cache_path = File.expand_path(path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/emoji/")
         ENV['EMOJI_CACHE'] = @cache_path
         FileUtils.mkdir_p(@cache_path)
         Emojidex::Defaults.sizes.keys.each do |size|
@@ -72,8 +73,27 @@ module Emojidex
         sizes.each do |size|
           src = @source_path + "/#{size}/#{moji.code}"
           FileUtils.cp("#{src}.#{format}",
-            (@cache_path + "/#{size}")) if FileTest.exist? "#{src}.#{format}"
+            ("#{@cache_path}/#{size}")) if FileTest.exist? "#{src}.#{format}"
           FileUtils.cp_r(src, @cache_path) if File.directory? src
+        end
+      end
+
+      def _cache_from_net(moji, formats, sizes)
+        formats = *formats unless formats.class == Array
+        _cache_svg_from_net(moji) if formats.include? :svg
+        if formats.include? :png
+          _cache_raster_from_net(moji, :png, sizes)
+        end
+      end
+
+      def _cache_svg_from_net(moji)
+      end
+
+      def _cache_raster_from_net(moji, format, sizes)
+        sizes.each do |size|
+          response = Emojidex::Service::Transactor.download("#{size}/#{moji.code}.#{format.to_s}")
+          File.open("#{@cache_path}/#{size}/#{moji.code}.#{format.to_s}", 'wb') { |fp| 
+            fp.write(response.body) }
         end
       end
     end

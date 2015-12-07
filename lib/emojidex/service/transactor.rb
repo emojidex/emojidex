@@ -46,6 +46,10 @@ module Emojidex
         self._datafy_json(response.body)
       end
 
+      def self.download(file_subpath)
+        self.connect.get("#{self.cdn_url}#{file_subpath}")
+      end
+
       def self.connect
         return @@connection if @@connection
         @@connection = Faraday.new do |conn|
@@ -58,6 +62,10 @@ module Emojidex
 
       def self.api_url()
         "#{@@settings[:api][:protocol]}://#{@@settings[:api][:host]}#{@@settings[:api][:prefix]}"
+      end
+
+      def self.cdn_url()
+        "#{@@settings[:cdn][:protocol]}://#{@@settings[:cdn][:host]}#{@@settings[:cdn][:prefix]}"
       end
 
       private
