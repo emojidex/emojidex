@@ -33,7 +33,7 @@ module Emojidex
         opts[:endpoint] = 'search/emoji'
         opts[:code_sw] = Emojidex.escape_code(code_sw)
         begin
-          col = Emojidex::Service::Collection.new('search/emoji', opts)
+          col = Emojidex::Service::Collection.new(opts)
         rescue
           return Emojidex::Service::Collection.new
         end
@@ -44,12 +44,30 @@ module Emojidex
       # Available options are the same as term.
       # Returns a service Collection.
       def self.ending(code_ew, opts = {})
+        opts[:endpoint] = 'search/emoji'
+        opts[:code_ew] = Emojidex.escape_code(code_ew)
+        begin
+          col = Emojidex::Service::Collection.new(opts)
+        rescue
+          return Emojidex::Service::Collection.new
+        end
+        col
       end
 
       # Searches an array of tags for emoji associated with all those tags.
       # Available options are the same as term.
       # Returns a service Collection.
       def self.tags(tags, opts = {})
+        opts[:endpoint] = 'search/emoji'
+        tags = [] << tags unless tags.class == Array
+        tags.map! { |tag| tag.to_s }
+        opts[:tags] = tags
+        begin
+          col = Emojidex::Service::Collection.new(opts)
+        rescue
+          return Emojidex::Service::Collection.new
+        end
+        col
       end
 
       def self.find(code)
