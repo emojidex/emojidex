@@ -13,14 +13,8 @@ module Emojidex
       # limit: sets the number of items per page (default Emojidex::Defaults.limit)
       # Returns a service Collection.
       def self.term(code_cont, opts = {})
-        opts[:endpoint] = 'search/emoji'
         opts[:code_cont] = Emojidex.escape_code(code_cont)
-        begin
-          col = Emojidex::Service::Collection.new(opts)
-        rescue
-          return Emojidex::Service::Collection.new
-        end
-        col
+        _do_search(opts)
       end
       def self.search(code_cont, opts = {})
         self.term(code_cont, opts)
@@ -30,47 +24,25 @@ module Emojidex
       # Available options are the same as term.
       # Returns a service Collection.
       def self.starting(code_sw, opts = {})
-        opts[:endpoint] = 'search/emoji'
         opts[:code_sw] = Emojidex.escape_code(code_sw)
-        begin
-          col = Emojidex::Service::Collection.new(opts)
-        rescue
-          return Emojidex::Service::Collection.new
-        end
-        col
+        _do_search(opts)
       end
 
       # Searches for a code ending with the given term.
       # Available options are the same as term.
       # Returns a service Collection.
       def self.ending(code_ew, opts = {})
-        opts[:endpoint] = 'search/emoji'
         opts[:code_ew] = Emojidex.escape_code(code_ew)
-        begin
-          col = Emojidex::Service::Collection.new(opts)
-        rescue
-          return Emojidex::Service::Collection.new
-        end
-        col
+        _do_search(opts)
       end
 
       # Searches an array of tags for emoji associated with all those tags.
       # Available options are the same as term.
       # Returns a service Collection.
       def self.tags(tags, opts = {})
-        opts[:endpoint] = 'search/emoji'
         tags = [] << tags unless tags.class == Array
-        tags.map! { |tag| tag.to_s }
         opts[:tags] = tags
-        begin
-          col = Emojidex::Service::Collection.new(opts)
-        rescue
-          return Emojidex::Service::Collection.new
-        end
-        col
-      end
-
-      def self.find(code)
+        _do_search(opts)
       end
 
       # An expanded version of term with categories and tags as arguments.
@@ -79,6 +51,29 @@ module Emojidex
       # limit: sets the number of items per page (default Emojidex::Defaults.limit)
       # Returns a service Collection.
       def self.advanced(code_term, categories = [], tags = [], opts = {})
+        opts[:code_term] = Emojidex.escape_code(code_term)
+        tags = [] << tags unless tags.class == Array
+        categories = [] << categories unless categories.class == Array
+        _do_search(opts)
+      end
+
+      private
+
+      def self._sanitize_opts(opts)
+        opts[:tags].map! { |tag| tag.to_s } if opts.include? :tags
+        opts[:categories].map! { |category| category.to_s } if opts.include? :categories
+        opts
+      end
+
+      def self._do_search(opts)
+        opts = _sanitize_opts(opts)
+        opts[:endpoint] = 'search/emoji'
+        begin
+          col = Emojidex::Service::Collection.new(opts)
+        rescue
+          return Emojidex::Service::Collection.new
+        end
+        col
       end
     end
   end
