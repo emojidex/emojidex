@@ -6,7 +6,7 @@ module Emojidex
   module Service
     # A modified collection class for collections tied to the emojidex service
     class Collection < Emojidex::Data::Collection
-      attr_reader :endpoint, :page, :limit, :detailed
+      attr_reader :endpoint, :page, :limit, :detailed, :auto_cache
 
       def initialize(opts = {})
         @emoji = opts[:emoji] || {}
@@ -25,6 +25,9 @@ module Emojidex
         opts.delete(:limit)
         @detailed = opts[:detailed] || false
         opts.delete(:detailed)
+
+        @auto_cache = opts[:auto_cache] || true
+        opts.delete(:auto_cache)
 
         @opts = opts
 
@@ -53,6 +56,7 @@ module Emojidex
           return page_moji[:emoji]
         end
         add_emoji(page_moji)
+        cache! if @auto_cache
         page_moji
       end
     end

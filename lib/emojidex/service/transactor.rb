@@ -47,7 +47,7 @@ module Emojidex
       end
 
       def self.download(file_subpath)
-        self.connect.get("#{self.cdn_url}#{file_subpath}")
+        self.connect.get(URI.escape("#{self.cdn_url}#{file_subpath}"))
       end
 
       def self.connect

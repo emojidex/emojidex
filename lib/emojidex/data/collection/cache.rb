@@ -1,5 +1,6 @@
 require 'json'
 require 'fileutils'
+require_relative 'asset_information'
 require_relative '../../service/transactor'
 require_relative '../../defaults'
 
@@ -7,6 +8,7 @@ module Emojidex
   module Data
     # local caching functionality for collections
     module CollectionCache
+      include Emojidex::Data::CollectionAssetInformation
       attr_reader :cache_path
 
       def setup_cache(path = nil)
@@ -14,7 +16,7 @@ module Emojidex
         return @cache_path if @cache_path && path.nil?
         # setup cache
         @cache_path = File.expand_path(path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/emoji/")
-        ENV['EMOJI_CACHE'] = @cache_path
+        # ENV['EMOJI_CACHE'] = @cache_path
         FileUtils.mkdir_p(@cache_path)
         Emojidex::Defaults.sizes.keys.each do |size|
           FileUtils.mkdir_p(@cache_path + "/#{size}")
@@ -30,11 +32,16 @@ module Emojidex
       #   sizes: sizes to cache (default is px32, but this is irrelivant for SVG)
       def cache!(options = {})
         setup_cache options[:cache_path]
-        formats = options[:formats] || [:svg, :png]
-        sizes = options[:sizes] || [:px32]
+        formats = options[:formats] || Emojidex::Defaults.selected_formats
+        sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
+        thr = []
         @emoji.values.each do |moji|
-          _svg_check_copy(moji) if formats.include? :svg
-          _raster_check_copy(moji, :png, sizes) if formats.include? :png
+          thr << Thread.new { _svg_check_copy(moji) } if formats.include? :svg
+          thr << Thread.new { _raster_check_copy(moji, :png, sizes) } if formats.include? :png
+          if thr.length >= 8
+            thr.each { |t| t.join }
+            thr = []
+          end
         end
         cache_index
       end
@@ -59,34 +66,50 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        src = @source_path + "/#{moji.code}"
+        _cache_svg_from_net(moji) if @vector_source_path.nil?
+        src = "#{@vector_source_path}/#{moji.code}"
         if File.exist? "#{src}.svg"
           unless File.exist?("#{@cache_path}/#{moji.code}.svg") &&
-            FileUtils.compare_file("#{src}.svg", "#{@cache_path}/#{moji.code}.svg")
+              FileUtils.compare_file("#{src}.svg", "#{@cache_path}/#{moji.code}.svg")
             FileUtils.cp("#{src}.svg", @cache_path)
           end
+        else
+          _cache_svg_from_net(moji)
         end
         FileUtils.cp_r src, @cache_path if File.directory? src
       end
 
       def _raster_check_copy(moji, format, sizes)
+        _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil?
         sizes.each do |size|
-          src = @source_path + "/#{size}/#{moji.code}"
-          FileUtils.cp("#{src}.#{format}",
-            ("#{@cache_path}/#{size}")) if FileTest.exist? "#{src}.#{format}"
+          src = "#{@raster_source_path}/#{size}/#{moji.code}"
+          if FileTest.exist? "#{src}.#{format}"
+            FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}"))
+          else 
+            _cache_raster_from_net(moji, format, sizes)
+          end
           FileUtils.cp_r(src, @cache_path) if File.directory? src
         end
       end
 
       def _cache_from_net(moji, formats, sizes)
         formats = *formats unless formats.class == Array
-        _cache_svg_from_net(moji) if formats.include? :svg
-        if formats.include? :png
-          _cache_raster_from_net(moji, :png, sizes)
-        end
+        dls = []
+        dls << Thread.new { _cache_svg_from_net(moji) } if formats.include? :svg
+        dls << Thread.new { _cache_raster_from_net(moji, :png, sizes) } if formats.include? :png
+        dls.each { |t| t.join }
       end
 
       def _cache_svg_from_net(moji)
+        target = "#{@cache_path}/#{moji.code}.svg"
+        if File.exist? target # check for an existing copy so we don't double downlaod
+          return if moji.checksum?(:svg).nil? # no updates if we didn't get details
+          # if the checksums are the same there is no reason to update
+          return if moji.checksum?(:svg) == get_checksums(moji, [:svg])[:svg]
+        end
+        response = Emojidex::Service::Transactor.download("#{moji.code}.svg")
+        File.open(target, 'wb') { |fp| 
+          fp.write(response.body) }
       end
 
       def _cache_raster_from_net(moji, format, sizes)

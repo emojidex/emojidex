@@ -9,6 +9,7 @@ module Emojidex::Data
     include Emojidex::Data::EmojiAssetInformation
 
     def initialize(details = {})
+      init_asset_info(details)
       @moji = details[:moji]
       @code, @code_ja = details[:code], details[:code_ja]
       @unicode, @full_name = details[:unicode], details[:full_name]
