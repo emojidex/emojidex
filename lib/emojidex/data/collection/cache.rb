@@ -9,9 +9,12 @@ module Emojidex
     # local caching functionality for collections
     module CollectionCache
       include Emojidex::Data::CollectionAssetInformation
-      attr_reader :cache_path
+      attr_reader :cache_path, :download_queue
+      attr_accessor :download_threads
 
       def setup_cache(path = nil)
+        @download_queue = []
+        @download_threads = 8
         # check if cache dir is already set
         return @cache_path if @cache_path && path.nil?
         # setup cache
@@ -34,11 +37,11 @@ module Emojidex
         setup_cache options[:cache_path]
         formats = options[:formats] || Emojidex::Defaults.selected_formats
         sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
-        thr = []
         @emoji.values.each do |moji|
           _svg_check_copy(moji) if formats.include? :svg
           _raster_check_copy(moji, :png, sizes) if formats.include? :png
         end
+        _process_download_queue
         cache_index
       end
 
@@ -65,7 +68,7 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        _cache_svg_from_net(moji, format, sizes) if @vector_source_path.nil? && @source_path.nil?
+        @download_queue << { moji: moji, formats: :svg, sizes: [] } if @vector_source_path.nil? && @source_path.nil?
         @vector_source_path = @source_path if @vector_source_path.nil?
         src = "#{@vector_source_path}/#{moji.code}.svg"
         if File.exist? "#{src}"
@@ -80,7 +83,7 @@ module Emojidex
       end
 
       def _raster_check_copy(moji, format, sizes)
-        _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil? && @source_path.nil?
+        @download_queue << { moji: moji, formats: [format], sizes: sizes } if @raster_source_path.nil? && @source_path.nil?
         @raster_source_path = @source_path if @raster_source_path.nil?
         _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil?
         sizes.each do |size|
@@ -91,6 +94,14 @@ module Emojidex
             _cache_raster_from_net(moji, format, sizes)
           end
           FileUtils.cp_r(src, @cache_path) if File.directory? src
+        end
+      end
+
+      def _process_download_queue
+        thr = []
+        @download_queue.each do |dl|
+          thr << Thread.new { _cache_from_net(dl[:moji], dl[:formats], dl[:sizes]) }
+          thr.each { |t| t.join } if thr.length >= @download_threads
         end
       end
 
