@@ -15,7 +15,7 @@ module Emojidex
         # check if cache dir is already set
         return @cache_path if @cache_path && path.nil?
         # setup cache
-        @cache_path = File.expand_path(path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/emoji/")
+        @cache_path = File.expand_path((path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/") + '/emoji')
         # ENV['EMOJI_CACHE'] = @cache_path
         FileUtils.mkdir_p(@cache_path)
         Emojidex::Defaults.sizes.keys.each do |size|
@@ -51,9 +51,7 @@ module Emojidex
         idx = Emojidex::Data::Collection.new
         idx.load_local_collection(destination) if FileTest.exist? "#{destination}/emoji.json"
         idx.add_emoji @emoji.values
-        File.open("#{destination}/emoji.json", 'w') do |f|
-          f.write idx.emoji.values.to_json
-        end
+        File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.emoji.values.to_json }
       end
 
       def write_index(destination)

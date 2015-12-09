@@ -66,8 +66,8 @@ describe Emojidex::Data::UTF do
     it 'caches emoji to local storage cache' do
       utf.cache!(cache_path: tmp_cache_path, formats: [:svg])
       expect(File.exist? tmp_cache_path).to be_truthy
-      expect(File.exist? tmp_cache_path + '/sushi.svg').to be_truthy
-      expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
+      expect(File.exist? tmp_cache_path + '/emoji/sushi.svg').to be_truthy
+      expect(File.exist? tmp_cache_path + '/emoji/emoji.json').to be_truthy
     end
   end
 

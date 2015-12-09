@@ -88,5 +88,41 @@ describe Emojidex::Service::User do
       user.add_favorite('combat_knife')
       expect(user.remove_favorite('combat_knife')).to be true
     end
+
+    it 'saves user data' do
+      user = Emojidex::Service::User.new
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      user.save(tmp_cache_path)
+      expect(File.exist? "#{tmp_cache_path}/user.json").to be true
+      expect(File.exist? "#{tmp_cache_path}/history.json").to be true
+      expect(File.exist? "#{tmp_cache_path}/favorites.json").to be true
+    end
+
+    it 'loads user data' do
+      user = Emojidex::Service::User.new
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      user.sync_favorites
+      user.sync_history
+      user.add_favorite('忍者') # just in case
+      user.save(tmp_cache_path)
+
+      # without syncing
+      user = Emojidex::Service::User.new
+      user.load(tmp_cache_path)
+      expect(user.username).to eq 'test'
+      expect(user.authorized?).to be true
+      expect(user.favorites.emoji.count > 0).to be true
+      expect(user.history.length > 0).to be true
+
+      # with syncing
+      user = Emojidex::Service::User.new
+      user.load(tmp_cache_path, false)
+      expect(user.username).to eq 'test'
+      expect(user.authorized?).to be false
+      expect(user.status).to be :loaded
+      expect(user.favorites.emoji.count > 0).to be true
+      expect(user.history.length > 0).to be true
+    end
+
   end
 end

@@ -9,8 +9,8 @@ module Emojidex
       attr_reader :endpoint, :page, :limit, :detailed, :auto_cache
 
       def initialize(opts = {})
-        @emoji = opts[:emoji] || {}
-        opts.delete(:emoji)
+        @emoji = {}
+        add_emoji(opts[:emoji]) && opts.delete(:emoji) if opts.include? :emoji
 
         @username = opts[:username] || nil
         opts.delete(:username)
@@ -29,9 +29,12 @@ module Emojidex
         @auto_cache = opts[:auto_cache] || true
         opts.delete(:auto_cache)
 
+        auto_init = opts[:auto_init] || true
+        opts.delete(:auto_init)
+
         @opts = opts
 
-        more
+        more if auto_init
         @emoji
       end
 

@@ -66,6 +66,9 @@ describe Emojidex::Data::Collection do
   describe '.cache!' do
     it 'caches emoji to local storage cache' do
       collection.cache!(cache_path: tmp_cache_path, formats: [:svg])
+      expect(collection.cache_path).to eq "#{tmp_cache_path}/emoji"
+      expect(collection.vector_source_path).to eq collection.source_path
+      expect(File.exist? "#{collection.vector_source_path}/mouth.svg").to be_truthy
       expect(File.exist? tmp_cache_path).to be_truthy
       expect(File.exist? "#{collection.cache_path}/mouth.svg").to be_truthy
       expect(File.exist? "#{collection.cache_path}/emoji.json").to be_truthy
