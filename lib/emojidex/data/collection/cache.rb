@@ -36,16 +36,15 @@ module Emojidex
         sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
         thr = []
         @emoji.values.each do |moji|
-          thr << Thread.new { _svg_check_copy(moji) } if formats.include? :svg
-          thr << Thread.new { _raster_check_copy(moji, :png, sizes) } if formats.include? :png
-          if thr.length >= 8
-            thr.each { |t| t.join }
-            thr = []
-          end
+          _svg_check_copy(moji) if formats.include? :svg
+          _raster_check_copy(moji, :png, sizes) if formats.include? :png
         end
         cache_index
       end
 
+      # Updates an index in the specified destination (or the cache path if not specified).
+      # This method reads the existing index, combines the contents with this collection, and
+      # writes the results.
       def cache_index(destination = nil)
         destination ||= @cache_path
         idx = Emojidex::Data::Collection.new
@@ -54,6 +53,8 @@ module Emojidex
         File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.emoji.values.to_json }
       end
 
+      # [over]writes a sanitized index to the specified destination.
+      # WARNING: This method destroys any index files in the destination.
       def write_index(destination)
         idx = @emoji.values.to_json
         idx = JSON.parse idx
@@ -64,13 +65,13 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        _cache_vector_from_net(moji, format, sizes) if @vector_source_path.nil? && @source_path.nil?
+        _cache_svg_from_net(moji, format, sizes) if @vector_source_path.nil? && @source_path.nil?
         @vector_source_path = @source_path if @vector_source_path.nil?
-        src = "#{@vector_source_path}/#{moji.code}"
-        if File.exist? "#{src}.svg"
-          unless File.exist?("#{@cache_path}/#{moji.code}.svg") &&
-              FileUtils.compare_file("#{src}.svg", "#{@cache_path}/#{moji.code}.svg")
-            FileUtils.cp("#{src}.svg", @cache_path)
+        src = "#{@vector_source_path}/#{moji.code}.svg"
+        if File.exist? "#{src}"
+          unless File.exist?("#{@cache_path}/#{moji.code}") &&
+              FileUtils.compare_file("#{src}", "#{@cache_path}/#{moji.code}.svg")
+            FileUtils.cp("#{src}", @cache_path)
           end
         else
           _cache_svg_from_net(moji)
