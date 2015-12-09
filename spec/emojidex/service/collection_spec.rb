@@ -12,6 +12,9 @@ describe Emojidex::Service::Collection do
       expect(sc.detailed).to be false
       expect(sc.endpoint).to eq 'emoji'
       expect(sc.page).to eq 1
+      expect(sc.source_path).to be nil
+      expect(sc.vector_source_path).to be nil
+      expect(sc.raster_source_path).to be nil
     end
   end
 end
