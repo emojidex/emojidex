@@ -8,7 +8,7 @@ require 'emojidex/data/extended'
 
 describe Emojidex::Data::Collection do
   let(:collection) { Emojidex::Data::Collection.new(nil, './spec/support/sample_collections/good') }
-  let(:tmp_cache_path) { File.expand_path('../support/tmpcache', __FILE__) }
+  before(:each) { clear_tmp_cache }
 
   describe '.load_local_collection' do
     it 'loads a local collection' do
@@ -71,30 +71,22 @@ describe Emojidex::Data::Collection do
       puts `ls #{collection.cache_path}`
       expect(File.exist? "#{collection.cache_path}/mouth.svg").to be_truthy
       expect(File.exist? "#{collection.cache_path}/emoji.json").to be_truthy
-
-      FileUtils.rm_rf tmp_cache_path # cleanup
     end
   end
 
   describe '.cache_index' do
     it 'caches the  index to the specified location' do
-      tmp_cache_path = File.expand_path('../support/tmpcache', __FILE__)
       FileUtils.mkdir_p(tmp_cache_path)
       collection.cache_index tmp_cache_path
       expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
-
-      FileUtils.rm_rf tmp_cache_path
     end
   end
 
   describe '.write_index' do
     it 'writes a cleaned index to the specified location' do
-      tmp_cache_path = File.expand_path('../support/tmpcache', __FILE__)
       FileUtils.mkdir_p(tmp_cache_path)
       collection.cache_index tmp_cache_path
       expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
-
-      FileUtils.rm_rf tmp_cache_path
     end
   end
 
@@ -108,8 +100,6 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.checksum?(:png, :px32)).to be_truthy
       expect(collection.emoji.values.first.checksums[:png][:px64]).to be_nil
       expect(collection.emoji.values.first.checksum?(:png, :px64)).to be_nil
-
-      FileUtils.rm_rf tmp_cache_path
     end
   end
 
@@ -122,9 +112,7 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.paths[:png][:px32]).to be_truthy
       expect(collection.emoji.values.first.path?(:png, :px32)).to be_truthy
       expect(collection.emoji.values.first.paths[:png][:px64]).to be_nil
-      expect(collection.emoji.values.first.path?(:png, :px64)).to be_nil
-      
-      FileUtils.rm_rf tmp_cache_path
+      expect(collection.emoji.values.first.path?(:png, :px64)).to be_nil 
     end
   end
 

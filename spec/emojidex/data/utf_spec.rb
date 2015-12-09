@@ -5,6 +5,7 @@ require 'emojidex/data/utf'
 
 describe Emojidex::Data::UTF do
   let(:utf) { Emojidex::Data::UTF.new }
+  before(:each) { clear_tmp_cache }
 
   describe '.each' do
     it 'provides each emoji' do
@@ -63,24 +64,18 @@ describe Emojidex::Data::UTF do
 
   describe '.cache!' do
     it 'caches emoji to local storage cache' do
-      tmp_cache_path = File.expand_path('../support/tmpcache', __FILE__)
       utf.cache!(cache_path: tmp_cache_path, formats: [:svg])
       expect(File.exist? tmp_cache_path).to be_truthy
       expect(File.exist? tmp_cache_path + '/sushi.svg').to be_truthy
       expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
-
-      FileUtils.rm_rf tmp_cache_path # cleanup
     end
   end
 
   describe 'cache_index' do
     it 'caches the collection index to the specified location' do
-      tmp_cache_path = File.expand_path('../support/tmpcache', __FILE__)
       FileUtils.mkdir_p(tmp_cache_path)
       utf.cache_index tmp_cache_path
       expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
-
-      FileUtils.rm_rf tmp_cache_path
     end
   end
 
