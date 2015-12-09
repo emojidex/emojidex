@@ -66,7 +66,8 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        _cache_svg_from_net(moji) if @vector_source_path.nil?
+        _cache_vector_from_net(moji, format, sizes) if @vector_source_path.nil? && @source_path.nil?
+        @vector_source_path = @source_path if @vector_source_path.nil?
         src = "#{@vector_source_path}/#{moji.code}"
         if File.exist? "#{src}.svg"
           unless File.exist?("#{@cache_path}/#{moji.code}.svg") &&
@@ -80,6 +81,8 @@ module Emojidex
       end
 
       def _raster_check_copy(moji, format, sizes)
+        _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil? && @source_path.nil?
+        @raster_source_path = @source_path if @raster_source_path.nil?
         _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil?
         sizes.each do |size|
           src = "#{@raster_source_path}/#{size}/#{moji.code}"
