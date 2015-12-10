@@ -112,7 +112,7 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.path?(:svg)).to be_truthy
       expect(collection.emoji.values.first.paths[:png][:px32]).to be_truthy
       expect(collection.emoji.values.first.path?(:png, :px32)).to be_truthy
-      expect(collection.emoji.values.first.paths[:png][:px64]).to be_nil
+      expect(collection.emoji.values.first.paths[:png][:px64]).to be_truthy
       expect(collection.emoji.values.first.path?(:png, :px64)).to be_nil 
     end
   end
