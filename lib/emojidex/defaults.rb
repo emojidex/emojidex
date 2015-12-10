@@ -31,5 +31,9 @@ module Emojidex
     def self.lang
       'en'
     end
+
+    def self.encapsulator
+      ':'
+    end
   end
 end

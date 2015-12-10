@@ -27,6 +27,11 @@ module Emojidex
         @cache_path
       end
 
+      def load_cache(path = nil)
+        setup_cache(path)
+        load_local_collection(@cache_path)
+      end
+
       # Caches emoji to local emoji storage cache
       # Options:
       #   cache_path: manually specify cache location
@@ -68,6 +73,7 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
+        return if File.exist? "#{@cache_path}/#{moji.code}.svg" # TODO check checsums
         @download_queue << { moji: moji, formats: :svg, sizes: [] } if @vector_source_path.nil? && @source_path.nil?
         @vector_source_path = @source_path if @vector_source_path.nil?
         src = "#{@vector_source_path}/#{moji.code}.svg"
@@ -87,6 +93,7 @@ module Emojidex
         @raster_source_path = @source_path if @raster_source_path.nil?
         _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil?
         sizes.each do |size|
+          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO check checsums
           src = "#{@raster_source_path}/#{size}/#{moji.code}"
           if FileTest.exist? "#{src}.#{format}"
             FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}"))
@@ -127,8 +134,9 @@ module Emojidex
 
       def _cache_raster_from_net(moji, format, sizes)
         sizes.each do |size|
-          response = Emojidex::Service::Transactor.download("#{size}/#{moji.code}.#{format.to_s}")
-          File.open("#{@cache_path}/#{size}/#{moji.code}.#{format.to_s}", 'wb') { |fp| 
+          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO check checsums
+          response = Emojidex::Service::Transactor.download("#{size}/#{moji.code}.#{format}")
+          File.open("#{@cache_path}/#{size}/#{moji.code}.#{format}", 'wb') { |fp| 
             fp.write(response.body) }
         end
       end

@@ -32,6 +32,7 @@ module Emojidex
         json = IO.read(@source_path + '/emoji.json')
         list = JSON.parse(json, symbolize_names: true)
         add_emoji(list)
+        generate_paths
       end
 
       # each override to map each functionality to the emoji hash values
@@ -112,8 +113,10 @@ module Emojidex
         list.each do |moji_info|
           if moji_info.instance_of? Emojidex::Data::Emoji
             @emoji[moji_info.code.to_sym] = moji_info.dup
+            @emoji[moji_info.code.to_sym].paths = get_paths(moji_info)
           else
             emoji = Emojidex::Data::Emoji.new moji_info
+            emoji.paths = get_paths(emoji)
             @emoji[emoji.code.to_sym] = emoji
           end
         end

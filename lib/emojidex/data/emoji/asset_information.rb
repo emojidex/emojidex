@@ -35,10 +35,48 @@ module Emojidex
         end
       end
 
+      def path(format, size = nil)
+        fp = path?(format, size)
+        cache(format, size) unless (fp != nil && File.exist?(fp))
+        fp
+      end
+
       # returns asset path
       def path?(format, size = nil)
-        return @paths[format][size] unless size.nil?
-        @paths[format]
+        case format
+        when :svg
+          return @paths[format] if File.exist?(@paths[format])
+        when :png
+          return nil if size.nil?
+          return @paths[format][size] if File.exist?(@paths[format][size])
+        end
+        nil
+      end
+
+      def cache(format, size = nil)
+        case format
+        when :png
+          _cache_png(size) unless size.nil?
+        when :svg
+          _cache_svg
+        end
+      end
+
+      private
+
+      def _cache_svg
+        @paths[:svg] = Dir.pwd unless (@paths.include? :svg && @paths[:svg] != nil)
+        response = Emojidex::Service::Transactor.download("#{code}.svg")
+        File.open(@paths[:svg], 'wb') { |fp| 
+          fp.write(response.body) }
+      end
+
+      def _cache_png(size)
+        @paths[:png][size] = "#{Dir.pwd}/#{size}/#{code}.png" unless ((@paths.include? :png) && 
+                                  (@paths[:png].include? size) && (@paths[:png][size] != nil))
+        response = Emojidex::Service::Transactor.download("#{size}/#{code}.png")
+        File.open(path?(:png, size), 'wb') { |fp| 
+          fp.write(response.body) }
       end
     end
   end

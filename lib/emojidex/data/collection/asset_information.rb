@@ -29,7 +29,7 @@ module Emojidex
         end
       end
 
-      def get_paths(moji, formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
+      def get_paths?(moji, formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
         paths = {}
         path = "#{@cache_path}/#{moji.code}.svg"
         paths[:svg] = path if File.exist? path
@@ -38,6 +38,18 @@ module Emojidex
           sizes.keys.each do |size|
             path = "#{@cache_path}/#{size}/#{moji.code}.png"
             paths[:png][size] = path if File.exist? path
+          end
+        end
+        paths
+      end
+
+      def get_paths(moji, formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
+        paths = {}
+        paths[:svg] = "#{@cache_path}/#{moji.code}.svg"
+        if formats.include? :png
+          paths[:png] = {}
+          sizes.keys.each do |size|
+            paths[:png][size] = "#{@cache_path}/#{size}/#{moji.code}.png"
           end
         end
         paths
