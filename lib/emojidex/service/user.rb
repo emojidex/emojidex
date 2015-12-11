@@ -86,13 +86,9 @@ module Emojidex
                                 emoji_code: Emojidex.escape_code(code))
         rescue Error::Unauthorized
           return false
-        rescue Error::UnprocessableEntity => e
-          # TODO: API is currently returning this both when emoji already registered
-          # and when code is invalid. When already registerd it will return 202 on
-          # next update
-          return true if e.message == 'emoji already in user favorites'
-          return false
         end
+        return false if res.include? :status && res[:status] == 'emoji already in user favorites'
+        @favorites.add_emoji([res])
         true
       end
 
@@ -101,17 +97,13 @@ module Emojidex
 
         begin
           res = Transactor.delete('users/favorites',
-                                  username: @username, auth_token: @auth_token,
-                                  emoji_code: Emojidex.escape_code(code))
+                            username: @username, auth_token: @auth_token,
+                            emoji_code: Emojidex.escape_code(code))
         rescue Error::Unauthorized
           return false
-        rescue Error::UnprocessableEntity => e
-          # TODO: API is currently returning this both when emoji already registered
-          # and when code is invalid. When already registerd it will return 200 on
-          # next update
-          return true if e.message == 'emoji not in user favorites'
-          return false
         end
+        return false if res.include? :status && res[:status] == 'emoji not in user favorites'
+        @favorites.remove_emoji(code.to_sym)
         true
       end
 

@@ -9,30 +9,17 @@ module Emojidex
       attr_reader :endpoint, :page, :limit, :detailed, :auto_cache
 
       def initialize(opts = {})
-        @emoji = {}
-        add_emoji(opts[:emoji]) && opts.delete(:emoji) if opts.include? :emoji
-
-        @username = opts[:username] || nil
-        opts.delete(:username)
-        @auth_token = opts[:auth_token] || nil
-        opts.delete(:auth_token)
-
-        @endpoint = opts[:endpoint] || 'emoji'
-        opts.delete(:endpoint)
-        @page = opts[:page] || 0
-        opts.delete(:page)
-        @limit = opts[:limit] || Emojidex::Defaults.limit
-        opts.delete(:limit)
-        @detailed = opts[:detailed] || false
-        opts.delete(:detailed)
-
-        @auto_cache = opts[:auto_cache] || true
-        opts.delete(:auto_cache)
-
-        auto_init = opts[:auto_init] || true
-        opts.delete(:auto_init)
-
         @opts = opts
+
+        _init_emoji
+        _init_user_info
+        _init_endpoint
+
+        @auto_cache = @opts[:auto_cache] || true
+        @opts.delete(:auto_cache)
+
+        auto_init = @opts[:auto_init] || true
+        @opts.delete(:auto_init)
 
         more if auto_init
         @emoji
@@ -47,20 +34,51 @@ module Emojidex
         opts[:auth_token] = @auth_token unless @auth_token.nil?
         opts.merge! @opts
 
-        page_moji = Emojidex::Service::Transactor.get(@endpoint, opts)
+        moji_page = Emojidex::Service::Transactor.get(@endpoint, opts)
 
-        if page_moji.is_a? Hash
-          unless page_moji.key? :emoji
+        _process_moji_page(moji_page)
+      end
+
+      private
+
+      def _init_emoji
+        @emoji = {}
+        return unless @opts.include? :emoji
+        add_emoji(@opts[:emoji])
+        @opts.delete(:emoji)
+      end
+
+      def _init_user_info
+        @username = @opts[:username] || nil
+        @opts.delete(:username)
+        @auth_token = @opts[:auth_token] || nil
+        @opts.delete(:auth_token)
+      end
+
+      def _init_endpoint
+        @endpoint = @opts[:endpoint] || 'emoji'
+        @opts.delete(:endpoint)
+        @page = @opts[:page] || 0
+        @opts.delete(:page)
+        @limit = @opts[:limit] || Emojidex::Defaults.limit
+        @opts.delete(:limit)
+        @detailed = @opts[:detailed] || false
+        @opts.delete(:detailed)
+      end
+
+      def _process_moji_page(moji_page)
+        if moji_page.is_a? Hash
+          unless moji_page.key? :emoji
             @page -= 1 # reset page beacuse we failed
             return {}
           end
 
-          add_emoji(page_moji[:emoji])
-          return page_moji[:emoji]
+          return add_emoji(moji_page[:emoji])
         end
-        add_emoji(page_moji)
+
+        add_emoji(moji_page)
         cache! if @auto_cache
-        page_moji
+        moji_page
       end
     end
   end

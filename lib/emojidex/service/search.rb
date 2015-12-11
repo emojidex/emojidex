@@ -4,6 +4,7 @@ require_relative '../../emojidex'
 
 module Emojidex
   module Service
+    # Search functionality for the emojidex service
     class Search
       # Searches by term with the options given. Options are:
       # tags: an array of tags to restrict the search to

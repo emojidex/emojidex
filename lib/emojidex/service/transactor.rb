@@ -75,9 +75,9 @@ module Emojidex
         when 200..299
           return # don't raise
         when 401
-          fail Error::Unauthorized.new(_extract_status_line(response))
+          fail Error::Unauthorized, _extract_status_line(response)
         when 422
-          fail Error::UnprocessableEntity.new(s_extract_status_line(response))
+          fail Error::UnprocessableEntity _extract_status_line(response)
         end
       end
 
@@ -91,7 +91,7 @@ module Emojidex
         begin
           data = JSON.parse(body, symbolize_names: true)
         rescue JSON::ParserError
-          raise Error::InvalidJSON.new('could not parse JSON')
+          raise Error::InvalidJSON, 'could not parse JSON'
         end
         data
       end

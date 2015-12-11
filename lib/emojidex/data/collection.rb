@@ -110,16 +110,7 @@ module Emojidex
       # Adds emojis to the collection
       # After add categories are updated
       def add_emoji(list)
-        list.each do |moji_info|
-          if moji_info.instance_of? Emojidex::Data::Emoji
-            @emoji[moji_info.code.to_sym] = moji_info.dup
-            @emoji[moji_info.code.to_sym].paths = get_paths(moji_info)
-          else
-            emoji = Emojidex::Data::Emoji.new moji_info
-            emoji.paths = get_paths(emoji)
-            @emoji[emoji.code.to_sym] = emoji
-          end
-        end
+        _add_list(list)
         categorize
         associate_variants
         condense_moji_code_data
@@ -128,7 +119,25 @@ module Emojidex
 
       alias_method :<<, :add_emoji
 
+      def remove_emoji(code)
+        emoji.delete(code)
+        @emoji
+      end
+
       private
+
+      def _add_list(list)
+        list.each do |moji_info|
+          if moji_info.instance_of? Emojidex::Data::Emoji
+            @emoji[moji_info.code.to_sym] = moji_info.dup
+            @emoji[moji_info.code.to_sym].paths = get_paths(moji_info)
+          else
+            emoji = Emojidex::Data::Emoji.new moji_info
+            emoji.paths = get_paths(emoji)
+            @emoji[Emojidex.escape_code(emoji.code.to_s).to_sym] = emoji
+          end
+        end
+      end
 
       # Makes a list of all categories which contain emoji in this collection
       def categorize

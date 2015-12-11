@@ -10,7 +10,7 @@ def sample_collection(name)
 end
 
 def tmp_cache_path
-  tmp_cache_path = File.expand_path('../tmp/samplecache', __FILE__)
+  File.expand_path('../tmp/samplecache', __FILE__)
 end
 
 def clear_tmp_cache

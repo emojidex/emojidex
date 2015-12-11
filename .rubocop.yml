@@ -1,18 +1,25 @@
 AsciiIdentifiers:
-  Enabled: false
+  Enabled: false # 日本語使えるから使わせて貰うわ
 
 AsciiComments:
-  Enabled: false
+  Enabled: false # 英語版は英語のコメント添えているからいい・・・
 
 AccessorMethodName:
-  Enabled: false
+  Enabled: false # HTTP method verb is 'get' and the method name should be 'get'
 
 Style/DefWithParentheses:
-  Enabled: false
+  Enabled: false # While a lot of people don't like parenthesis they can often add clarification
+
+Style/ClassVars:
+  Enabled: false # We're using them on purpose as static containers, instance vars won't retain
+
+Lint/UselessAccessModifier:
+  Enabled: false # without private designator methods were not private... rubocop bug?
 
 LineLength:
-  Max: 99
+  Max: 99 # safe for github
 
 AllCops:
-  Excludes:
+  Exclude:
     - 'Guardfile'
+    - 'emojidex.gemspec'
