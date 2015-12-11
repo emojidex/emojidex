@@ -5,7 +5,6 @@ require_relative '../../emojidex'
 module Emojidex
   module Service
     class Search
-
       # Searches by term with the options given. Options are:
       # tags: an array of tags to restrict the search to
       # categories: an arry of categories to restrict the serach to
@@ -16,8 +15,9 @@ module Emojidex
         opts[:code_cont] = Emojidex.escape_code(code_cont)
         _do_search(opts)
       end
+
       def self.search(code_cont, opts = {})
-        self.term(code_cont, opts)
+        term(code_cont, opts)
       end
 
       # Searches for a code starting with the given term.
@@ -62,8 +62,8 @@ module Emojidex
       private
 
       def self._sanitize_opts(opts)
-        opts[:tags].map! { |tag| tag.to_s } if opts.include? :tags
-        opts[:categories].map! { |category| category.to_s } if opts.include? :categories
+        opts[:tags].map!(&:to_s) if opts.include? :tags
+        opts[:categories].map!(&:to_s) if opts.include? :categories
         opts
       end
 

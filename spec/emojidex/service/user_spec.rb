@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'emojidex/service/user'
 
-
 describe Emojidex::Service::User do
   it 'has a set of auth status codes which define if a user is authorized' do
     expect(Emojidex::Service::User.auth_status_codes.include? :verified).to be true
@@ -123,6 +122,5 @@ describe Emojidex::Service::User do
       expect(user.favorites.emoji.count > 0).to be true
       expect(user.history.length > 0).to be true
     end
-
   end
 end

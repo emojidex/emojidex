@@ -132,19 +132,18 @@ module Emojidex
 
       # Makes a list of all categories which contain emoji in this collection
       def categorize
-        @categories = @emoji.values.map { |moji| moji.category }
+        @categories = @emoji.values.map(&:category)
         @categories.uniq!
       end
 
       def associate_variants
         @emoji.values.each do |emoji_obj|
-          if emoji_obj.code.match(/\(.*\)$/) # this emoji is a variant
-            # check for base
-            base_code = emoji_obj.code.sub(/\(.*\)$/, '').to_sym
-            if @emoji.key? base_code
-              @emoji[base_code].variants << emoji_obj.code.to_sym
-              emoji_obj.base = base_code
-            end
+          next unless emoji_obj.code.match(/\(.*\)$/) # this emoji is a variant
+          # check for base
+          base_code = emoji_obj.code.sub(/\(.*\)$/, '').to_sym
+          if @emoji.key? base_code
+            @emoji[base_code].variants << emoji_obj.code.to_sym
+            emoji_obj.base = base_code
           end
         end
       end

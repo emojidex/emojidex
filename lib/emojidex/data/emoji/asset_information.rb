@@ -37,7 +37,7 @@ module Emojidex
 
       def path(format, size = nil)
         fp = path?(format, size)
-        cache(format, size) unless (fp != nil && File.exist?(fp))
+        cache(format, size) unless !fp.nil? && File.exist?(fp)
         fp
       end
 
@@ -65,18 +65,17 @@ module Emojidex
       private
 
       def _cache_svg
-        @paths[:svg] = Dir.pwd unless (@paths.include? :svg && @paths[:svg] != nil)
+        @paths[:svg] = Dir.pwd unless (@paths.include? :svg) && !@paths[:svg].nil?
         response = Emojidex::Service::Transactor.download("#{code}.svg")
-        File.open(@paths[:svg], 'wb') { |fp| 
-          fp.write(response.body) }
+        File.open(@paths[:svg], 'wb') { |fp| fp.write(response.body) }
       end
 
       def _cache_png(size)
-        @paths[:png][size] = "#{Dir.pwd}/#{size}/#{code}.png" unless ((@paths.include? :png) && 
-                                  (@paths[:png].include? size) && (@paths[:png][size] != nil))
+        unless (@paths.include? :png) && (@paths[:png].include? size) && !@paths[:png][size].nil?
+          @paths[:png][size] = "#{Dir.pwd}/#{size}/#{code}.png"
+        end
         response = Emojidex::Service::Transactor.download("#{size}/#{code}.png")
-        File.open(path?(:png, size), 'wb') { |fp| 
-          fp.write(response.body) }
+        File.open(path?(:png, size), 'wb') { |fp| fp.write(response.body) }
       end
     end
   end

@@ -7,7 +7,9 @@ require 'emojidex/data/utf'
 require 'emojidex/data/extended'
 
 describe Emojidex::Data::Collection do
-  let(:collection) { Emojidex::Data::Collection.new(nil, './spec/support/sample_collections/good') }
+  let(:collection) do
+    Emojidex::Data::Collection.new(nil, './spec/support/sample_collections/good')
+  end
   before(:each) { clear_tmp_cache }
 
   describe '.load_local_collection' do
@@ -113,7 +115,7 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.paths[:png][:px32]).to be_truthy
       expect(collection.emoji.values.first.path?(:png, :px32)).to be_truthy
       expect(collection.emoji.values.first.paths[:png][:px64]).to be_truthy
-      expect(collection.emoji.values.first.path?(:png, :px64)).to be_nil 
+      expect(collection.emoji.values.first.path?(:png, :px64)).to be_nil
     end
   end
 
@@ -125,12 +127,12 @@ describe Emojidex::Data::Collection do
 
       col << Emojidex::Data::UTF.new
       expect(col.emoji.count > 0).to be true
-      expect(col.emoji.count).to eq (Emojidex::Data::UTF.new()).emoji.count
+      expect(col.emoji.count).to eq Emojidex::Data::UTF.new.emoji.count
 
       col << Emojidex::Data::Extended.new
-      expect(col.emoji.count > (Emojidex::Data::UTF.new()).emoji.count).to be true
-      expect(col.emoji.count).to eq ((Emojidex::Data::UTF.new()).emoji.count + 
-                                     (Emojidex::Data::Extended.new()).emoji.count)
+      expect(col.emoji.count > (Emojidex::Data::UTF.new).emoji.count).to be true
+      expect(col.emoji.count).to eq Emojidex::Data::UTF.new.emoji.count +
+        Emojidex::Data::Extended.new.emoji.count
     end
   end
 end

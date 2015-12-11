@@ -15,7 +15,7 @@ module Emojidex::Data
       @unicode, @full_name = details[:unicode], details[:full_name]
       @emoticon = details[:emoticon]
       @category = details[:category] ? details[:category].to_sym : :other
-      @tags = details[:tags].map { |tag| tag.to_sym } unless details[:tags].nil?
+      @tags = details[:tags].map(&:to_sym) unless details[:tags].nil?
       @link = details[:link]
       @variants, @base = details[:variants] || [], details[:base]
       @is_wide = details[:is_wide]

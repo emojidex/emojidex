@@ -35,7 +35,7 @@ module Emojidex
 
       def create_file_list(dir, ext, prefix)
         result = {}
-        return result unless Dir.exists?(dir)
+        return result unless Dir.exist?(dir)
         Dir.foreach(dir) do |file|
           result["#{prefix}#{File.basename(file, '.*')}".to_sym] =
             "#{prefix}#{file}" if File.extname(file) == ext
@@ -56,7 +56,6 @@ module Emojidex
 
       def create_svg_array(emoji, asset_files)
         result = []
-        asset_file = asset_files[emoji.code.to_sym]
         result << "#{emoji.code}.svg" if asset_files[emoji.code.to_sym].nil?
         result
       end

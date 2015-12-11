@@ -15,5 +15,4 @@ describe Emojidex::Data::Categories do
       expect(categories.categories[:transportation].ja).to eq('乗り物')
     end
   end
-
 end

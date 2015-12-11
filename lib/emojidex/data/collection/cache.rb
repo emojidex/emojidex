@@ -18,7 +18,8 @@ module Emojidex
         # check if cache dir is already set
         return @cache_path if @cache_path && path.nil?
         # setup cache
-        @cache_path = File.expand_path((path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/") + '/emoji')
+        @cache_path =
+          File.expand_path((path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/") + '/emoji')
         # ENV['EMOJI_CACHE'] = @cache_path
         FileUtils.mkdir_p(@cache_path)
         Emojidex::Defaults.sizes.keys.each do |size|
@@ -66,20 +67,22 @@ module Emojidex
       def write_index(destination)
         idx = @emoji.values.to_json
         idx = JSON.parse idx
-        idx.each { |moji| moji.delete_if{ |k, v| v.nil? }}
+        idx.each { |moji| moji.delete_if { |_k, v| v.nil? } }
         File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.to_json }
       end
 
       private
 
       def _svg_check_copy(moji)
-        return if File.exist? "#{@cache_path}/#{moji.code}.svg" # TODO check checsums
-        @download_queue << { moji: moji, formats: :svg, sizes: [] } if @vector_source_path.nil? && @source_path.nil?
+        return if File.exist? "#{@cache_path}/#{moji.code}.svg" # TODO: check checksums
+        if @vector_source_path.nil? && @source_path.nil?
+          @download_queue << { moji: moji, formats: :svg, sizes: [] }
+        end
         @vector_source_path = @source_path if @vector_source_path.nil?
         src = "#{@vector_source_path}/#{moji.code}.svg"
         if File.exist? "#{src}"
           unless File.exist?("#{@cache_path}/#{moji.code}") &&
-              FileUtils.compare_file("#{src}", "#{@cache_path}/#{moji.code}.svg")
+                 FileUtils.compare_file("#{src}", "#{@cache_path}/#{moji.code}.svg")
             FileUtils.cp("#{src}", @cache_path)
           end
         else
@@ -89,15 +92,17 @@ module Emojidex
       end
 
       def _raster_check_copy(moji, format, sizes)
-        @download_queue << { moji: moji, formats: [format], sizes: sizes } if @raster_source_path.nil? && @source_path.nil?
+        if @raster_source_path.nil? && @source_path.nil?
+          @download_queue << { moji: moji, formats: [format], sizes: sizes }
+        end
         @raster_source_path = @source_path if @raster_source_path.nil?
         _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil?
         sizes.each do |size|
-          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO check checsums
+          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO: check checksums
           src = "#{@raster_source_path}/#{size}/#{moji.code}"
           if FileTest.exist? "#{src}.#{format}"
             FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}"))
-          else 
+          else
             _cache_raster_from_net(moji, format, sizes)
           end
           FileUtils.cp_r(src, @cache_path) if File.directory? src
@@ -108,7 +113,7 @@ module Emojidex
         thr = []
         @download_queue.each do |dl|
           thr << Thread.new { _cache_from_net(dl[:moji], dl[:formats], dl[:sizes]) }
-          thr.each { |t| t.join } if thr.length >= @download_threads
+          thr.each(&:join) if thr.length >= @download_threads
         end
       end
 
@@ -117,7 +122,7 @@ module Emojidex
         dls = []
         dls << Thread.new { _cache_svg_from_net(moji) } if formats.include? :svg
         dls << Thread.new { _cache_raster_from_net(moji, :png, sizes) } if formats.include? :png
-        dls.each { |t| t.join }
+        dls.each(&:join)
       end
 
       def _cache_svg_from_net(moji)
@@ -128,16 +133,16 @@ module Emojidex
           return if moji.checksum?(:svg) == get_checksums(moji, [:svg])[:svg]
         end
         response = Emojidex::Service::Transactor.download("#{moji.code}.svg")
-        File.open(target, 'wb') { |fp| 
-          fp.write(response.body) }
+        File.open(target, 'wb') { |fp| fp.write(response.body) }
       end
 
       def _cache_raster_from_net(moji, format, sizes)
         sizes.each do |size|
-          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO check checsums
+          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO: check checksums
           response = Emojidex::Service::Transactor.download("#{size}/#{moji.code}.#{format}")
-          File.open("#{@cache_path}/#{size}/#{moji.code}.#{format}", 'wb') { |fp| 
-            fp.write(response.body) }
+          File.open("#{@cache_path}/#{size}/#{moji.code}.#{format}", 'wb') do |fp|
+            fp.write(response.body)
+          end
         end
       end
     end

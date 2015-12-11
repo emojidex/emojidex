@@ -17,7 +17,7 @@ module Emojidex
         @@auth_status_codes
       end
 
-      def initialize(opts = {})
+      def initialize(_opts = {})
         clear_auth_data
         @status = :none
         @history = []
@@ -27,7 +27,7 @@ module Emojidex
       def login(user, password, sync_on_login = true)
         begin
           auth_response = Transactor.get('users/authenticate',
-                            { user: user, password: password })
+                                         user: user, password: password)
         rescue Error::Unauthorized
           @status = :unverified
           return false
@@ -44,7 +44,7 @@ module Emojidex
       def authorize(username, auth_token, sync_on_auth = true)
         begin
           auth_response = Transactor.get('users/authenticate',
-                            { username: username, token: auth_token })
+                                         username: username, token: auth_token)
         rescue Error::Unauthorized
           @status = :unverified
           return false
@@ -67,8 +67,8 @@ module Emojidex
 
         begin
           res = Emojidex::Service::Collection.new(
-            { endpoint: 'users/favorites', limit: limit, detailed: detailed,
-             username: @username, auth_token: @auth_token })
+            endpoint: 'users/favorites', limit: limit, detailed: detailed,
+            username: @username, auth_token: @auth_token)
         rescue Error::Unauthorized
           return false
         end
@@ -82,8 +82,8 @@ module Emojidex
 
         begin
           res = Transactor.post('users/favorites',
-                  { username: @username, auth_token: @auth_token,
-                   emoji_code: Emojidex.escape_code(code) })
+                                username: @username, auth_token: @auth_token,
+                                emoji_code: Emojidex.escape_code(code))
         rescue Error::Unauthorized
           return false
         rescue Error::UnprocessableEntity => e
@@ -93,7 +93,7 @@ module Emojidex
           return true if e.message == 'emoji already in user favorites'
           return false
         end
-        return true
+        true
       end
 
       def remove_favorite(code)
@@ -101,8 +101,8 @@ module Emojidex
 
         begin
           res = Transactor.delete('users/favorites',
-                  { username: @username, auth_token: @auth_token,
-                   emoji_code: Emojidex.escape_code(code) })
+                                  username: @username, auth_token: @auth_token,
+                                  emoji_code: Emojidex.escape_code(code))
         rescue Error::Unauthorized
           return false
         rescue Error::UnprocessableEntity => e
@@ -119,7 +119,8 @@ module Emojidex
         return false unless authorized?
 
         @history = Transactor.get('users/history',
-                    { limit: limit, page: page, username: @username, auth_token: @auth_token })
+                                  limit: limit, page: page,
+                                  username: @username, auth_token: @auth_token)
         # TODO: this is a temporary implementation of history. It will be revised after an
         # API update.
         true
@@ -137,9 +138,7 @@ module Emojidex
       end
 
       def sync
-        authorize(@username, @auth_token) &&
-        sync_favorites &&
-        sync_history
+        authorize(@username, @auth_token) && sync_favorites && sync_history
       end
 
       def save(path)
@@ -183,8 +182,7 @@ module Emojidex
       end
 
       def _set_cache_path(path)
-        @cache_path = @cache_path || File.expand_path(
-          path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/")
+        @cache_path ||= File.expand_path(path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/")
         FileUtils.mkdir_p(@cache_path)
         @cache_path
       end
@@ -192,13 +190,15 @@ module Emojidex
       def _save_user
         user_info = { username: username, auth_token: auth_token,
                       premium: premium, pro: pro,
-                      premium_exp: premium_exp, pro_exp: pro_exp 
+                      premium_exp: premium_exp, pro_exp: pro_exp
                     }
         File.open("#{@cache_path}/user.json", 'w') { |f| f.write user_info.to_json }
       end
 
       def _save_favorites
-        File.open("#{@cache_path}/favorites.json", 'w') { |f| f.write @favorites.emoji.values.to_json }
+        File.open("#{@cache_path}/favorites.json", 'w') do |f|
+          f.write @favorites.emoji.values.to_json
+        end
       end
 
       def _save_history

@@ -23,7 +23,7 @@ describe Emojidex::Service::Search do
       res = Emojidex::Service::Search.starting('face')
       expect(res).to be_a(Emojidex::Service::Collection)
       expect(res.emoji.count >= 3).to be true
-      for i in 0..10
+      (0..10).each do |i|
         expect(/^face/.match(res.emoji.values[i].code).nil?).to be false
       end
     end
@@ -34,7 +34,7 @@ describe Emojidex::Service::Search do
       res = Emojidex::Service::Search.ending('face')
       expect(res).to be_a(Emojidex::Service::Collection)
       expect(res.emoji.count >= 3).to be true
-      for i in 0..10
+      (0..10).each do |i|
         expect(/face$/.match(res.emoji.values[i].code).nil?).to be false
       end
     end
@@ -58,7 +58,7 @@ describe Emojidex::Service::Search do
       res = Emojidex::Service::Search.advanced('face')
       expect(res).to be_a(Emojidex::Service::Collection)
       expect(res.emoji.count > 0).to be true
-      for i in 0..(res.emoji.count - 1)
+      (0..(res.emoji.count - 1)).each do |i|
         expect(/face/.match(res.emoji.values[i].code).nil?).to be false
       end
     end
@@ -67,7 +67,7 @@ describe Emojidex::Service::Search do
       res = Emojidex::Service::Search.advanced('metal', [], :fist)
       expect(res).to be_a(Emojidex::Service::Collection)
       expect(res.emoji.count > 0).to be true
-      for i in 0..(res.emoji.count - 1)
+      (0..(res.emoji.count - 1)).each do |i|
         expect(/metal/.match(res.emoji.values[i].code).nil?).to be false
         expect(res.emoji.values[i].tags.include? :fist).to be true
       end
@@ -77,11 +77,10 @@ describe Emojidex::Service::Search do
       res = Emojidex::Service::Search.advanced('san', [:food])
       expect(res).to be_a(Emojidex::Service::Collection)
       expect(res.emoji.count > 0).to be true
-      for i in 0..(res.emoji.count - 1)
+      (0..(res.emoji.count - 1)).each do |i|
         expect(/san/.match(res.emoji.values[i].code).nil?).to be false
         expect(res.emoji.values[i].category).to be :food
       end
     end
-
   end
 end

@@ -23,31 +23,31 @@ module Emojidex
       }
 
       def self.get(endpoint, params = {})
-        response = self.connect.get(
-          "#{self.api_url}#{endpoint}", params)
+        response = connect.get(
+          "#{api_url}#{endpoint}", params)
 
-        self._status_raiser(response)
-        self._datafy_json(response.body)
+        _status_raiser(response)
+        _datafy_json(response.body)
       end
 
       def self.post(endpoint, params = {})
-        response = self.connect.post(
-          "#{self.api_url}#{endpoint}", params)
+        response = connect.post(
+          "#{api_url}#{endpoint}", params)
 
-        self._status_raiser(response)
-        self._datafy_json(response.body)
+        _status_raiser(response)
+        _datafy_json(response.body)
       end
 
       def self.delete(endpoint, params = {})
-        response = self.connect.delete(
-          "#{self.api_url}#{endpoint}", params)
+        response = connect.delete(
+          "#{api_url}#{endpoint}", params)
 
-        self._status_raiser(response)
-        self._datafy_json(response.body)
+        _status_raiser(response)
+        _datafy_json(response.body)
       end
 
       def self.download(file_subpath)
-        self.connect.get(URI.escape("#{self.cdn_url}#{file_subpath}"))
+        connect.get(URI.escape("#{cdn_url}#{file_subpath}"))
       end
 
       def self.connect
@@ -75,16 +75,16 @@ module Emojidex
         when 200..299
           return # don't raise
         when 401
-          raise Error::Unauthorized.new(self._extract_status_line(response))
+          fail Error::Unauthorized.new(_extract_status_line(response))
         when 422
-          raise Error::UnprocessableEntity.new(self._extract_status_line(response))
+          fail Error::UnprocessableEntity.new(s_extract_status_line(response))
         end
       end
 
       def self._extract_status_line(response)
-          data = self._datafy_json(response.body)
-          status_line = (data.key?(:status) ? data[:status] : '')
-          status_line
+        data = _datafy_json(response.body)
+        status_line = (data.key?(:status) ? data[:status] : '')
+        status_line
       end
 
       def self._datafy_json(body)

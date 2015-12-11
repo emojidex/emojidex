@@ -5,13 +5,15 @@ module Emojidex
   module Data
     # Asset Information for Collections
     module CollectionAssetInformation
-      def generate_checksums(formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
+      def generate_checksums(formats = Emojidex::Defaults.formats,
+                             sizes = Emojidex::Defaults.sizes)
         @emoji.values.each do |moji|
           moji.checksums = get_checksums(moji, formats, sizes)
         end
       end
 
-      def get_checksums(moji, formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
+      def get_checksums(moji, formats = Emojidex::Defaults.formats,
+                        sizes = Emojidex::Defaults.sizes)
         sums = {}
         sums[:svg] = _checksum_for_file("#{@cache_path}/#{moji.code}.svg") if formats.include? :svg
         if formats.include? :png
@@ -43,7 +45,8 @@ module Emojidex
         paths
       end
 
-      def get_paths(moji, formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
+      def get_paths(moji, formats = Emojidex::Defaults.formats,
+                    sizes = Emojidex::Defaults.sizes)
         paths = {}
         paths[:svg] = "#{@cache_path}/#{moji.code}.svg"
         if formats.include? :png
@@ -56,6 +59,7 @@ module Emojidex
       end
 
       private
+
       def _checksum_for_file(path)
         (File.exist? path) ? Digest::MD5.file(path).hexdigest : nil
       end

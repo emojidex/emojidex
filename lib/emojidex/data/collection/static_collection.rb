@@ -8,12 +8,12 @@ module Emojidex
       def load_from_server(detailed = true, locale = '??')
         locale = Emojidex::EnvHelper.lang? if locale == '??'
         begin
-          res = Emojidex::Service::Transactor.get(@endpoint, {detailed: detailed, locale: locale})
+          res = Emojidex::Service::Transactor.get(@endpoint, detailed: detailed, locale: locale)
         rescue
-          return false
+          false
         end
         add_emoji(res)
-        return true
+        true
       end
 
       def check_and_load_static(collection)

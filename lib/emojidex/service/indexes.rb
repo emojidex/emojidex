@@ -9,17 +9,21 @@ module Emojidex
       # Obtain a service Collection of emoji indexed by score.
       # This is the default index.
       def self.emoji(detailed = false, limit = Emojidex::Defaults.limit, page = 1)
-        Emojidex::Service::Collection.new({endpoint: 'emoji', detailed: detailed, limit: limit, page: page})
+        Emojidex::Service::Collection.new(endpoint: 'emoji', detailed: detailed,
+                                          limit: limit, page: page)
       end
 
       # Obtain a service Collection of emoji indexed by date of creation (or in some cases update).
       def self.newest(detailed = false, limit = Emojidex::Defaults.limit, page = 1)
-        Emojidex::Service::Collection.new({endpoint: 'newest', detailed: detailed, limit: limit, page: page})
+        Emojidex::Service::Collection.new(endpoint: 'newest', detailed: detailed,
+                                          limit: limit, page: page)
       end
 
-      # Obtain a service Collection of emoji indexed by popularity [how many times they have been favorited].
+      # Obtain a service Collection of emoji indexed by popularity
+      # [how many times they have been favorited].
       def self.popular(detailed = false, limit = Emojidex::Defaults.limit, page = 1)
-        Emojidex::Service::Collection.new({endpoint: 'popular', detailed: detailed, limit: limit, page: page})
+        Emojidex::Service::Collection.new(endpoint: 'popular', detailed: detailed,
+                                          limit: limit, page: page)
       end
 
       # Obtains a hash with three different types of chracter [moji] code indexes:
@@ -31,11 +35,11 @@ module Emojidex
       #   the emoji short codes in the locale [language] specified (defaults to english).
       def self.moji_codes(locale = Emojidex::Defaults.lang)
         begin
-          res = Emojidex::Service::Transactor.get('moji_codes', { locale: locale })
+          res = Emojidex::Service::Transactor.get('moji_codes', locale: locale)
         rescue
-          return { moji_string: "", moji_array: [], moji_index: {} }
+          return { moji_string: '', moji_array: [], moji_index: {} }
         end
-        res[:moji_index] = Hash[res[:moji_index].map{ |k, v| [k.to_s, v] }]
+        res[:moji_index] = Hash[res[:moji_index].map { |k, v| [k.to_s, v] }]
         res
       end
     end

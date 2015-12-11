@@ -17,12 +17,12 @@ describe Emojidex::Data::Extended do
   describe 'find_by_code' do
     it 'finds and returns an emoji by code' do
       expect(ext.find_by_code('combat_knife'))
-      .to be_an_instance_of(Emojidex::Data::Emoji)
+        .to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'finds and returns an emoji by code, converting spaces to underscores' do
       expect(ext.find_by_code('combat knife'))
-      .to be_an_instance_of(Emojidex::Data::Emoji)
+        .to be_an_instance_of(Emojidex::Data::Emoji)
     end
 
     it 'returns nil when a code does not exist' do
@@ -114,5 +114,4 @@ describe Emojidex::Data::Extended do
       expect(ext.emoji.count > 0).to be true
     end
   end
-
 end
