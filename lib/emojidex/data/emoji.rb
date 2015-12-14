@@ -1,3 +1,4 @@
+require_relative '../../emojidex'
 require_relative 'emoji/asset_information'
 
 module Emojidex
@@ -10,13 +11,13 @@ module Emojidex
       include Emojidex::Data::EmojiAssetInformation
 
       def initialize(details = {})
-        init_asset_info(details)
         _init_identifier_info(details)
         _init_descriptor_info(details)
+        init_asset_info(details)
       end
 
       def to_s
-        @moji || ":#{@code}:"
+        @moji || Emojidex.encapsulate_code(@code)
       end
 
       def to_json(*args)
@@ -43,8 +44,8 @@ module Emojidex
 
       def _init_identifier_info(details)
         @moji = details[:moji].to_s
-        @code = details[:code].to_s
-        @code_ja = details[:code_ja].to_s
+        @code = Emojidex.unescape_code(details[:code].to_s)
+        @code_ja = Emojidex.unescape_code(details[:code_ja].to_s)
         @unicode = details[:unicode].to_s
         @full_name = details[:full_name].to_s
         @emoticon = details[:emoticon].to_s

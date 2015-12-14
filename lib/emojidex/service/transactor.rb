@@ -1,5 +1,6 @@
 require 'faraday'
 require 'json'
+require_relative '../../emojidex'
 require_relative 'error'
 
 module Emojidex
@@ -47,7 +48,7 @@ module Emojidex
       end
 
       def self.download(file_subpath)
-        connect.get(URI.escape("#{cdn_url}#{file_subpath}"))
+        connect.get(URI.escape("#{cdn_url}#{file_subpath.tr(' ', '_')}"))
       end
 
       def self.connect

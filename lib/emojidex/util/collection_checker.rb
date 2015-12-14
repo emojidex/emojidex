@@ -2,7 +2,7 @@ require 'find'
 require_relative '../defaults.rb'
 
 module Emojidex
-  module Data
+  module Util
     # Check collections for presence of image assets and discrepencies in emoji indexes.
     class CollectionChecker
       attr_reader :index_only, :asset_only

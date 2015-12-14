@@ -36,6 +36,16 @@ describe Emojidex::Service::Indexes do
     end
   end
 
+  describe 'user_emoji' do
+    it 'returns a service collection' do
+      idx = Emojidex::Service::Indexes.user_emoji('emojidex')
+      expect(idx).to be_a(Emojidex::Service::Collection)
+      expect(idx.source_path).to be nil
+      expect(idx.vector_source_path).to be nil
+      expect(idx.raster_source_path).to be nil
+    end
+  end
+
   describe 'moji_codes' do
     it 'returns a hash with three different types of standard emoji mappings' do
       codes = Emojidex::Service::Indexes.moji_codes

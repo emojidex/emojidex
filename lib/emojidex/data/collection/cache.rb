@@ -120,8 +120,8 @@ module Emojidex
       def _cache_from_net(moji, formats, sizes)
         formats = *formats unless formats.class == Array
         dls = []
-        dls << Thread.new { _cache_svg_from_net(moji) } if formats.include? :svg
-        dls << Thread.new { _cache_raster_from_net(moji, :png, sizes) } if formats.include? :png
+        dls << Thread.new { moji.cache(:svg) } if formats.include? :svg
+        dls << Thread.new { moji.cache(:png, sizes) } if formats.include? :png
         dls.each(&:join)
       end
 

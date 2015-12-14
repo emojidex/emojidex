@@ -16,7 +16,7 @@ describe Emojidex::Data::Emoji do
 
     it 'outputs emoji code when UTF is not present' do
       emoji.moji = nil
-      expect(emoji.to_s).to eq(':shooting_star:')
+      expect(emoji.to_s).to eq(':shooting star:')
     end
   end
 

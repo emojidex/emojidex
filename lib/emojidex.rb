@@ -9,4 +9,12 @@ module Emojidex
   def self.escape_code(code)
     code.tr(' ', '_')
   end
+
+  def self.unescape_code(code)
+    code.tr('_', ' ')
+  end
+
+  def self.encapsulate_code(code)
+    "#{Emojidex::Defaults.encapsulator}#{unescape_code(code)}#{Emojidex::Defaults.encapsulator}"
+  end
 end

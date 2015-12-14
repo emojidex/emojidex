@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'emojidex/data/collection_checker'
+require 'emojidex/util/collection_checker'
 
-describe Emojidex::Data::CollectionChecker do
+describe Emojidex::Util::CollectionChecker do
   before(:all) do
     @sizes = [:px32]
   end
@@ -28,23 +28,23 @@ describe Emojidex::Data::CollectionChecker do
 
   describe '.new' do
     it 'creates a valid CollectionChecker instance and checks a valid collection' do
-      checker = Emojidex::Data::CollectionChecker.new(col_good, sizes: @sizes)
+      checker = Emojidex::Util::CollectionChecker.new(col_good, sizes: @sizes)
 
-      expect(checker).to be_an_instance_of(Emojidex::Data::CollectionChecker)
+      expect(checker).to be_an_instance_of(Emojidex::Util::CollectionChecker)
       expect(checker.index_only).to be_empty
       expect(checker.asset_only).to be_empty
     end
 
     it 'checks to see if a size of an asset exists' do
-      checker = Emojidex::Data::CollectionChecker.new(col_good, sizes: [:px64])
+      checker = Emojidex::Util::CollectionChecker.new(col_good, sizes: [:px64])
 
-      expect(checker).to be_an_instance_of(Emojidex::Data::CollectionChecker)
+      expect(checker).to be_an_instance_of(Emojidex::Util::CollectionChecker)
       expect(checker.index_only.size).to eq(4)
       expect(checker.asset_only).to be_empty
     end
 
     it 'checks for and identifies missing assets' do
-      checker = Emojidex::Data::CollectionChecker.new(col_missing_assets, sizes: @sizes)
+      checker = Emojidex::Util::CollectionChecker.new(col_missing_assets, sizes: @sizes)
 
       expect(checker.asset_only).to be_empty
       expect(checker.index_only.size).to eq(2)
@@ -53,7 +53,7 @@ describe Emojidex::Data::CollectionChecker do
     end
 
     it 'checks for and identifies missing index entries' do
-      checker = Emojidex::Data::CollectionChecker.new(col_missing_index, sizes: @sizes)
+      checker = Emojidex::Util::CollectionChecker.new(col_missing_index, sizes: @sizes)
 
       expect(checker.index_only).to be_empty
       expect(checker.asset_only.size).to eq(1)
@@ -61,7 +61,7 @@ describe Emojidex::Data::CollectionChecker do
         purple_heart: ['purple_heart.svg', 'px32/purple_heart.png'])
     end
     it 'checks collections against a specified asset directory' do
-      checker = Emojidex::Data::CollectionChecker.new([col_missing_index, col_missing_assets],
+      checker = Emojidex::Util::CollectionChecker.new([col_missing_index, col_missing_assets],
                                                       sizes: @sizes,
                                                       asset_path: col_good.source_path)
 

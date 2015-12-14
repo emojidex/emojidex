@@ -35,6 +35,14 @@ module Emojidex
         end
       end
 
+      def fill_paths(paths)
+        @paths[:svg] = paths[:svg] if paths.include? :svg
+        return unless paths.include? :png
+        Emojidex::Defaults.sizes.keys.each do |size|
+          @paths[:png][size] = paths[:png][size] if paths[:png].include? size
+        end
+      end
+
       def path(format, size = nil)
         fp = path?(format, size)
         cache(format, size) unless !fp.nil? && File.exist?(fp)
@@ -53,10 +61,10 @@ module Emojidex
         nil
       end
 
-      def cache(format, size = nil)
+      def cache(format, sizes = nil)
         case format
         when :png
-          _cache_png(size) unless size.nil?
+          _cache_png(sizes) unless sizes.nil?
         when :svg
           _cache_svg
         end
@@ -66,16 +74,20 @@ module Emojidex
 
       def _cache_svg
         @paths[:svg] = Dir.pwd unless (@paths.include? :svg) && !@paths[:svg].nil?
-        response = Emojidex::Service::Transactor.download("#{code}.svg")
+        # TODO check target, check checksum
+        response = Emojidex::Service::Transactor.download("#{@code}.svg")
         File.open(@paths[:svg], 'wb') { |fp| fp.write(response.body) }
       end
 
-      def _cache_png(size)
-        unless (@paths.include? :png) && (@paths[:png].include? size) && !@paths[:png][size].nil?
-          @paths[:png][size] = "#{Dir.pwd}/#{size}/#{code}.png"
+      def _cache_png(sizes)
+        sizes.each do |size|
+          unless (@paths.include? :png) && (@paths[:png].include? size) && @paths[:png][size].nil? == false
+            @paths[:png][size] = "#{Dir.pwd}/#{size}/#{@code}.png"
+          end
+          next if File.exist? @paths[:png][size] # TODO: check checksums
+          response = Emojidex::Service::Transactor.download("#{size}/#{@code}.png")
+          File.open(@paths[:png][size], 'wb') { |fp| fp.write(response.body) }
         end
-        response = Emojidex::Service::Transactor.download("#{size}/#{code}.png")
-        File.open(path?(:png, size), 'wb') { |fp| fp.write(response.body) }
       end
     end
   end

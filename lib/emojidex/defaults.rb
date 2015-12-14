@@ -1,7 +1,7 @@
 module Emojidex
   # Global defines for emojidex
   class Defaults
-    @@selected_sizes = [:mdpi, :px32]
+    @@selected_sizes = [:hdpi, :px32]
     @@selected_formats = [:png]
 
     def self.sizes

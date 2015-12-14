@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'json'
+require_relative '../../emojidex'
 require_relative 'emoji'
 require_relative 'categories'
 require_relative 'collection/cache'

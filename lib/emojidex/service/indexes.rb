@@ -8,20 +8,20 @@ module Emojidex
     class Indexes
       # Obtain a service Collection of emoji indexed by score.
       # This is the default index.
-      def self.emoji(detailed = false, limit = Emojidex::Defaults.limit, page = 1)
+      def self.emoji(detailed = false, limit = Emojidex::Defaults.limit, page = 0)
         Emojidex::Service::Collection.new(endpoint: 'emoji', detailed: detailed,
                                           limit: limit, page: page)
       end
 
       # Obtain a service Collection of emoji indexed by date of creation (or in some cases update).
-      def self.newest(detailed = false, limit = Emojidex::Defaults.limit, page = 1)
+      def self.newest(detailed = false, limit = Emojidex::Defaults.limit, page = 0)
         Emojidex::Service::Collection.new(endpoint: 'newest', detailed: detailed,
                                           limit: limit, page: page)
       end
 
       # Obtain a service Collection of emoji indexed by popularity
       # [how many times they have been favorited].
-      def self.popular(detailed = false, limit = Emojidex::Defaults.limit, page = 1)
+      def self.popular(detailed = false, limit = Emojidex::Defaults.limit, page = 0)
         Emojidex::Service::Collection.new(endpoint: 'popular', detailed: detailed,
                                           limit: limit, page: page)
       end
@@ -41,6 +41,11 @@ module Emojidex
         end
         res[:moji_index] = Hash[res[:moji_index].map { |k, v| [k.to_s, v] }]
         res
+      end
+
+      def self.user_emoji(username, detailed = false, limit = Emojidex::Defaults.limit, page = 0)
+        Emojidex::Service::Collection.new(endpoint: "users/#{username}/emoji", detailed: detailed,
+                                          limit: limit, page: page)
       end
     end
   end
