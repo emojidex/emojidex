@@ -97,7 +97,7 @@ module Emojidex
         data
       end
 
-      def _kludge_windows
+      def self._kludge_windows
         cert_loc = "#{__dir__}/cacert.pem"
         unless File.exist? cert_loc 
           response = @@connection.get("http://curl.haxx.se/ca/cacert.pem")
