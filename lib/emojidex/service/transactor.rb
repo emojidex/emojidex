@@ -57,6 +57,7 @@ module Emojidex
           # conn.response :logger
           conn.adapter Faraday.default_adapter
         end
+        _kludge_windows if Gem.win_platform?
         @@connection
       end
 
@@ -94,6 +95,15 @@ module Emojidex
           raise Error::InvalidJSON, 'could not parse JSON'
         end
         data
+      end
+
+      def _kludge_windows
+        cert_loc = "#{__dir__}/../../cacert.pem"
+        unless File.exist? cert_loc 
+          response = @@connection.get("http://curl.haxx.se/ca/cacert.pem")
+          File.open(cert_loc, 'wb') { |fp| fp.write(response.body) }
+        end
+        ENV['SSL_CERT_FILE'] = cert_loc
       end
     end
   end
