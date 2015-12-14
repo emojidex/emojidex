@@ -119,6 +119,7 @@ module Emojidex
       end
 
       def add_history(code)
+        # TODO
       end
 
       def clear_auth_data()
