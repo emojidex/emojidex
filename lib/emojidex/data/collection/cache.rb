@@ -74,7 +74,7 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        return if File.exist? "#{@cache_path}/#{moji.code}.svg" # TODO: check checksums
+        # return if File.exist? "#{@cache_path}/#{moji.code}.svg" # TODO: check checksums
         if @vector_source_path.nil? && @source_path.nil?
           @download_queue << { moji: moji, formats: :svg, sizes: [] }
         end
@@ -86,7 +86,7 @@ module Emojidex
             FileUtils.cp("#{src}", @cache_path)
           end
         else
-          moji.cache(:svg)
+          @download_queue << { moji: moji, formats: :svg, sizes: [] }
         end
         FileUtils.cp_r src, @cache_path if File.directory? src
       end
@@ -103,7 +103,7 @@ module Emojidex
           if FileTest.exist? "#{src}.#{format}"
             FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}"))
           else
-            moji.cache(format, sizes)
+            @download_queue << { moji: moji, formats: [format], sizes: [size] }
           end
           FileUtils.cp_r(src, @cache_path) if File.directory? src
         end
