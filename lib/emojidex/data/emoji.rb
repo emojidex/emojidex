@@ -44,8 +44,8 @@ module Emojidex
 
       def _init_identifier_info(details)
         @moji = details[:moji].to_s
-        @code = Emojidex.unescape_code(details[:code].to_s)
-        @code_ja = Emojidex.unescape_code(details[:code_ja].to_s)
+        @code = Emojidex.escape_code(details[:code].to_s)
+        @code_ja = Emojidex.escape_code(details[:code_ja].to_s)
         @unicode = details[:unicode].to_s
         @full_name = details[:full_name].to_s
         @emoticon = details[:emoticon].to_s

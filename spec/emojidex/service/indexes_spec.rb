@@ -7,9 +7,9 @@ describe Emojidex::Service::Indexes do
     it 'returns a service collection' do
       idx = Emojidex::Service::Indexes.emoji
       expect(idx).to be_a(Emojidex::Service::Collection)
-      expect(idx.emoji.count).to be(Emojidex::Defaults.limit)
+      expect(idx.emoji.count).to eq(Emojidex::Defaults.limit)
       idx.more
-      expect(idx.emoji.count).to be(Emojidex::Defaults.limit * 2)
+      expect(idx.emoji.count).to eq(Emojidex::Defaults.limit * 2)
       expect(idx.source_path).to be nil
       expect(idx.vector_source_path).to be nil
       expect(idx.raster_source_path).to be nil
