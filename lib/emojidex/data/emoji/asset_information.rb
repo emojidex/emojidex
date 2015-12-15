@@ -1,10 +1,11 @@
+require 'digest/md5'
 require_relative '../../defaults'
 
 module Emojidex
   module Data
     # Asset information for emoji
     module EmojiAssetInformation
-      attr_accessor :checksums, :paths
+      attr_accessor :checksums, :paths, :local_checksums
 
       def init_asset_info(details)
         blank_checksums
@@ -25,6 +26,7 @@ module Emojidex
         Emojidex::Defaults.sizes.keys.each do |size|
           @checksums[:png][size] = nil
         end
+        @local_checksums = @checksums.dup
       end
 
       def fill_checksums(checksums)
@@ -43,9 +45,10 @@ module Emojidex
         end
       end
 
+      # Acquires path and caches the target file if not found or out of date
       def path(format, size = nil)
         fp = path?(format, size)
-        cache(format, size) unless !fp.nil? && File.exist?(fp)
+        cache(format, [size]) unless !fp.nil? && File.exist?(fp)
         fp
       end
 
@@ -61,7 +64,9 @@ module Emojidex
         nil
       end
 
+      # Caches a file of the specified format in the specified sizes
       def cache(format, sizes = nil)
+        generate_local_checksums
         case format
         when :png
           _cache_png(sizes) unless sizes.nil?
@@ -70,13 +75,33 @@ module Emojidex
         end
       end
 
+      # Generates a checksum for each locally cached file
+      def generate_local_checksum(format, size = nil)
+        case format
+        when :png
+          return @local_checksums[:png][size] = _checksum_for_file(@paths[:png][size])
+        when :svg
+          return @local_checksum[:svg] = _checksum_for_file(@paths[:svg])
+        end
+        nil
+      end
+
+      def generate_local_checksums
+        @local_checksums[:svg] = _checksum_for_file(@paths[:svg])
+        @paths[:png].keys.each do |size|
+          @local_checksums[:png][size] = _checksum_for_file(@paths[:png][size])
+        end
+        @local_checksums
+      end
+
       private
 
       def _cache_svg
         @paths[:svg] = Dir.pwd unless (@paths.include? :svg) && !@paths[:svg].nil?
-        # TODO check target, check checksum
+        return if File.exist?(@paths[:svg]) && !@checksums[:svg].nil? && @checksums[:svg] == generate_local_checksum(:svg)
         response = Emojidex::Service::Transactor.download("#{@code}.svg")
         File.open(@paths[:svg], 'wb') { |fp| fp.write(response.body) }
+        generate_local_checksum(:svg)
       end
 
       def _cache_png(sizes)
@@ -84,10 +109,15 @@ module Emojidex
           unless (@paths.include? :png) && (@paths[:png].include? size) && @paths[:png][size].nil? == false
             @paths[:png][size] = "#{Dir.pwd}/#{size}/#{@code}.png"
           end
-          next if File.exist? @paths[:png][size] # TODO: check checksums
+          next if File.exist?(@paths[:png][size]) && !@checksums[:png][size].nil? && @checksums[:png][size] == generate_local_checksum(:png, size)
           response = Emojidex::Service::Transactor.download("#{size}/#{@code}.png")
           File.open(@paths[:png][size], 'wb') { |fp| fp.write(response.body) }
+          generate_local_checksum(:png, size)
         end
+      end
+
+      def _checksum_for_file(path)
+        (File.exist? path) ? Digest::MD5.file(path).hexdigest : nil
       end
     end
   end
