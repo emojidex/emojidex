@@ -7,8 +7,8 @@ module Emojidex
     class UTF < Collection
       include Emojidex::Data::StaticCollection
 
-      def initialize
-        super
+      def initialize(opts = {})
+        super(opts)
         @endpoint = 'utf_emoji'
         load_from_server unless check_and_load_static('utf')
         @emoji

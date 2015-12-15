@@ -8,7 +8,8 @@ require 'emojidex/data/extended'
 
 describe Emojidex::Data::Collection do
   let(:collection) do
-    Emojidex::Data::Collection.new(nil, './spec/support/sample_collections/good')
+    Emojidex::Data::Collection.new(local_load_path: './spec/support/sample_collections/good',
+                                  cache_path: tmp_cache_path)
   end
   before(:each) { clear_tmp_cache }
 
@@ -67,7 +68,7 @@ describe Emojidex::Data::Collection do
 
   describe '.cache!' do
     it 'caches emoji to local storage cache' do
-      collection.cache!(cache_path: tmp_cache_path, formats: [:svg])
+      collection.cache!(formats: [:svg])
       expect(collection.cache_path).to eq "#{tmp_cache_path}/emoji"
       expect(collection.vector_source_path).to eq collection.source_path
       expect(File.exist? "#{collection.vector_source_path}/mouth.svg").to be_truthy
@@ -95,7 +96,7 @@ describe Emojidex::Data::Collection do
 
   describe '.generate_checksums' do
     it 'generates checksums for assets' do
-      collection.cache!(cache_path: tmp_cache_path, formats: [:svg, :png], sizes: [:px32])
+      collection.cache!(formats: [:svg, :png], sizes: [:px32])
       expect(collection.generate_checksums).to be_an_instance_of(Array)
       expect(collection.emoji.values.first.checksums[:svg]).to be_truthy
       expect(collection.emoji.values.first.checksum?(:svg)).to be_truthy
@@ -108,7 +109,7 @@ describe Emojidex::Data::Collection do
 
   describe '.generate_paths' do
     it 'generates file paths for each emoji' do
-      collection.cache!(cache_path: tmp_cache_path, formats: [:svg, :png], sizes: [:px32])
+      collection.cache!(formats: [:svg, :png], sizes: [:px32])
       expect(collection.generate_paths).to be_an_instance_of(Array)
       expect(collection.emoji.values.first.paths[:svg]).to be_truthy
       expect(collection.emoji.values.first.path?(:svg)).to be_truthy

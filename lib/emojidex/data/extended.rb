@@ -7,8 +7,8 @@ module Emojidex
     class Extended < Collection
       include Emojidex::Data::StaticCollection
 
-      def initialize
-        super
+      def initialize(opts = {})
+        super(opts)
         @endpoint = 'extended_emoji'
         load_from_server unless check_and_load_static('extended')
         @emoji

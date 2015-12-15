@@ -15,6 +15,13 @@ module Emojidex
         _init_user_info
         _init_endpoint
 
+        if @opts.include? :cache_path
+          setup_cache(@opts[:cache_path])
+          @opts.delete :cache_path
+        else
+          setup_cache
+        end
+
         @auto_cache = @opts[:auto_cache] || true
         @opts.delete(:auto_cache)
 
@@ -22,11 +29,12 @@ module Emojidex
         @opts.delete(:auto_init)
 
         more if auto_init
+        
         @emoji
       end
 
       # Get the next page worth of emoji and add them to the collection
-      def more()
+      def more
         @page += 1
 
         opts = { page: @page, limit: @limit, detailed: @detailed }

@@ -86,7 +86,7 @@ module Emojidex
             FileUtils.cp("#{src}", @cache_path)
           end
         else
-          _cache_svg_from_net(moji)
+          moji.cache(:svg)
         end
         FileUtils.cp_r src, @cache_path if File.directory? src
       end
@@ -96,14 +96,14 @@ module Emojidex
           @download_queue << { moji: moji, formats: [format], sizes: sizes }
         end
         @raster_source_path = @source_path if @raster_source_path.nil?
-        _cache_raster_from_net(moji, format, sizes) if @raster_source_path.nil?
+        moji.cache(format, sizes) if @raster_source_path.nil?
         sizes.each do |size|
           next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO: check checksums
           src = "#{@raster_source_path}/#{size}/#{moji.code}"
           if FileTest.exist? "#{src}.#{format}"
             FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}"))
           else
-            _cache_raster_from_net(moji, format, sizes)
+            moji.cache(format, sizes)
           end
           FileUtils.cp_r(src, @cache_path) if File.directory? src
         end
@@ -123,27 +123,6 @@ module Emojidex
         dls << Thread.new { moji.cache(:svg) } if formats.include? :svg
         dls << Thread.new { moji.cache(:png, sizes) } if formats.include? :png
         dls.each(&:join)
-      end
-
-      def _cache_svg_from_net(moji)
-        target = "#{@cache_path}/#{moji.code}.svg"
-        if File.exist? target # check for an existing copy so we don't double downlaod
-          return if moji.checksum?(:svg).nil? # no updates if we didn't get details
-          # if the checksums are the same there is no reason to update
-          return if moji.checksum?(:svg) == get_checksums(moji, [:svg])[:svg]
-        end
-        response = Emojidex::Service::Transactor.download("#{moji.code}.svg")
-        File.open(target, 'wb') { |fp| fp.write(response.body) }
-      end
-
-      def _cache_raster_from_net(moji, format, sizes)
-        sizes.each do |size|
-          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO: check checksums
-          response = Emojidex::Service::Transactor.download("#{size}/#{moji.code}.#{format}")
-          File.open("#{@cache_path}/#{size}/#{moji.code}.#{format}", 'wb') do |fp|
-            fp.write(response.body)
-          end
-        end
       end
     end
   end

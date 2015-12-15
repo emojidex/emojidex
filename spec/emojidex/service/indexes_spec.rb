@@ -13,6 +13,7 @@ describe Emojidex::Service::Indexes do
       expect(idx.source_path).to be nil
       expect(idx.vector_source_path).to be nil
       expect(idx.raster_source_path).to be nil
+      expect(idx.emoji.values[0].path[:svg]).to be idx.get_paths(idx.emoji.keys[0])[:svg]
     end
   end
 

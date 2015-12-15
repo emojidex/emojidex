@@ -19,11 +19,17 @@ module Emojidex
                     :source_path, :vector_source_path, :raster_source_path
 
       # Initialize Collection. You can pass a list of emoji to seed the collection
-      def initialize(emoji_list = nil, local_load_path = nil)
+      def initialize(opts = {})
         @emoji = {}
         @raster_source_path = @vector_source_path = @source_path = nil
-        load_local_collection(local_load_path) unless local_load_path.nil?
-        add_emoji(emoji_list) unless emoji_list.nil?
+        if opts.include? :cache_path
+          setup_cache(opts[:cache_path])
+          opts.delete :cache_path
+        else
+          setup_cache
+        end
+        load_local_collection(opts[:local_load_path]) if opts.include? :local_load_path
+        add_emoji(opts[:emoji]) if opts.include? :emoji
         @emoji
       end
 
@@ -92,14 +98,14 @@ module Emojidex
       end
 
       def search(criteria = {})
-        Emojidex::Data::Collection.new _sub_search(@emoji.values.dup, criteria)
+        Emojidex::Data::Collection.new(emoji: _sub_search(@emoji.values.dup, criteria))
       end
 
       # Get all emoji from this collection that are part of the specified category
       # Returns a new collection of only emoji in the specified category
       def category(category_code)
         categorized = @emoji.values.select { |moji| moji.category == category_code }
-        Emojidex::Data::Collection.new categorized
+        Emojidex::Data::Collection.new(emoji: categorized)
       end
 
       # Check to see if there are emoji in this collection which have the specified categories
