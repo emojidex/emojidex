@@ -93,6 +93,7 @@ describe Emojidex::Service::User do
     end
 
     it 'saves user data' do
+      clear_tmp_cache
       user = Emojidex::Service::User.new
       user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
       user.save(tmp_cache_path)
@@ -102,6 +103,7 @@ describe Emojidex::Service::User do
     end
 
     it 'loads user data' do
+      clear_tmp_cache
       user = Emojidex::Service::User.new
       user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
       user.sync_favorites
@@ -125,6 +127,17 @@ describe Emojidex::Service::User do
       expect(user.status).to be :loaded
       expect(user.favorites.emoji.count > 0).to be true
       expect(user.history.length > 0).to be true
+    end
+
+    it 'auto loads user data when a cache path is specified' do
+      clear_tmp_cache
+      user = Emojidex::Service::User.new(tmp_cache_path)
+      expect(user.cache_path).to eq tmp_cache_path
+      expect(user.username).to eq ''
+      expect(user.auth_token).to eq ''
+      expect(user.status).to_not be :loaded
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      user.save(tmp_cache_path)
     end
   end
 end

@@ -35,5 +35,9 @@ module Emojidex
     def self.encapsulator
       ':'
     end
+
+    def self.system_cache_path
+      ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/"
+    end
   end
 end

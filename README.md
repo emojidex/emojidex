@@ -24,6 +24,15 @@ emojidex isn't just a set of emoji and some tools, it's a full service that allo
 register their own emoji and for anyone else to use them. emojidex can also store a users 
 favorites and history.
 
+emojidex Client
+---------------
+The emojidex Client attempts to make using emojidex for an end-user application as simple as 
+possible. There is no need to manually cache or join collections or separately instantiate a 
+user as these are all done for you. A client will automatically try to load user details and 
+a primary emoji cache from ```$HOME/.emojidex``` unless overridden by the EMOJI_CACHE 
+environment variable or by instantiating a client with the cache_path option like
+```emojidex = Emojidex::Client.new(cache_path: "/path/to/cache")```.
+
 emoji Collections
 -----------------
 The Collection is the primary container for sets of emoji. All containers inherit from 

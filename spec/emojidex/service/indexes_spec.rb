@@ -18,8 +18,15 @@ describe Emojidex::Service::Indexes do
 
   describe 'newest' do
     it 'returns a service collection' do
-      idx = Emojidex::Service::Indexes.newest
+      user = Emojidex::Service::User.new
+      user.load
+      idx = Emojidex::Service::Indexes.newest(user: user)
       expect(idx).to be_a(Emojidex::Service::Collection)
+      if user.pro
+        expect((idx).emoji.count >= 50).to be true
+      else
+        expect((idx).emoji.count == 0).to be true
+      end
       expect(idx.source_path).to be nil
       expect(idx.vector_source_path).to be nil
       expect(idx.raster_source_path).to be nil
@@ -28,8 +35,15 @@ describe Emojidex::Service::Indexes do
 
   describe 'popular' do
     it 'returns a service collection' do
-      idx = Emojidex::Service::Indexes.popular
+      user = Emojidex::Service::User.new
+      user.load
+      idx = Emojidex::Service::Indexes.popular(user: user)
       expect(idx).to be_a(Emojidex::Service::Collection)
+      if user.pro
+        expect((idx).emoji.count >= 50).to be true
+      else
+        expect((idx).emoji.count == 0).to be true
+      end
       expect(idx.source_path).to be nil
       expect(idx.vector_source_path).to be nil
       expect(idx.raster_source_path).to be nil

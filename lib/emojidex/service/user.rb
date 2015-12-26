@@ -17,11 +17,12 @@ module Emojidex
         @@auth_status_codes
       end
 
-      def initialize(_opts = {})
+      def initialize(opts = {})
         clear_auth_data
         @status = :none
         @history = []
         @favorites = Emojidex::Data::Collection.new
+        load(opts[:cache_path]) if opts.key? :cache_path
       end
 
       def login(user, password, sync_on_login = true)
@@ -87,7 +88,7 @@ module Emojidex
         rescue Error::Unauthorized
           return false
         end
-        return false if res.include? :status && res[:status] == 'emoji already in user favorites'
+        return false if res.include?(:status) && res[:status] == 'emoji already in user favorites'
         @favorites.add_emoji([res])
         true
       end
@@ -97,12 +98,12 @@ module Emojidex
 
         begin
           res = Transactor.delete('users/favorites',
-                            username: @username, auth_token: @auth_token,
-                            emoji_code: Emojidex.escape_code(code))
+                                  username: @username, auth_token: @auth_token,
+                                  emoji_code: Emojidex.escape_code(code))
         rescue Error::Unauthorized
           return false
         end
-        return false if res.include? :status && res[:status] == 'emoji not in user favorites'
+        return false if res.include?(:status) && res[:status] == 'emoji not in user favorites'
         @favorites.remove_emoji(code.to_sym)
         true
       end
@@ -134,14 +135,14 @@ module Emojidex
         authorize(@username, @auth_token) && sync_favorites && sync_history
       end
 
-      def save(path)
+      def save(path = nil)
         _set_cache_path(path)
         _save_user
         _save_favorites
         _save_history
       end
 
-      def load(path, auto_sync = true)
+      def load(path = nil, auto_sync = true)
         _set_cache_path(path)
         _load_user
         _load_favorites
@@ -175,7 +176,7 @@ module Emojidex
       end
 
       def _set_cache_path(path)
-        @cache_path ||= File.expand_path(path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/")
+        @cache_path ||= File.expand_path(path || Emojidex::Defaults.system_cache_path)
         FileUtils.mkdir_p(@cache_path)
         @cache_path
       end

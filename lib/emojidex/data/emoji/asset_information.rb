@@ -98,7 +98,8 @@ module Emojidex
 
       def _cache_svg
         @paths[:svg] = Dir.pwd unless (@paths.include? :svg) && !@paths[:svg].nil?
-        return if File.exist?(@paths[:svg]) && !@checksums[:svg].nil? && @checksums[:svg] == generate_local_checksum(:svg)
+        return if File.exist?(@paths[:svg]) && !@checksums[:svg].nil? &&
+                  @checksums[:svg] == generate_local_checksum(:svg)
         response = Emojidex::Service::Transactor.download("#{@code}.svg")
         File.open(@paths[:svg], 'wb') { |fp| fp.write(response.body) }
         generate_local_checksum(:svg)
@@ -106,10 +107,13 @@ module Emojidex
 
       def _cache_png(sizes)
         sizes.each do |size|
-          unless (@paths.include? :png) && (@paths[:png].include? size) && @paths[:png][size].nil? == false
+          unless @paths.include?(:png) &&
+                 @paths[:png].include?(size) && @paths[:png][size].nil? == false
             @paths[:png][size] = "#{Dir.pwd}/#{size}/#{@code}.png"
           end
-          next if File.exist?(@paths[:png][size]) && !@checksums[:png][size].nil? && @checksums[:png][size] == generate_local_checksum(:png, size)
+          next if File.exist?(@paths[:png][size]) &&
+                  !@checksums[:png][size].nil? &&
+                  @checksums[:png][size] == generate_local_checksum(:png, size)
           response = Emojidex::Service::Transactor.download("#{size}/#{@code}.png")
           File.open(@paths[:png][size], 'wb') { |fp| fp.write(response.body) }
           generate_local_checksum(:png, size)

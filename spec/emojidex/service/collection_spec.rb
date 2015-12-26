@@ -22,11 +22,15 @@ describe Emojidex::Service::Collection do
       sc = Emojidex::Service::Collection.new(limit: 2, detailed: true, cache_path: tmp_cache_path)
       sc.cache!
       expect(File.exist?(sc.emoji.values[0].paths[:png][:hdpi])).to be true
-      expect(sc.emoji.values[0].checksums[:png][:hdpi]).to eq sc.emoji.values[0].local_checksums[:png][:hdpi]
-      File.open(sc.emoji.values[0].paths[:png][:hdpi], 'w') { |f| f.write 'garbagegarbagegarbage' }
-      expect(sc.emoji.values[0].checksums[:png][:hdpi]).not_to eq sc.emoji.values[0].generate_local_checksum(:png, :hdpi)
+      expect(sc.emoji.values[0].checksums[:png][:hdpi]
+            ).to eq sc.emoji.values[0].local_checksums[:png][:hdpi]
+      File.open(sc.emoji.values[0].paths[:png][:hdpi], 'w'
+               ) { |f| f.write 'garbagegarbagegarbage' }
+      expect(sc.emoji.values[0].checksums[:png][:hdpi]
+            ).not_to eq sc.emoji.values[0].generate_local_checksum(:png, :hdpi)
       sc.cache!
-      expect(sc.emoji.values[0].checksums[:png][:hdpi]).to eq sc.emoji.values[0].local_checksums[:png][:hdpi]
+      expect(sc.emoji.values[0].checksums[:png][:hdpi]
+            ).to eq sc.emoji.values[0].local_checksums[:png][:hdpi]
     end
   end
 end

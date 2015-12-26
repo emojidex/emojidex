@@ -19,7 +19,7 @@ module Emojidex
         return @cache_path if @cache_path && path.nil?
         # setup cache
         @cache_path =
-          File.expand_path((path || ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/") + '/emoji')
+          File.expand_path((path || Emojidex::Defaults.system_cache_path) + '/emoji')
         # ENV['EMOJI_CACHE'] = @cache_path
         FileUtils.mkdir_p(@cache_path)
         Emojidex::Defaults.sizes.keys.each do |size|
@@ -74,7 +74,6 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        # return if File.exist? "#{@cache_path}/#{moji.code}.svg" # TODO: check checksums
         if @vector_source_path.nil? && @source_path.nil?
           @download_queue << { moji: moji, formats: :svg, sizes: [] }
         end

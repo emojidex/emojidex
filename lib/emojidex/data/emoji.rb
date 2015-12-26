@@ -56,6 +56,7 @@ module Emojidex
         @tags = details[:tags].map(&:to_sym) unless details[:tags].nil?
         @link = details[:link].to_s
         @variants = details[:variants] || []
+        @variants.uniq!
         @base = details[:base]
         @is_wide = details[:is_wide]
       end

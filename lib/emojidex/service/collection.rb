@@ -14,13 +14,7 @@ module Emojidex
         _init_emoji
         _init_user_info
         _init_endpoint
-
-        if @opts.include? :cache_path
-          setup_cache(@opts[:cache_path])
-          @opts.delete :cache_path
-        else
-          setup_cache
-        end
+        _init_cache
 
         @auto_cache = @opts[:auto_cache] || true
         @opts.delete(:auto_cache)
@@ -29,7 +23,7 @@ module Emojidex
         @opts.delete(:auto_init)
 
         more if auto_init
-        
+
         @emoji
       end
 
@@ -87,6 +81,15 @@ module Emojidex
         add_emoji(moji_page)
         cache! if @auto_cache
         moji_page
+      end
+
+      def _init_cache
+        if @opts.include? :cache_path
+          setup_cache(@opts[:cache_path])
+          @opts.delete :cache_path
+        else
+          setup_cache
+        end
       end
     end
   end

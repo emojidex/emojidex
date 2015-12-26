@@ -9,7 +9,7 @@ require 'emojidex/data/extended'
 describe Emojidex::Data::Collection do
   let(:collection) do
     Emojidex::Data::Collection.new(local_load_path: './spec/support/sample_collections/good',
-                                  cache_path: tmp_cache_path)
+                                   cache_path: tmp_cache_path)
   end
   before(:each) { clear_tmp_cache }
 
