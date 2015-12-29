@@ -25,6 +25,9 @@ module Emojidex
         Emojidex::Defaults.sizes.keys.each do |size|
           FileUtils.mkdir_p(@cache_path + "/#{size}")
         end
+        # load will expect emoji.json even if it contains no emoji
+        File.open("#{@cache_path}/emoji.json", 'w') { |f|
+          f.write "[]" } unless File.exist? "#{cache_path}/emoji.json"
         @cache_path
       end
 
