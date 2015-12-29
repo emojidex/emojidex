@@ -40,7 +40,10 @@ module Emojidex
 
         begin
           moji_page = Emojidex::Service::Transactor.get(@endpoint, opts)
-        rescue => e
+        rescue Error::Unauthorized => e
+          @status = e.message
+          return {}
+        rescue Error::PaymentRequired => e
           @status = e.message
           return {}
         end

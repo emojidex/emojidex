@@ -21,6 +21,7 @@ describe Emojidex::Service::Indexes do
     it 'returns a service collection' do
       idx = Emojidex::Service::Indexes.newest()
       expect(idx).to be_a(Emojidex::Service::Collection)
+      expect(idx.status).to eq 'resource requires authorization'
       expect(idx.emoji.count == 0).to be true
       
       # attempt to test premium collection
@@ -45,6 +46,7 @@ describe Emojidex::Service::Indexes do
     it 'returns a service collection' do
       idx = Emojidex::Service::Indexes.popular()
       expect(idx).to be_a(Emojidex::Service::Collection)
+      expect(idx.status).to eq 'resource requires authorization'
       expect(idx.emoji.count == 0).to be true
 
       # attempt to test premium collection
