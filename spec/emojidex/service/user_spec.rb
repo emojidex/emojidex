@@ -131,7 +131,7 @@ describe Emojidex::Service::User do
 
     it 'auto loads user data when a cache path is specified' do
       clear_tmp_cache
-      user = Emojidex::Service::User.new(tmp_cache_path)
+      user = Emojidex::Service::User.new(cache_path: tmp_cache_path)
       expect(user.cache_path).to eq tmp_cache_path
       expect(user.username).to eq ''
       expect(user.auth_token).to eq ''

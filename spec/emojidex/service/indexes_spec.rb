@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'emojidex/service/indexes'
+require 'emojidex/service/user'
 require 'emojidex/defaults'
 
 describe Emojidex::Service::Indexes do
@@ -18,14 +19,21 @@ describe Emojidex::Service::Indexes do
 
   describe 'newest' do
     it 'returns a service collection' do
+      idx = Emojidex::Service::Indexes.newest()
+      expect(idx).to be_a(Emojidex::Service::Collection)
+      expect(idx.emoji.count == 0).to be true
+      
+      # attempt to test premium collection
       user = Emojidex::Service::User.new
       user.load
-      idx = Emojidex::Service::Indexes.newest(user: user)
-      expect(idx).to be_a(Emojidex::Service::Collection)
       if user.pro
-        expect((idx).emoji.count >= 50).to be true
+        idx = Emojidex::Service::Indexes.newest(false, 20, 0, user.username, user.auth_token)
+        expect(idx).to be_a(Emojidex::Service::Collection)
+        expect(idx.emoji.count == 20).to be true
+        expect(idx.more).to be_a(Hash)
+        expect(idx.emoji.count == 40).to be true
       else
-        expect((idx).emoji.count == 0).to be true
+        puts 'Could not detect a premium user account. Skipping premium collection test.'
       end
       expect(idx.source_path).to be nil
       expect(idx.vector_source_path).to be nil
@@ -35,15 +43,23 @@ describe Emojidex::Service::Indexes do
 
   describe 'popular' do
     it 'returns a service collection' do
+      idx = Emojidex::Service::Indexes.popular()
+      expect(idx).to be_a(Emojidex::Service::Collection)
+      expect(idx.emoji.count == 0).to be true
+
+      # attempt to test premium collection
       user = Emojidex::Service::User.new
       user.load
-      idx = Emojidex::Service::Indexes.popular(user: user)
-      expect(idx).to be_a(Emojidex::Service::Collection)
       if user.pro
-        expect((idx).emoji.count >= 50).to be true
+        idx = Emojidex::Service::Indexes.popular(false, 20, 0, user.username, user.auth_token)
+        expect(idx).to be_a(Emojidex::Service::Collection)
+        expect(idx.emoji.count == 20).to be true
+        expect(idx.more).to be_a(Hash)
+        expect(idx.emoji.count == 40).to be true
       else
-        expect((idx).emoji.count == 0).to be true
+        puts 'Could not detect a premium user account. Skipping premium collection test.'
       end
+
       expect(idx.source_path).to be nil
       expect(idx.vector_source_path).to be nil
       expect(idx.raster_source_path).to be nil

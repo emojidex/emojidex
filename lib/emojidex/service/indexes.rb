@@ -14,16 +14,20 @@ module Emojidex
       end
 
       # Obtain a service Collection of emoji indexed by date of creation (or in some cases update).
-      def self.newest(detailed = false, limit = Emojidex::Defaults.limit, page = 0)
+      def self.newest(detailed = false, limit = Emojidex::Defaults.limit, page = 0,
+                      username = nil, auth_token = nil)
         Emojidex::Service::Collection.new(endpoint: 'newest', detailed: detailed,
-                                          limit: limit, page: page)
+                                          limit: limit, page: page,
+                                          username: username, auth_token: auth_token)
       end
 
       # Obtain a service Collection of emoji indexed by popularity
       # [how many times they have been favorited].
-      def self.popular(detailed = false, limit = Emojidex::Defaults.limit, page = 0)
+      def self.popular(detailed = false, limit = Emojidex::Defaults.limit, page = 0,
+                      username = nil, auth_token = nil)
         Emojidex::Service::Collection.new(endpoint: 'popular', detailed: detailed,
-                                          limit: limit, page: page)
+                                          limit: limit, page: page,
+                                          username: username, auth_token: auth_token)
       end
 
       # Obtains a hash with three different types of chracter [moji] code indexes:

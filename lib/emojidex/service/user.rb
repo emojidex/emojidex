@@ -22,7 +22,11 @@ module Emojidex
         @status = :none
         @history = []
         @favorites = Emojidex::Data::Collection.new
-        load(opts[:cache_path]) if opts.key? :cache_path
+        if opts.key?(:cache_path)
+          load(opts[:cache_path])
+        elsif opts[:load_cache] == true
+          load
+        end
       end
 
       def login(user, password, sync_on_login = true)
@@ -200,6 +204,7 @@ module Emojidex
       end
 
       def _load_user
+        _save_user unless File.exist? "#{@cache_path}/user.json"
         json = IO.read("#{@cache_path}/user.json")
         user_info = JSON.parse(json, symbolize_names: true)
         @username = user_info[:username]
@@ -212,6 +217,7 @@ module Emojidex
       end
 
       def _load_favorites
+        _save_favorites unless File.exist? "#{@cache_path}/favorites.json"
         json = IO.read("#{@cache_path}/favorites.json")
         @favorites = Emojidex::Service::Collection.new(
           emoji: JSON.parse(json, symbolize_names: true),
@@ -219,6 +225,7 @@ module Emojidex
       end
 
       def _load_history
+        _save_history unless File.exist? "#{@cache_path}/history.json"
         json = IO.read("#{@cache_path}/history.json")
         @history = JSON.parse json
       end

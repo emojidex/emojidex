@@ -78,6 +78,8 @@ module Emojidex
           return # don't raise
         when 401
           fail Error::Unauthorized, _extract_status_line(response)
+        when 402
+          fail Error::PaymentRequired, _extract_status_line(response)
         when 422
           fail Error::UnprocessableEntity _extract_status_line(response)
         end

@@ -6,10 +6,12 @@ module Emojidex
   module Service
     # A modified collection class for collections tied to the emojidex service
     class Collection < Emojidex::Data::Collection
-      attr_reader :endpoint, :page, :limit, :detailed, :auto_cache
+      attr_reader :endpoint, :page, :limit, :detailed, :auto_cache, :status
 
       def initialize(opts = {})
         @opts = opts
+
+        @status = ''
 
         _init_emoji
         _init_user_info
@@ -36,7 +38,12 @@ module Emojidex
         opts[:auth_token] = @auth_token unless @auth_token.nil?
         opts.merge! @opts
 
-        moji_page = Emojidex::Service::Transactor.get(@endpoint, opts)
+        begin
+          moji_page = Emojidex::Service::Transactor.get(@endpoint, opts)
+        rescue => e
+          @status = e.message
+          return {}
+        end
 
         _process_moji_page(moji_page)
       end
