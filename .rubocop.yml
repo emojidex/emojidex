@@ -7,8 +7,17 @@ AsciiComments:
 AccessorMethodName:
   Enabled: false # HTTP method verb is 'get' and the method name should be 'get'
 
+Style/MethodName:
+  Enabled: false # Different method usage should be designated with different styles
+
 Style/DefWithParentheses:
   Enabled: false # While a lot of people don't like parenthesis they can often add clarification
+
+Style/MethodLength:
+  Max: 17 # A ton of one-off helper methods is worse than a longer method
+
+Style/ClassLength:
+  Max: 199 # Splitting some mix-ins can make code harder to read - add a little leeway
 
 Style/ClassVars:
   Enabled: false # We're using them on purpose as static containers, instance vars won't retain

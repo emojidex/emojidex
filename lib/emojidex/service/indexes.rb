@@ -24,7 +24,7 @@ module Emojidex
       # Obtain a service Collection of emoji indexed by popularity
       # [how many times they have been favorited].
       def self.popular(detailed = false, limit = Emojidex::Defaults.limit, page = 0,
-                      username = nil, auth_token = nil)
+                       username = nil, auth_token = nil)
         Emojidex::Service::Collection.new(endpoint: 'popular', detailed: detailed,
                                           limit: limit, page: page,
                                           username: username, auth_token: auth_token)
