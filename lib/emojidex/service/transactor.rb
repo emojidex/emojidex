@@ -8,6 +8,7 @@ module Emojidex
     # API transaction utility
     class Transactor
       @@connection = nil
+      @@retries = 3
 
       @@settings = {
         api: {
@@ -55,6 +56,7 @@ module Emojidex
         return @@connection if @@connection
         @@connection = Faraday.new do |conn|
           conn.request :url_encoded
+          conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.05
           # conn.response :logger
           conn.adapter Faraday.default_adapter
         end
