@@ -49,8 +49,20 @@ describe Emojidex::Service::User do
     it 'syncs history when authorized' do
       user = Emojidex::Service::User.new
       user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
-      expect(user.sync_history).to be true
-      expect(user.history.size > 0).to be true
+      expect(user.sync_history(10)).to be true
+      expect(user.history.size == 10).to be true
+      expect(user.sync_history(20)).to be true
+      expect(user.history.size == 20).to be true
+    end
+
+    it 'adds to history' do
+      user = Emojidex::Service::User.new
+      expect(user.add_history('two_hearts')).to be false
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      user.sync_history
+      expect(user.add_history('two_hearts')).to be true
+      expect(user.history[0].emoji_code).to eq 'two_hearts'
+      expect(user.add_history('jijijijijiijijijijijijijijijijijijiji')).to be false
     end
 
     it 'fails to sync favorites when unauthorized' do

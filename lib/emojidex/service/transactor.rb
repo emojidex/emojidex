@@ -56,7 +56,8 @@ module Emojidex
         return @@connection if @@connection
         @@connection = Faraday.new do |conn|
           conn.request :url_encoded
-          conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.05
+          conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.05,
+                        backoff_factor: 2
           # conn.response :logger
           conn.adapter Faraday.default_adapter
         end

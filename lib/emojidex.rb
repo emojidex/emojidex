@@ -7,7 +7,7 @@ require_relative 'emojidex/data/categories'
 # Master emojidex module. Contains a few general helper functions.
 module Emojidex
   def self.escape_code(code)
-    code.tr(' ', '_')
+    code.tr(' ', '_').tr(':', '')
   end
 
   def self.unescape_code(code)

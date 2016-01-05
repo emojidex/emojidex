@@ -2,13 +2,14 @@ require_relative '../../emojidex'
 require_relative 'error'
 require_relative 'transactor'
 require_relative 'collection'
+require_relative './user/history_item'
 
 module Emojidex
   module Service
     # User auth and user details
     class User
       attr_reader :username, :auth_token, :premium, :pro, :premium_exp, :pro_exp, :status
-      attr_accessor :favorites, :history, :cache_path
+      attr_accessor :favorites, :history, :history_page, :cache_path
 
       @@auth_status_codes = { none: false, failure: false,
                               unverified: false, verified: true,
@@ -21,6 +22,7 @@ module Emojidex
         clear_auth_data
         @status = :none
         @history = []
+        @history_page = 0
         @favorites = Emojidex::Data::Collection.new
         if opts.key?(:cache_path)
           load(opts[:cache_path])
@@ -112,19 +114,38 @@ module Emojidex
         true
       end
 
-      def sync_history(limit = Emojidex::Defaults.limit, page = 1)
+      def sync_history(limit = Emojidex::Defaults.limit, page = 0)
         return false unless authorized?
 
-        @history = Transactor.get('users/history',
-                                  limit: limit, page: page,
-                                  username: @username, auth_token: @auth_token)
-        # TODO: this is a temporary implementation of history. It will be revised after an
-        # API update.
+        page = @history_page + 1 if page == 0
+
+        begin
+          result = Transactor.get('users/history',
+                                      limit: limit, page: page,
+                                      username: @username, auth_token: @auth_token)
+        rescue
+          return false
+        end
+
+        return false unless (result.key?(:history) && result.key?(:meta))
+        @history_page = result[:meta][:page]
+        _merge_history(result[:history])
         true
       end
 
       def add_history(code)
-        # TODO
+        return false unless authorized?
+
+        begin
+          result = Transactor.post('users/history',
+                                   username: @username, auth_token: @auth_token,
+                                   emoji_code: Emojidex.escape_code(code))
+        rescue
+          return false
+        end
+
+        _push_and_dedupe_history(result)
+        true
       end
 
       def clear_auth_data()
@@ -228,6 +249,30 @@ module Emojidex
         _save_history unless File.exist? "#{@cache_path}/history.json"
         json = IO.read("#{@cache_path}/history.json")
         @history = JSON.parse json
+      end
+
+      def _merge_history(history_delta = [])
+        history_delta.each do |item|
+          _push_and_dedupe_history(item)
+        end
+        _sort_history
+      end
+
+      def _push_and_dedupe_history(item)
+        i = 0
+        while i < @history.size do
+          if @history[i].emoji_code == item[:emoji_code]
+            @history.delete_at i
+            break
+          end
+          i++
+        end
+        @history.unshift Emojidex::Service::HistoryItem.new(item[:emoji_code],
+                                                            item[:times_used], item[:last_used])
+      end
+
+      def _sort_history
+        # TODO implement sort by date
       end
     end
   end
