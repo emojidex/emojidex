@@ -13,10 +13,10 @@ Style/MethodName:
 Style/DefWithParentheses:
   Enabled: false # While a lot of people don't like parenthesis they can often add clarification
 
-Style/MethodLength:
+Metrics/MethodLength:
   Max: 17 # A ton of one-off helper methods is worse than a longer method
 
-Style/ClassLength:
+Metrics/ClassLength:
   Max: 199 # Splitting some mix-ins can make code harder to read - add a little leeway
 
 Style/ClassVars:
