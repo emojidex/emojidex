@@ -260,12 +260,12 @@ module Emojidex
 
       def _push_and_dedupe_history(item)
         i = 0
-        while i < @history.size do
+        while i < (@history.size - 1) do
           if @history[i].emoji_code == item[:emoji_code]
             @history.delete_at i
             break
           end
-          i++
+          i += 1
         end
         @history.unshift Emojidex::Service::HistoryItem.new(item[:emoji_code],
                                                             item[:times_used], item[:last_used])
