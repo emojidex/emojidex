@@ -48,7 +48,7 @@ describe Emojidex::Service::User do
 
     it 'syncs history when authorized' do
       user = Emojidex::Service::User.new
-      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138')
+      user.authorize('test', '1798909355d57c9a93e3b82d275594e7c7c000db05021138', false)
       expect(user.sync_history(10)).to be true
       puts "HISTORY SIZE #{user.history.size}"
       expect(user.history.size == 10).to be true
