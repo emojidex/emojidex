@@ -250,7 +250,9 @@ module Emojidex
         json = IO.read("#{@cache_path}/history.json")
         items = JSON.parse(json, symbolize_names: true)
         @history = []
-        items.each { |item| @history << Emojidex::Service::HistoryItem.new(item) }
+        items.each { |item| @history << Emojidex::Service::HistoryItem.new(item[:emoji_code],
+                                                                           item[:times_used],
+                                                                           item[:last_used]) }
       end
 
       def _merge_history(history_delta = [])
@@ -262,7 +264,8 @@ module Emojidex
 
       def _push_and_dedupe_history(item)
         @history.delete_if { |hi| hi.emoji_code == item[:emoji_code] }
-        @history.unshift Emojidex::Service::HistoryItem.new(item)
+        @history.unshift Emojidex::Service::HistoryItem.new(item[:emoji_code],
+                                                            item[:times_used], item[:last_used])
       end
 
       def _sort_history
