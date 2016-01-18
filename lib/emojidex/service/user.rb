@@ -269,7 +269,7 @@ module Emojidex
       end
 
       def _sort_history
-        # TODO implement sort by date
+        @history.sort_by! {|h| -h.last_used.to_i}
       end
     end
   end
