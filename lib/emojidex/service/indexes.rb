@@ -16,6 +16,10 @@ module Emojidex
       # Obtain a service Collection of emoji indexed by date of creation (or in some cases update).
       def self.newest(detailed = false, limit = Emojidex::Defaults.limit, page = 0,
                       username = nil, auth_token = nil)
+        if auth_token.nil?
+          username = Emojidex::Client.USER.username
+          auth_token = Emojidex::Client.USER.auth_token
+        end
         Emojidex::Service::Collection.new(endpoint: 'newest', detailed: detailed,
                                           limit: limit, page: page,
                                           username: username, auth_token: auth_token)
@@ -25,6 +29,10 @@ module Emojidex
       # [how many times they have been favorited].
       def self.popular(detailed = false, limit = Emojidex::Defaults.limit, page = 0,
                        username = nil, auth_token = nil)
+        if auth_token.nil?
+          username = Emojidex::Client.USER.username
+          auth_token = Emojidex::Client.USER.auth_token
+        end
         Emojidex::Service::Collection.new(endpoint: 'popular', detailed: detailed,
                                           limit: limit, page: page,
                                           username: username, auth_token: auth_token)

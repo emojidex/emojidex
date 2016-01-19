@@ -42,12 +42,12 @@ module Emojidex
     end
 
     def initialize(opts = {})
-      if opts.include? :cache_path
+      if (opts.include? :cache_path)
         @@client_cache_path = opts[:cache_path]
-        @@user_instance = @@collection_instance = nil
+        user = collection = nil
       end
-      user # prime user
-      collection # prime collection
+      user
+      collection
     end
   end
 end

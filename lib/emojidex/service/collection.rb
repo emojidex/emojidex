@@ -34,8 +34,8 @@ module Emojidex
         @page += 1
 
         opts = { page: @page, limit: @limit, detailed: @detailed }
-        opts[:username] = @username unless @username.nil?
-        opts[:auth_token] = @auth_token unless @auth_token.nil?
+        opts[:username] = @username unless @username.nil? || @username == ''
+        opts[:auth_token] = @auth_token unless @auth_token.nil? || @auth_token == ''
         opts.merge! @opts
 
         begin
