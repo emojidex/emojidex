@@ -84,7 +84,7 @@ module Emojidex
         @vector_source_path = @source_path if @vector_source_path.nil?
         src = "#{@vector_source_path}/#{moji.code}.svg"
         if File.exist? "#{src}"
-          unless File.exist?("#{@cache_path}/#{moji.code}") &&
+          unless File.exist?("#{@cache_path}/#{moji.code}.svg") &&
                  FileUtils.compare_file("#{src}", "#{@cache_path}/#{moji.code}.svg")
             FileUtils.cp("#{src}", @cache_path)
           end
