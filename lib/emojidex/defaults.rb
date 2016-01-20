@@ -39,5 +39,9 @@ module Emojidex
     def self.system_cache_path
       ENV['EMOJI_CACHE'] || "#{ENV['HOME']}/.emojidex/"
     end
+
+    class << self
+      alias :locale :lang
+    end
   end
 end

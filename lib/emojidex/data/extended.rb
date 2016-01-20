@@ -10,7 +10,9 @@ module Emojidex
       def initialize(opts = {})
         super(opts)
         @endpoint = 'extended_emoji'
-        load_from_server unless check_and_load_static('extended')
+        @locale = opts[:locale] || Emojidex::Defaults.locale
+        load_from_server((opts[:detailed] || true),
+                         @locale) unless check_and_load_static('extended')
         @emoji
       end
     end
