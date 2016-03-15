@@ -114,4 +114,24 @@ describe Emojidex::Data::Extended do
       expect(ext.emoji.count > 0).to be true
     end
   end
+
+  describe 'R-18 handling' do
+    it 'doesn\'t load R-18 content by default' do
+      expect(ext.r18).to be false
+      r18_count = 0
+      ext.emoji.values.each do |emoji|
+        r18_count += 1 if emoji.r18 == true
+      end
+      expect(r18_count).to be 0
+    end
+
+    it 'loads R-18 content when r18: true override is given' do
+      r18_count = 0
+      ext = Emojidex::Data::Extended.new()
+      ext.emoji.values.each do |emoji|
+        r18_count += 1 if emoji.r18 == true
+      end
+      expect(r18_count).to be_gt 0
+    end
+  end
 end
