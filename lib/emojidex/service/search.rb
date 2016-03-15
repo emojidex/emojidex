@@ -78,6 +78,15 @@ module Emojidex
         end
         col
       end
+
+      def self._check_auth(opts)
+        if !(opts.include? :auth_token) && Emojidex::Client.USER.authorized?
+          opts[:username] = Emojidex::Client::USER.username
+          opts[:auth_token] = Emojidex::Client::USER.auth_token
+        end
+
+        opts
+      end
     end
   end
 end
