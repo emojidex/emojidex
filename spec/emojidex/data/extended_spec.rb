@@ -122,7 +122,7 @@ describe Emojidex::Data::Extended do
       ext.emoji.values.each do |emoji|
         r18_count += 1 if emoji.r18 == true
       end
-      expect(r18_count).to be 0
+      expect(r18_count).to eq 0
     end
 
     it 'loads R-18 content when r18: true override is given' do
@@ -131,7 +131,7 @@ describe Emojidex::Data::Extended do
       ext.emoji.values.each do |emoji|
         r18_count += 1 if emoji.r18 == true
       end
-      expect(r18_count).to be_gt 0
+      expect(r18_count > 0).to be true
     end
   end
 end

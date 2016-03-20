@@ -142,7 +142,7 @@ module Emojidex
             @emoji[moji_info.code.to_sym] = moji_info.dup
             @emoji[moji_info.code.to_sym].paths = get_paths(moji_info)
           else
-            next if @r18 == false && moji_info.r18 == true
+            next if @r18 == false && moji_info.include?('r18') && moji_info[:r18] == true
             emoji = Emojidex::Data::Emoji.new moji_info
             emoji.paths = get_paths(emoji)
             @emoji[Emojidex.escape_code(emoji.code.to_s).to_sym] = emoji
