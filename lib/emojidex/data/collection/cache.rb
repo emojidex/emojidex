@@ -52,6 +52,8 @@ module Emojidex
           _raster_check_copy(moji, :png, sizes) if formats.include? :png
         end
         _process_download_queue
+        generate_paths
+        generate_checksums
         cache_index
       end
 
@@ -63,7 +65,8 @@ module Emojidex
         idx = Emojidex::Data::Collection.new
         idx.load_local_collection(destination) if FileTest.exist? "#{destination}/emoji.json"
         idx.add_emoji @emoji.values
-        File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.emoji.values.to_json }
+        #File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.emoji.values.to_json }
+        write_index(destination)
       end
 
       # [over]writes a sanitized index to the specified destination.
@@ -71,7 +74,11 @@ module Emojidex
       def write_index(destination)
         idx = @emoji.values.to_json
         idx = JSON.parse idx
-        idx.each { |moji| moji.delete_if { |_k, v| v.nil? } }
+        idx.each do |moji|
+          moji['paths'] = nil
+          moji['local_checksums'] = nil
+          moji.delete_if { |_k, v| v.nil? }
+        end
         File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.to_json }
       end
 

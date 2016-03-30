@@ -37,6 +37,15 @@ module Emojidex
         end
       end
 
+      def blank_paths
+        @paths = {}
+        @paths[:svg] = nil
+        @paths[:png] = {}
+        Emojidex::Defaults.sizes.keys.each do |size|
+          @paths[:png][size] = nil
+        end
+      end
+
       def fill_paths(paths)
         @paths[:svg] = paths[:svg] if paths.include? :svg
         return unless paths.include? :png
