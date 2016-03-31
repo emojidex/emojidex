@@ -43,15 +43,20 @@ module Emojidex
       #     (default is ENV['EMOJI_CACHE'] or '$HOME/.emoji_cache')
       #   formats: formats to cache (default is SVG only)
       #   sizes: sizes to cache (default is px32, but this is irrelivant for SVG)
+      def cache(options = {})
+        _cache(options)
+        cache_index
+      end
+
+      # Caches emoji to local emoji storage cache
+      # +regenerates checksums and paths
+      # Options:
+      #   cache_path: manually specify cache location
+      #     (default is ENV['EMOJI_CACHE'] or '$HOME/.emoji_cache')
+      #   formats: formats to cache (default is SVG only)
+      #   sizes: sizes to cache (default is px32, but this is irrelivant for SVG)
       def cache!(options = {})
-        setup_cache options[:cache_path]
-        formats = options[:formats] || Emojidex::Defaults.selected_formats
-        sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
-        @emoji.values.each do |moji|
-          _svg_check_copy(moji) if formats.include? :svg
-          _raster_check_copy(moji, :png, sizes) if formats.include? :png
-        end
-        _process_download_queue
+        _cache(options)
         generate_paths
         generate_checksums
         cache_index
@@ -133,6 +138,17 @@ module Emojidex
         dls << Thread.new { moji.cache(:svg) } if formats.include? :svg
         dls << Thread.new { moji.cache(:png, sizes) } if formats.include? :png
         dls.each(&:join)
+      end
+
+      def _cache(options)
+        setup_cache options[:cache_path]
+        formats = options[:formats] || Emojidex::Defaults.selected_formats
+        sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
+        @emoji.values.each do |moji|
+          _svg_check_copy(moji) if formats.include? :svg
+          _raster_check_copy(moji, :png, sizes) if formats.include? :png
+        end
+        _process_download_queue
       end
     end
   end
