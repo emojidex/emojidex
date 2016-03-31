@@ -136,6 +136,7 @@ module Emojidex
       private
 
       def _add_list(list)
+        return if list.nil?
         list.each do |moji_info|
           if moji_info.instance_of? Emojidex::Data::Emoji
             next if @r18 == false && moji_info.r18 == true
