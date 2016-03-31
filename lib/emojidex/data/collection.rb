@@ -16,12 +16,14 @@ module Emojidex
       include Emojidex::Data::CollectionAssetInformation
       include Emojidex::Data::CollectionMojiData
       attr_accessor :emoji, :categories,
-                    :source_path, :vector_source_path, :raster_source_path
+                    :source_path, :vector_source_path, :raster_source_path,
+                    :r18 # set to true if collection contains R-18 emoji
 
       # Initialize Collection. You can pass a list of emoji to seed the collection
       def initialize(opts = {})
         @emoji = {}
         @raster_source_path = @vector_source_path = @source_path = nil
+        @r18 = opts[:r18] || false
         if opts.include? :cache_path
           setup_cache(opts[:cache_path])
           opts.delete :cache_path
@@ -35,7 +37,7 @@ module Emojidex
 
       # Loads an emoji collection on local storage
       def load_local_collection(path)
-        @source_path = @vector_source_path = @raster_source_path = File.expand_path(path)
+        @source_path =  File.expand_path(path)
         json = IO.read(@source_path + '/emoji.json')
         list = JSON.parse(json, symbolize_names: true)
         add_emoji(list)
@@ -134,11 +136,14 @@ module Emojidex
       private
 
       def _add_list(list)
+        return if list.nil?
         list.each do |moji_info|
           if moji_info.instance_of? Emojidex::Data::Emoji
+            next if @r18 == false && moji_info.r18 == true
             @emoji[moji_info.code.to_sym] = moji_info.dup
             @emoji[moji_info.code.to_sym].paths = get_paths(moji_info)
           else
+            next if @r18 == false && moji_info.include?(:r18) && moji_info[:r18] == true
             emoji = Emojidex::Data::Emoji.new moji_info
             emoji.paths = get_paths(emoji)
             @emoji[Emojidex.escape_code(emoji.code.to_s).to_sym] = emoji

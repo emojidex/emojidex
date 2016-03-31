@@ -43,15 +43,22 @@ module Emojidex
       #     (default is ENV['EMOJI_CACHE'] or '$HOME/.emoji_cache')
       #   formats: formats to cache (default is SVG only)
       #   sizes: sizes to cache (default is px32, but this is irrelivant for SVG)
+      def cache(options = {})
+        _cache(options)
+        cache_index
+      end
+
+      # Caches emoji to local emoji storage cache
+      # +regenerates checksums and paths
+      # Options:
+      #   cache_path: manually specify cache location
+      #     (default is ENV['EMOJI_CACHE'] or '$HOME/.emoji_cache')
+      #   formats: formats to cache (default is SVG only)
+      #   sizes: sizes to cache (default is px32, but this is irrelivant for SVG)
       def cache!(options = {})
-        setup_cache options[:cache_path]
-        formats = options[:formats] || Emojidex::Defaults.selected_formats
-        sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
-        @emoji.values.each do |moji|
-          _svg_check_copy(moji) if formats.include? :svg
-          _raster_check_copy(moji, :png, sizes) if formats.include? :png
-        end
-        _process_download_queue
+        _cache(options)
+        generate_paths
+        generate_checksums
         cache_index
       end
 
@@ -63,7 +70,8 @@ module Emojidex
         idx = Emojidex::Data::Collection.new
         idx.load_local_collection(destination) if FileTest.exist? "#{destination}/emoji.json"
         idx.add_emoji @emoji.values
-        File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.emoji.values.to_json }
+        #File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.emoji.values.to_json }
+        write_index(destination)
       end
 
       # [over]writes a sanitized index to the specified destination.
@@ -71,7 +79,11 @@ module Emojidex
       def write_index(destination)
         idx = @emoji.values.to_json
         idx = JSON.parse idx
-        idx.each { |moji| moji.delete_if { |_k, v| v.nil? } }
+        idx.each do |moji|
+          moji['paths'] = nil
+          moji['local_checksums'] = nil
+          moji.delete_if { |_k, v| v.nil? }
+        end
         File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.to_json }
       end
 
@@ -126,6 +138,17 @@ module Emojidex
         dls << Thread.new { moji.cache(:svg) } if formats.include? :svg
         dls << Thread.new { moji.cache(:png, sizes) } if formats.include? :png
         dls.each(&:join)
+      end
+
+      def _cache(options)
+        setup_cache options[:cache_path]
+        formats = options[:formats] || Emojidex::Defaults.selected_formats
+        sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
+        @emoji.values.each do |moji|
+          _svg_check_copy(moji) if formats.include? :svg
+          _raster_check_copy(moji, :png, sizes) if formats.include? :png
+        end
+        _process_download_queue
       end
     end
   end

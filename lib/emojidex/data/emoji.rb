@@ -6,7 +6,8 @@ module Emojidex
     # emoji base class
     class Emoji
       attr_accessor :moji, :category, :code, :code_ja,
-                    :unicode, :tags, :emoticon, :variants, :base
+                    :unicode, :tags, :emoticon, :variants, :base,
+                    :r18
 
       include Emojidex::Data::EmojiAssetInformation
 
@@ -49,6 +50,7 @@ module Emojidex
         @unicode = details[:unicode].to_s
         @full_name = details[:full_name].to_s
         @emoticon = details[:emoticon].to_s
+        @r18 = details[:r18] || false
       end
 
       def _init_descriptor_info(details)
