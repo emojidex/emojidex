@@ -12,15 +12,16 @@ describe Emojidex::Service::Collection do
       expect(sc.detailed).to be false
       expect(sc.endpoint).to eq 'emoji'
       expect(sc.page).to eq 1
-      expect(sc.source_path).to be nil
-      expect(sc.vector_source_path).to be nil
-      expect(sc.raster_source_path).to be nil
+      expect(sc.source_path).to eq sc.cache_path
+      expect(sc.vector_source_path).to eq sc.cache_path
+      expect(sc.raster_source_path).to eq sc.cache_path
     end
 
     it 'caches, does not re-cache matching assets, re-caches updated assets' do
       clear_tmp_cache
       sc = Emojidex::Service::Collection.new(limit: 2, detailed: true, cache_path: tmp_cache_path)
       sc.cache!
+      `ls #{sc.emoji.values[0].paths[:png][:hdpi]}`
       expect(File.exist?(sc.emoji.values[0].paths[:png][:hdpi])).to be true
       expect(sc.emoji.values[0].checksums[:png][:hdpi]
             ).to eq sc.emoji.values[0].local_checksums[:png][:hdpi]

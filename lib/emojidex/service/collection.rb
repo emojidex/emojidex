@@ -100,6 +100,8 @@ module Emojidex
         else
           setup_cache
         end
+
+        @raster_source_path = @vector_source_path = @source_path = @cache_path
       end
     end
   end

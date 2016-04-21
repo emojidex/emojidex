@@ -90,37 +90,24 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        if @vector_source_path.nil? && @source_path.nil?
-          @download_queue << { moji: moji, formats: :svg, sizes: [] }
-        end
-        @vector_source_path = @source_path if @vector_source_path.nil?
         src = "#{@vector_source_path}/#{moji.code}.svg"
         if File.exist? "#{src}"
-          unless File.exist?("#{@cache_path}/#{moji.code}.svg") &&
-                 FileUtils.compare_file("#{src}", "#{@cache_path}/#{moji.code}.svg")
-            FileUtils.cp("#{src}", @cache_path)
-          end
+            FileUtils.cp("#{src}", @cache_path) unless @vector_source_path == @cache_path
         else
           @download_queue << { moji: moji, formats: :svg, sizes: [] }
         end
-        FileUtils.cp_r src, @cache_path if File.directory? src
+        FileUtils.cp_r src, @cache_path if File.directory? src # Copies source frames and data files if unpacked
       end
 
       def _raster_check_copy(moji, format, sizes)
-        if @raster_source_path.nil? && @source_path.nil?
-          @download_queue << { moji: moji, formats: [format], sizes: sizes }
-        end
-        @raster_source_path = @source_path if @raster_source_path.nil?
-        moji.cache(format, sizes) if @raster_source_path.nil?
         sizes.each do |size|
-          next if File.exist? "#{@cache_path}/#{size}/#{moji.code}.#{format}" # TODO: check checksums
           src = "#{@raster_source_path}/#{size}/#{moji.code}"
-          if FileTest.exist? "#{src}.#{format}"
-            FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}"))
+          if File.exist? "#{src}.#{format}"
+            FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}")) unless @raster_source_path == @cache_path
           else
             @download_queue << { moji: moji, formats: [format], sizes: [size] }
           end
-          FileUtils.cp_r(src, @cache_path) if File.directory? src
+          FileUtils.cp_r(src, @cache_path) if File.directory? src # Copies source frames and data files if unpacked
         end
       end
 
@@ -130,6 +117,7 @@ module Emojidex
           thr << Thread.new { _cache_from_net(dl[:moji], dl[:formats], dl[:sizes]) }
           thr.each(&:join) if thr.length >= @download_threads
         end
+        thr.each(&:join) # grab end of queue
       end
 
       def _cache_from_net(moji, formats, sizes)
@@ -144,11 +132,18 @@ module Emojidex
         setup_cache options[:cache_path]
         formats = options[:formats] || Emojidex::Defaults.selected_formats
         sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
+        
+        @vector_source_path = @cache_path if @vector_source_path.nil?
+        @raster_source_path = @cache_path if @raster_source_path.nil?
+        
         @emoji.values.each do |moji|
           _svg_check_copy(moji) if formats.include? :svg
           _raster_check_copy(moji, :png, sizes) if formats.include? :png
         end
         _process_download_queue
+
+        @vector_source_path = @cache_path if formats.include? :svg
+        @raster_source_path = @cache_path if formats.include? :png
       end
     end
   end

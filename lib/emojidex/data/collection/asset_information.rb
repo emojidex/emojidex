@@ -15,11 +15,11 @@ module Emojidex
       def get_checksums(moji, formats = Emojidex::Defaults.formats,
                         sizes = Emojidex::Defaults.sizes)
         sums = {}
-        sums[:svg] = _checksum_for_file("#{@cache_path}/#{moji.code}.svg") if formats.include? :svg
+        sums[:svg] = _checksum_for_file("#{@vector_source_path}/#{moji.code}.svg") if formats.include? :svg
         if formats.include? :png
           sums[:png] = {}
           sizes.keys.each do |size|
-            sums[:png][size] = _checksum_for_file("#{@cache_path}/#{size}/#{moji.code}.png")
+            sums[:png][size] = _checksum_for_file("#{@raster_source_path}/#{size}/#{moji.code}.png")
           end
         end
         sums
@@ -33,12 +33,12 @@ module Emojidex
 
       def get_paths?(moji, formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
         paths = {}
-        path = "#{@cache_path}/#{moji.code}.svg"
+        path = "#{@vector_source_path}/#{moji.code}.svg"
         paths[:svg] = path if File.exist? path
         if formats.include? :png
           paths[:png] = {}
           sizes.keys.each do |size|
-            path = "#{@cache_path}/#{size}/#{moji.code}.png"
+            path = "#{@raster_source_path}/#{size}/#{moji.code}.png"
             paths[:png][size] = path if File.exist? path
           end
         end
@@ -48,11 +48,11 @@ module Emojidex
       def get_paths(moji, formats = Emojidex::Defaults.formats,
                     sizes = Emojidex::Defaults.sizes)
         paths = {}
-        paths[:svg] = "#{@cache_path}/#{moji.code}.svg"
+        paths[:svg] = "#{@vector_source_path}/#{moji.code}.svg"
         if formats.include? :png
           paths[:png] = {}
           sizes.keys.each do |size|
-            paths[:png][size] = "#{@cache_path}/#{size}/#{moji.code}.png"
+            paths[:png][size] = "#{@raster_source_path}/#{size}/#{moji.code}.png"
           end
         end
         paths
@@ -61,7 +61,11 @@ module Emojidex
       private
 
       def _checksum_for_file(path)
-        (File.exist? path) ? Digest::MD5.file(path).hexdigest : nil
+        sum = nil
+        if File.exist? path
+          sum = Digest::MD5.file(path).hexdigest
+        end
+        sum
       end
     end
   end

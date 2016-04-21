@@ -11,9 +11,9 @@ describe Emojidex::Service::Indexes do
       expect(idx.emoji.count).to eq(Emojidex::Defaults.limit)
       idx.more
       expect(idx.emoji.count).to eq(Emojidex::Defaults.limit * 2)
-      expect(idx.source_path).to be nil
-      expect(idx.vector_source_path).to be nil
-      expect(idx.raster_source_path).to be nil
+      expect(idx.source_path).to eq idx.cache_path
+      expect(idx.vector_source_path).to eq idx.cache_path
+      expect(idx.raster_source_path).to eq idx.cache_path
     end
   end
 
@@ -36,9 +36,10 @@ describe Emojidex::Service::Indexes do
       else
         puts 'Could not detect a premium user account. Skipping premium collection test.'
       end
-      expect(idx.source_path).to be nil
-      expect(idx.vector_source_path).to be nil
-      expect(idx.raster_source_path).to be nil
+
+      expect(idx.source_path).to eq idx.cache_path
+      expect(idx.vector_source_path).to eq idx.cache_path
+      expect(idx.raster_source_path).to eq idx.cache_path
     end
   end
 
@@ -62,9 +63,9 @@ describe Emojidex::Service::Indexes do
         puts 'Could not detect a premium user account. Skipping premium collection test.'
       end
 
-      expect(idx.source_path).to be nil
-      expect(idx.vector_source_path).to be nil
-      expect(idx.raster_source_path).to be nil
+      expect(idx.source_path).to eq idx.cache_path
+      expect(idx.vector_source_path).to eq idx.cache_path
+      expect(idx.raster_source_path).to eq idx.cache_path
     end
   end
 
@@ -72,9 +73,10 @@ describe Emojidex::Service::Indexes do
     it 'returns a service collection' do
       idx = Emojidex::Service::Indexes.user_emoji('emojidex')
       expect(idx).to be_a(Emojidex::Service::Collection)
-      expect(idx.source_path).to be nil
-      expect(idx.vector_source_path).to be nil
-      expect(idx.raster_source_path).to be nil
+
+      expect(idx.source_path).to eq idx.cache_path
+      expect(idx.vector_source_path).to eq idx.cache_path
+      expect(idx.raster_source_path).to eq idx.cache_path
     end
   end
 
