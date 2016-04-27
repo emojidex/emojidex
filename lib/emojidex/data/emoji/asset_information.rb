@@ -115,7 +115,10 @@ module Emojidex
       end
 
       def _cache_png(sizes)
+        sizes = sizes.keys if sizes.is_a?(Hash)
         sizes.each do |size|
+          size = size.first if size.is_a?(Array)
+          size = size.key if size.is_a?(Hash)
           unless @paths.include?(:png) &&
                  @paths[:png].include?(size) && @paths[:png][size].nil? == false
             @paths[:png][size] = "#{Dir.pwd}/#{size}/#{@code}.png"

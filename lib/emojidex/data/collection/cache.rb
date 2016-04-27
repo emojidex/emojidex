@@ -40,7 +40,6 @@ module Emojidex
       # Caches emoji to local emoji storage cache
       # Options:
       #   cache_path: manually specify cache location
-      #     (default is ENV['EMOJI_CACHE'] or '$HOME/.emoji_cache')
       #   formats: formats to cache (default is SVG only)
       #   sizes: sizes to cache (default is px32, but this is irrelivant for SVG)
       def cache(options = {})
@@ -52,7 +51,6 @@ module Emojidex
       # +regenerates checksums and paths
       # Options:
       #   cache_path: manually specify cache location
-      #     (default is ENV['EMOJI_CACHE'] or '$HOME/.emoji_cache')
       #   formats: formats to cache (default is SVG only)
       #   sizes: sizes to cache (default is px32, but this is irrelivant for SVG)
       def cache!(options = {})
