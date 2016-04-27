@@ -9,12 +9,12 @@ Gem::Specification.new do |s|
   s.email       = 'info@emojidex.com'
   s.homepage    = 'http://developer.emojidex.com'
 
-  s.required_ruby_version = '>= 2.0'
+  s.required_ruby_version = '>= 2.2'
   s.files       = Dir.glob('emoji/**/*') +
                   Dir.glob('lib/**/*.rb') +
                   ['emojidex.gemspec']
   s.require_paths = ['lib']
 
   s.add_dependency 'faraday', '~> 0.9', '~> 0.9.2'
-  s.add_dependency 'faraday_middleware', '~> 0.9', '~> 0.9.2'
+  s.add_dependency 'faraday_middleware', '~> 0.10', '~> 0.10.0'
 end
