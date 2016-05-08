@@ -57,6 +57,8 @@ module Emojidex
         _process_moji_page(moji_page)
         
         cache! if @auto_cache
+
+        moji_page
       end
 
       private
