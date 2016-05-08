@@ -19,19 +19,23 @@ describe Emojidex::Service::Collection do
 
     it 'caches, does not re-cache matching assets, re-caches updated assets' do
       clear_tmp_cache
-      sc = Emojidex::Service::Collection.new(limit: 2, detailed: true, cache_path: tmp_cache_path)
-      sc.cache!
-      `ls #{sc.emoji.values[0].paths[:png][:hdpi]}`
+      sc = Emojidex::Service::Collection.new(limit: 2, formats: Emojidex::Defaults.formats,
+                                             detailed: true, cache_path: tmp_cache_path)
+
+      sc.cache!(formats: Emojidex::Defaults.formats)
       expect(File.exist?(sc.emoji.values[0].paths[:png][:hdpi])).to be true
-      expect(sc.emoji.values[0].checksums[:png][:hdpi]
-            ).to eq sc.emoji.values[0].local_checksums[:png][:hdpi]
+      expect(sc.emoji.values[0].remote_checksums[:png][:hdpi]
+            ).to eq sc.emoji.values[0].checksums[:png][:hdpi]
+      expect(File.exist?(sc.emoji.values[0].paths[:svg])).to be true
+      expect(sc.emoji.values[0].remote_checksums[:svg]
+            ).to eq sc.emoji.values[0].checksums[:svg]
       File.open(sc.emoji.values[0].paths[:png][:hdpi], 'w'
                ) { |f| f.write 'garbagegarbagegarbage' }
-      expect(sc.emoji.values[0].checksums[:png][:hdpi]
-            ).not_to eq sc.emoji.values[0].generate_local_checksum(:png, :hdpi)
+      expect(sc.emoji.values[0].remote_checksums[:png][:hdpi]
+            ).not_to eq sc.emoji.values[0].generate_checksum(:png, :hdpi)
       sc.cache!
-      expect(sc.emoji.values[0].checksums[:png][:hdpi]
-            ).to eq sc.emoji.values[0].local_checksums[:png][:hdpi]
+      expect(sc.emoji.values[0].remote_checksums[:png][:hdpi]
+            ).to eq sc.emoji.values[0].checksums[:png][:hdpi]
     end
   end
 end

@@ -10,9 +10,11 @@ module Emojidex
     module CollectionCache
       include Emojidex::Data::CollectionAssetInformation
       attr_reader :cache_path, :download_queue
-      attr_accessor :download_threads
+      attr_accessor :download_threads, :formats, :sizes
 
       def setup_cache(path = nil)
+        @formats = Emojidex::Defaults.selected_formats unless @formats
+        @sizes = Emojidex::Defaults.selected_sizes unless @sizes
         @download_queue = []
         @download_threads = 8
         # check if cache dir is already set
@@ -79,7 +81,7 @@ module Emojidex
         idx = JSON.parse idx
         idx.each do |moji|
           moji['paths'] = nil
-          moji['local_checksums'] = nil
+          moji['remote_checksums'] = nil
           moji.delete_if { |_k, v| v.nil? }
         end
         File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.to_json }
@@ -88,13 +90,17 @@ module Emojidex
       private
 
       def _svg_check_copy(moji)
-        src = "#{@vector_source_path}/#{moji.code}.svg"
-        if File.exist? "#{src}"
-            FileUtils.cp("#{src}", @cache_path) unless @vector_source_path == @cache_path
-        else
-          @download_queue << { moji: moji, formats: :svg, sizes: [] }
+        if @vector_source_path != nil
+          return if @vector_source_path == @cache_path
+          src_d = "#{@vector_source_path}/#{moji.code}"
+          src = "#{src_d}.svg"
+
+          FileUtils.cp("#{src}", @cache_path) if File.exist?"#{src}"
+          FileUtils.cp_r src_d, @cache_path if File.directory? src_d # Copies source frames and data files if unpacked
+          return
         end
-        FileUtils.cp_r src, @cache_path if File.directory? src # Copies source frames and data files if unpacked
+
+        @download_queue << { moji: moji, formats: :svg, sizes: [] }
       end
 
       def _raster_check_copy(moji, format, sizes)
@@ -128,11 +134,11 @@ module Emojidex
 
       def _cache(options)
         setup_cache options[:cache_path]
-        formats = options[:formats] || Emojidex::Defaults.selected_formats
-        sizes = options[:sizes] || Emojidex::Defaults.selected_sizes
+        formats = options[:formats] || @formats
+        sizes = options[:sizes] || @sizes
         
-        @vector_source_path = @cache_path if @vector_source_path.nil?
-        @raster_source_path = @cache_path if @raster_source_path.nil?
+        #@vector_source_path = @cache_path if @vector_source_path.nil?
+        #@raster_source_path = @cache_path if @raster_source_path.nil?
         
         @emoji.values.each do |moji|
           _svg_check_copy(moji) if formats.include? :svg

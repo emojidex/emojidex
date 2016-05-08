@@ -13,16 +13,22 @@ module Emojidex
 
         @status = ''
 
+        @auto_cache = @opts[:auto_cache] || true
+        @opts.delete(:auto_cache)
+
+        @formats = @opts[:formats] || Emojidex::Defaults.selected_formats
+        @opts.delete(:formats)
+
+        @sizes = @opts[:sizes] || Emojidex::Defaults.selected_sizes
+        @opts.delete(:sizes)
+
+        auto_init = @opts[:auto_init] || true
+        @opts.delete(:auto_init)
+
         _init_emoji
         _init_user_info
         _init_endpoint
         _init_cache
-
-        @auto_cache = @opts[:auto_cache] || true
-        @opts.delete(:auto_cache)
-
-        auto_init = @opts[:auto_init] || true
-        @opts.delete(:auto_init)
 
         more if auto_init
 
@@ -49,6 +55,8 @@ module Emojidex
         end
 
         _process_moji_page(moji_page)
+        
+        cache! if @auto_cache
       end
 
       private
@@ -89,7 +97,6 @@ module Emojidex
         end
 
         add_emoji(moji_page)
-        cache! if @auto_cache
         moji_page
       end
 
