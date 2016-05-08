@@ -16,7 +16,7 @@ module Emojidex
         @formats = Emojidex::Defaults.selected_formats unless @formats
         @sizes = Emojidex::Defaults.selected_sizes unless @sizes
         @download_queue = []
-        @download_threads = 8
+        @download_threads = 4
         # check if cache dir is already set
         return @cache_path if @cache_path && path.nil?
         # setup cache
@@ -119,7 +119,7 @@ module Emojidex
         thr = []
         @download_queue.each do |dl|
           thr << Thread.new { _cache_from_net(dl[:moji], dl[:formats], dl[:sizes]) }
-          thr.each(&:join) if thr.length >= @download_threads
+          thr.each(&:join) if thr.length >= (@download_threads - 1)
         end
         thr.each(&:join) # grab end of queue
       end
@@ -136,10 +136,7 @@ module Emojidex
         setup_cache options[:cache_path]
         formats = options[:formats] || @formats
         sizes = options[:sizes] || @sizes
-        
-        #@vector_source_path = @cache_path if @vector_source_path.nil?
-        #@raster_source_path = @cache_path if @raster_source_path.nil?
-        
+
         @emoji.values.each do |moji|
           _svg_check_copy(moji) if formats.include? :svg
           _raster_check_copy(moji, :png, sizes) if formats.include? :png

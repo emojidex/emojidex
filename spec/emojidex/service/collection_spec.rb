@@ -19,7 +19,8 @@ describe Emojidex::Service::Collection do
 
     it 'caches, does not re-cache matching assets, re-caches updated assets' do
       clear_tmp_cache
-      sc = Emojidex::Service::Collection.new(limit: 2, formats: Emojidex::Defaults.formats,
+      sc = Emojidex::Service::Collection.new(limit: 20, formats: Emojidex::Defaults.formats,
+                                             sizes: Emojidex::Defaults.sizes,
                                              detailed: true, cache_path: tmp_cache_path)
 
       sc.cache!(formats: Emojidex::Defaults.formats)

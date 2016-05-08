@@ -118,6 +118,7 @@ module Emojidex
       private
 
       def _cache_svg
+        puts "== CACHING SVG"
         @paths[:svg] = Dir.pwd unless (@paths.include? :svg) && !@paths[:svg].nil?
         return if File.exist?(@paths[:svg]) && (!@remote_checksums[:svg].nil? &&
                   @remote_checksums[:svg] == generate_checksum(:svg))

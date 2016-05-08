@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'faraday', '~> 0.9', '~> 0.9.2'
   s.add_dependency 'faraday_middleware', '~> 0.10', '~> 0.10.0'
+  s.add_dependency 'typhoeus'
 end

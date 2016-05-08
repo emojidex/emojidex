@@ -1,4 +1,6 @@
 require 'faraday'
+require 'typhoeus'
+require 'typhoeus/adapters/faraday'
 require 'json'
 require_relative '../../emojidex'
 require_relative 'error'
@@ -8,7 +10,7 @@ module Emojidex
     # API transaction utility
     class Transactor
       @@connection = nil
-      @@retries = 3
+      @@retries = 10
 
       @@settings = {
         api: {
@@ -49,6 +51,8 @@ module Emojidex
       end
 
       def self.download(file_subpath)
+        url = URI.escape("#{cdn_url}#{file_subpath.tr(' ', '_')}")
+        puts "== URL IS: #{url}"
         connect.get(URI.escape("#{cdn_url}#{file_subpath.tr(' ', '_')}"))
       end
 
@@ -56,10 +60,10 @@ module Emojidex
         return @@connection if @@connection
         @@connection = Faraday.new do |conn|
           conn.request :url_encoded
-          conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.05,
+          conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.5,
                         backoff_factor: 2
           # conn.response :logger
-          conn.adapter Faraday.default_adapter
+          conn.adapter :typhoeus #Faraday.default_adapter
         end
         _kludge_windows if Gem.win_platform?
         @@connection
