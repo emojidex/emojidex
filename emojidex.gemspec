@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = 'info@emojidex.com'
   s.homepage    = 'http://developer.emojidex.com'
 
-  s.required_ruby_version = '>= 2.2'
+  s.required_ruby_version = '>= 2.2.3'
   s.files       = Dir.glob('emoji/**/*') +
                   Dir.glob('lib/**/*.rb') +
                   ['emojidex.gemspec']
