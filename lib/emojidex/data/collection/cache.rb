@@ -91,12 +91,12 @@ module Emojidex
 
       def _svg_check_copy(moji)
         if @vector_source_path != nil
-          return if @vector_source_path == @cache_path
           src_d = "#{@vector_source_path}/#{moji.code}"
           src = "#{src_d}.svg"
 
-          FileUtils.cp("#{src}", @cache_path) if File.exist?"#{src}"
-          FileUtils.cp_r src_d, @cache_path if File.directory? src_d # Copies source frames and data files if unpacked
+          FileUtils.cp(src, @cache_path) if File.exist?(src) && @vector_source_path != @cache_path
+          FileUtils.cp_r(src_d, @cache_path) if File.directory?(src_d) && @vector_source_path != @cache_path # Copies source frames and data files if unpacked
+          @download_queue << { moji: moji, formats: :svg, sizes: [] } unless File.exist?("#{@cache_path}/#{moji.code}.svg") # nothing was copied, get from net
           return
         end
 
@@ -105,13 +105,14 @@ module Emojidex
 
       def _raster_check_copy(moji, format, sizes)
         sizes.each do |size|
-          src = "#{@raster_source_path}/#{size}/#{moji.code}"
-          if File.exist? "#{src}.#{format}"
-            FileUtils.cp("#{src}.#{format}", ("#{@cache_path}/#{size}")) unless @raster_source_path == @cache_path
-          else
-            @download_queue << { moji: moji, formats: [format], sizes: [size] }
+          if @raster_source_path != nil
+            src_d = "#{@raster_source_path}/#{size}/#{moji.code}"
+            src = "#{src_d}.#{format}"
+
+            FileUtils.cp("#{src}", ("#{@cache_path}/#{size}")) if File.exist?(src) && @raster_source_path != @cache_path
+            FileUtils.cp_r(src, @cache_path) if File.directory?(src_d) && @raster_source_path != @cache_path # Copies source frames and data files if unpacked
+            @download_queue << { moji: moji, formats: [format], sizes: [size] } unless File.exist?("#{@cache_path}/#{size}/#{moji.code}.#{format}") # nothing was copied, get from net
           end
-          FileUtils.cp_r(src, @cache_path) if File.directory? src # Copies source frames and data files if unpacked
         end
       end
 

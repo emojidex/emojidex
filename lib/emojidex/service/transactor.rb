@@ -51,8 +51,6 @@ module Emojidex
       end
 
       def self.download(file_subpath)
-        url = URI.escape("#{cdn_url}#{file_subpath.tr(' ', '_')}")
-        puts "== URL IS: #{url}"
         connect.get(URI.escape("#{cdn_url}#{file_subpath.tr(' ', '_')}"))
       end
 

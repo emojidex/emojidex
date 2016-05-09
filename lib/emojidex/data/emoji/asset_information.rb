@@ -102,7 +102,7 @@ module Emojidex
         when :png
           return @checksums[:png][size] = _checksum_for_file(@paths[:png][size])
         when :svg
-          return @checksum[:svg] = _checksum_for_file(@paths[:svg])
+          return @checksums[:svg] = _checksum_for_file(@paths[:svg])
         end
         nil
       end
@@ -118,7 +118,6 @@ module Emojidex
       private
 
       def _cache_svg
-        puts "== CACHING SVG"
         @paths[:svg] = Dir.pwd unless (@paths.include? :svg) && !@paths[:svg].nil?
         return if File.exist?(@paths[:svg]) && (!@remote_checksums[:svg].nil? &&
                   @remote_checksums[:svg] == generate_checksum(:svg))
