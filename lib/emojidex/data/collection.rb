@@ -37,7 +37,9 @@ module Emojidex
 
       # Loads an emoji collection on local storage
       def load_local_collection(path)
-        @source_path = @vector_source_path = @raster_source_path = File.expand_path(path)
+        @source_path = File.expand_path(path)
+        @vector_source_path = @source_path if @vector_source_path.nil?
+        @raster_source_path = @source_path if @raster_source_path.nil?
         json = IO.read(@source_path + '/emoji.json')
         list = JSON.parse(json, symbolize_names: true)
         add_emoji(list)
