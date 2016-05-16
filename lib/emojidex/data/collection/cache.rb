@@ -70,8 +70,7 @@ module Emojidex
         idx = Emojidex::Data::Collection.new
         idx.load_local_collection(destination) if FileTest.exist? "#{destination}/emoji.json"
         idx.add_emoji @emoji.values
-        #File.open("#{destination}/emoji.json", 'w') { |f| f.write idx.emoji.values.to_json }
-        write_index(destination)
+        idx.write_index(destination)
       end
 
       # [over]writes a sanitized index to the specified destination.
