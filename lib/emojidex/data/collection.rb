@@ -147,7 +147,6 @@ module Emojidex
           if moji_info.instance_of? Emojidex::Data::Emoji
             next if @r18 == false && moji_info.r18 == true
             @emoji[moji_info.code.to_sym] = moji_info.dup
-            @emoji[moji_info.code.to_sym].paths = get_paths(moji_info)
           else
             next if @r18 == false && moji_info.include?(:r18) && moji_info[:r18] == true
             emoji = Emojidex::Data::Emoji.new moji_info
