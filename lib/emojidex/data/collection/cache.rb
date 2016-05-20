@@ -68,6 +68,7 @@ module Emojidex
       def cache_index(destination = nil)
         destination ||= @cache_path
         idx = Emojidex::Data::Collection.new
+        idx.r18 = @r18
         idx.load_local_collection(destination) if FileTest.exist? "#{destination}/emoji.json"
         idx.add_emoji @emoji.values
         idx.write_index(destination)
