@@ -113,7 +113,7 @@ module Emojidex
       # Returns a new collection of only emoji in the specified category
       def category(category_code)
         categorized = @emoji.values.select { |moji| moji.category == category_code }
-        Emojidex::Data::Collection.new(emoji: categorized)
+        Emojidex::Data::Collection.new(emoji: categorized, r18: @r18)
       end
 
       # Check to see if there are emoji in this collection which have the specified categories
