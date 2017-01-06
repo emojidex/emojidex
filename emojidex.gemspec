@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'emojidex'
-  s.version     = '0.3.4'
+  s.version     = '0.3.5'
   s.license     = 'emojiOL'
   s.summary     = 'emojidex Ruby tools'
   s.description = 'emojidex emoji handling, search and lookup, listing and caching functionality' \
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
                   ['emojidex.gemspec']
   s.require_paths = ['lib']
 
-  s.add_dependency 'faraday', '~> 0.9', '~> 0.9.2'
-  s.add_dependency 'faraday_middleware', '~> 0.10', '~> 0.10.0'
-  s.add_dependency 'typhoeus'
+  s.add_dependency 'faraday', '~> 0.10', '~> 0.10.1'
+  s.add_dependency 'faraday_middleware', '~> 0.10', '~> 0.10.1'
+  s.add_dependency 'typhoeus', '~> 1.1', '~> 1.1.2'
 end
