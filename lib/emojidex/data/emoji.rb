@@ -1,19 +1,35 @@
 require_relative '../../emojidex'
+require_relative 'emoji/combination_information'
 require_relative 'emoji/asset_information'
 
 module Emojidex
   module Data
     # emoji base class
     class Emoji
+      # Attribute Definitions:
+      # * moji: the actual character code associated with this emoji (if any)
+      # * category: category this emoji belongs to (usually as defined by Unicode)
+      # * code: the "short code" for the emoji
+      # * code_ja: the Japanese version of the "short code"
+      # * unicode: a string representing the hex of the unicode characters with - between multiples
+      # * tags: the tags registered to this emoji (usually only from the service)
+      # * emoticon: the emoticon that maps to this emoji (rarely used/not recommended)
+      # * variants: different (variants) of the emoji EG: racial modifiers
+      # * base: the base variant EG: the base emoji without modifiers
+      # * combinations: combinations starting with this emoji; base/components/component order
+      # * cutomizations: emoji which start customization of this emoji (this is combination base)
+      # * r18: flag indicating adult content
       attr_accessor :moji, :category, :code, :code_ja,
                     :unicode, :tags, :emoticon, :variants, :base,
                     :r18
 
       include Emojidex::Data::EmojiAssetInformation
+      include Emojidex::Data::EmojiCombinationInformation
 
       def initialize(details = {})
         _init_identifier_info(details)
         _init_descriptor_info(details)
+        #init_combination_info(details)
         init_asset_info(details)
       end
 

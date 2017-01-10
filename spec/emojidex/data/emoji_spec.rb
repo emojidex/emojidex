@@ -6,7 +6,39 @@ describe Emojidex::Data::Emoji do
   let(:emoji) do
     Emojidex::Data::Emoji.new moji: '🌠', code: 'shooting_star',
                               code_ja: '流れ星', category: 'cosmos',
-                              unicode: '1f320', uri: '/dummy/uri'
+                              unicode: '1f320'
+  end
+
+  let(:combination_info) do
+    [
+      {
+        base: "star",
+        component_layer_order: [2, 0, 1, 3],
+        components: [
+          ["a", "b", "c"],
+          ["d", "e", ""],
+          ["g", "h", ""]
+        ]
+      },
+      {
+        base: "moon",
+        components: [
+          ["a", "b", "c"],
+          ["d", "e", ""],
+          ["g", "h", ""]
+        ]
+      }
+    ]
+  end
+
+  describe 'attributes' do
+    it 'assings all attributes or defaults' do
+      expect(emoji.moji).to eq('🌠')
+      expect(emoji.code).to eq('shooting_star')
+      expect(emoji.code_ja).to eq('流れ星')
+      expect(emoji.category).to eq(:cosmos)
+      expect(emoji.unicode).to eq('1f320')
+    end
   end
 
   describe '.to_s' do
@@ -42,6 +74,18 @@ describe Emojidex::Data::Emoji do
   describe '.to_json' do
     it 'outputs JSON info from the emoji' do
       expect(JSON.parse(emoji.to_json)).to be_an_instance_of(Hash)
+    end
+  end
+
+  describe '.fill_combinations' do
+    it 'fills the combinations array with combination object instances' do
+      emoji.fill_combinations(combination_info)
+      expect(emoji.combinations.first).to be_an_instance_of(Emojidex::Data::Combination)
+      expect(emoji.combinations[0].component_layer_order).to eq([2, 0, 1, 3])
+      expect(emoji.combinations[1].component_layer_order).to eq([0, 1, 2, 3])
+      expect(emoji.combinations[0].base).to eq("star")
+      expect(emoji.combinations[0].components[0]).to eq(["shooting_star"])
+      expect(emoji.combinations[0].components[2]).to eq(["d", "e", ""])
     end
   end
 end
