@@ -39,7 +39,7 @@ describe Emojidex::Util::CollectionChecker do
       checker = Emojidex::Util::CollectionChecker.new(col_good, sizes: [:px64])
 
       expect(checker).to be_an_instance_of(Emojidex::Util::CollectionChecker)
-      expect(checker.index_only.size).to eq(4)
+      expect(checker.index_only.size).to eq(6)
       expect(checker.asset_only).to be_empty
     end
 

@@ -113,6 +113,7 @@ module Emojidex
         @paths[:png].keys.each do |size|
           @checksums[:png][size] = _checksum_for_file(@paths[:png][size])
         end
+        @combinations.each { |combo| combo.generate_checksums }
         @checksums
       end
 

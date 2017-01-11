@@ -76,6 +76,12 @@ module Emojidex
       def fill_remote_checksums(checksums)
         #todo once implemented in API
       end
+
+      private
+
+      def _checksum_for_file(path)
+        (File.exist? path) ? Digest::MD5.file(path).hexdigest : nil
+      end
     end
   end
 end
