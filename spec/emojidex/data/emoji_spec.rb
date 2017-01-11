@@ -86,6 +86,30 @@ describe Emojidex::Data::Emoji do
       expect(emoji.combinations[0].base).to eq("star")
       expect(emoji.combinations[0].components[0]).to eq(["shooting_star"])
       expect(emoji.combinations[0].components[2]).to eq(["d", "e", ""])
+      expect(emoji.combinations[0].checksums[0]).to eq(
+        {
+          "shooting_star" => {
+            svg:nil,
+            png: {
+              ldpi: nil,
+              mdpi: nil,
+              hdpi: nil,
+              xhdpi: nil,
+              xxhdpi: nil,
+              xxxhdpi: nil,
+              px8: nil,
+              px16: nil,
+              px32: nil,
+              px64: nil,
+              px128: nil,
+              px256: nil,
+              px512: nil,
+              hanko: nil,
+              seal: nil
+            }
+          }
+        }
+      )
     end
   end
 end

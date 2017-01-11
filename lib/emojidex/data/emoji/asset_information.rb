@@ -63,6 +63,7 @@ module Emojidex
         Emojidex::Defaults.sizes.keys.each do |size|
           @paths[:png][size] = paths[:png][size] if paths[:png].include? size
         end
+        @combinations.each { |combo| combo.fill_paths(paths) }
         @paths
       end
 
