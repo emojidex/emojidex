@@ -9,6 +9,9 @@ module Emojidex
                              sizes = Emojidex::Defaults.sizes)
         @emoji.values.each do |moji|
           moji.checksums = get_checksums(moji, formats, sizes)
+          moji.combinations.each do |combo|
+            combo.checksums = get_combo_checksums(moji, combo, formats, sizes)
+          end
         end
       end
 
@@ -20,6 +23,28 @@ module Emojidex
           sums[:png] = {}
           sizes.keys.each do |size|
             sums[:png][size] = _checksum_for_file("#{@raster_source_path}/#{size}/#{moji.code}.png")
+          end
+        end
+        sums
+      end
+
+      def get_combo_checksums(moji, combo, formats = Emojidex::Defaults.formats,
+                        sizes = Emojidex::Defaults.sizes)
+        sums = combo.generate_blank_entry_set
+        if formats.include? :svg
+          for i in 0..(combo.components.length - 1)
+            combo.components[i].each do |component|
+              sums[i][component][:svg] = _checksum_for_file("#{@vector_source_path}/#{combo.base}/#{i}/#{component}.svg")
+            end
+          end
+        end
+        if formats.include? :png
+          sizes.keys.each do |size|
+            for i in 0..(combo.components.length - 1)
+              combo.components[i].each do |component|
+                sums[i][component][:png] = _checksum_for_file("#{@raster_source_path}/#{size}/#{combo.base}/#{i}/#{component}.png")
+              end
+            end
           end
         end
         sums

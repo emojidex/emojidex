@@ -104,7 +104,7 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.checksum?(:png, :px32)).to be_truthy
       expect(collection.emoji.values.first.checksums[:png][:px64]).to be_nil
       expect(collection.emoji.values.first.checksum?(:png, :px64)).to be_nil
-      expect(collection.emoji['man'].combinations.first.checksums[0].first[:svg])
+      expect(collection.emoji[:woman].combinations.first.checksums[0]['woman'][:svg]).to be_truthy
     end
   end
 

@@ -13,7 +13,7 @@ module Emojidex
         fill_remote_checksums(details[:checksums]) if details.include? :checksums
       end
 
-      def _generate_blank_entry_set
+      def generate_blank_entry_set
         entry_set = []
         @components.each do |component_set|
           component_group = {}
@@ -46,8 +46,8 @@ module Emojidex
       end
 
       def blank_checksums
-        @checksums = _generate_blank_entry_set
-        @remote_checksums = _generate_blank_entry_set
+        @checksums = generate_blank_entry_set
+        @remote_checksums = generate_blank_entry_set
       end
 
       def generate_checksum(component_set_num, component_name, format, size = nil)
