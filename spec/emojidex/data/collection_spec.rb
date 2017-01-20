@@ -70,11 +70,11 @@ describe Emojidex::Data::Collection do
     it 'caches emoji to local storage cache' do
       collection.cache!(formats: [:svg])
       expect(collection.cache_path).to eq "#{tmp_cache_path}/emoji"
-      #expect(collection.vector_source_path).to eq collection.source_path
-      expect(File.exist? "#{collection.vector_source_path}/mouth.svg").to be_truthy
-      expect(File.exist? tmp_cache_path).to be_truthy
-      expect(File.exist? "#{collection.cache_path}/mouth.svg").to be_truthy
-      expect(File.exist? "#{collection.cache_path}/emoji.json").to be_truthy
+      # expect(collection.vector_source_path).to eq collection.source_path
+      expect(File.exist?("#{collection.vector_source_path}/mouth.svg")).to be_truthy
+      expect(File.exist?(tmp_cache_path)).to be_truthy
+      expect(File.exist?("#{collection.cache_path}/mouth.svg")).to be_truthy
+      expect(File.exist?("#{collection.cache_path}/emoji.json")).to be_truthy
     end
   end
 
@@ -82,7 +82,7 @@ describe Emojidex::Data::Collection do
     it 'caches the  index to the specified location' do
       FileUtils.mkdir_p(tmp_cache_path)
       collection.cache_index tmp_cache_path
-      expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
+      expect(File.exist?(tmp_cache_path + '/emoji.json')).to be_truthy
     end
   end
 
@@ -90,7 +90,7 @@ describe Emojidex::Data::Collection do
     it 'writes a cleaned index to the specified location' do
       FileUtils.mkdir_p(tmp_cache_path)
       collection.cache_index tmp_cache_path
-      expect(File.exist? tmp_cache_path + '/emoji.json').to be_truthy
+      expect(File.exist?(tmp_cache_path + '/emoji.json')).to be_truthy
     end
   end
 
@@ -118,6 +118,7 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.path?(:png, :px32)).to be_truthy
       expect(collection.emoji.values.first.paths[:png][:px64]).to be_truthy
       expect(collection.emoji.values.first.path?(:png, :px64)).to be_nil
+      expect(collection.emoji[:woman].combinations.first.paths[:svg]).to be_truthy
     end
   end
 
@@ -132,9 +133,9 @@ describe Emojidex::Data::Collection do
       expect(col.emoji.count).to eq Emojidex::Data::UTF.new.emoji.count
 
       col << Emojidex::Data::Extended.new
-      expect(col.emoji.count > (Emojidex::Data::UTF.new).emoji.count).to be true
+      expect(col.emoji.count > Emojidex::Data::UTF.new.emoji.count).to be true
       expect(col.emoji.count).to eq Emojidex::Data::UTF.new.emoji.count +
-        Emojidex::Data::Extended.new.emoji.count
+                                    Emojidex::Data::Extended.new.emoji.count
     end
   end
 end

@@ -24,9 +24,10 @@ module Emojidex
         @combinations << Combination.new(@code, combination_info) 
       end
 
-      def add_customization()
+      def add_customization(combo)
         _check_and_init_combinations
-        #todo
+        @customizations << combo
+        @customizations.uniq!
       end
 
       private

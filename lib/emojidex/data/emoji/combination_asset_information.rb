@@ -31,12 +31,17 @@ module Emojidex
       end
 
       def blank_paths
-        @paths = {}
-        @paths[:svg] = nil
-        @paths[:png] = {}
+        @paths = generate_blank_path_set
+      end
+
+      def generate_blank_path_set
+        paths = {}
+        paths[:svg] = nil
+        paths[:png] = {}
         Emojidex::Defaults.sizes.keys.each do |size|
-          @paths[:png][size] = nil
+          paths[:png][size] = nil
         end
+        paths
       end
 
       def fill_paths(paths)

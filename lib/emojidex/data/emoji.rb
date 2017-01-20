@@ -36,7 +36,12 @@ module Emojidex
       end
 
       def to_json(*args)
-        to_hash.to_json(*args)
+        hash = to_hash
+        hash.each do |key, val|
+          hash.delete(key) if (val.instance_of?(Array) && val.length == 0)
+          hash.delete(key) if (val.instance_of?(String) && val == "")
+        end
+        hash.to_json(*args)
       end
 
       def to_hash

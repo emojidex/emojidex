@@ -128,6 +128,7 @@ module Emojidex
         _add_list(list)
         categorize
         associate_variants
+        associate_customizations
         condense_moji_code_data
         @emoji
       end
@@ -170,6 +171,14 @@ module Emojidex
           if @emoji.key? base_code
             @emoji[base_code].variants << emoji_obj.code.to_sym
             emoji_obj.base = base_code
+          end
+        end
+      end
+
+      def associate_customizations
+        @emoji.values.each do |emoji_obj|
+          emoji_obj.combinations.each do |combo|
+            @emoji[combo.base.to_sym].add_customization(combo)
           end
         end
       end

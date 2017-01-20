@@ -32,3 +32,9 @@ AllCops:
   Exclude:
     - 'Guardfile'
     - 'emojidex.gemspec'
+
+Style/BlockLength:
+  Exclude:
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'

@@ -53,6 +53,9 @@ module Emojidex
       def generate_paths(formats = Emojidex::Defaults.formats, sizes = Emojidex::Defaults.sizes)
         @emoji.values.each do |moji|
           moji.paths = get_paths(moji, formats, sizes)
+          moji.combinations.each do |combo|
+            combo.paths = get_combo_paths(moji, combo, formats, sizes)
+          end
         end
       end
 
@@ -78,6 +81,18 @@ module Emojidex
           paths[:png] = {}
           sizes.keys.each do |size|
             paths[:png][size] = "#{@raster_source_path}/#{size}/#{moji.code}.png"
+          end
+        end
+        paths
+      end
+
+      def get_combo_paths(moji, combo, formats = Emojidex::Defaults.formats,
+                    sizes = Emojidex::Defaults.sizes)
+        paths = combo.generate_blank_path_set
+        paths[:svg] = "#{@vector_source_path}/#{moji.code}"
+        if formats.include? :png
+          sizes.keys.each do |size|
+            paths[:png][size] = "#{@raster_source_path}/#{size}/#{moji.code}"
           end
         end
         paths
