@@ -26,8 +26,18 @@ module Emojidex
 
       def add_customization(combo)
         _check_and_init_combinations
-        @customizations << combo
-        @customizations.uniq!
+        added = false
+        @customizations.each do |customization|
+          if (customization.base == combo.base) &&
+              (customization.component_layer_order == combo.component_layer_order)
+            for i in 0..(customization.components.length - 1)
+              customization.components[i] = customization.components[i] | combo.components[i]
+            end
+            added = true
+          end
+        end
+
+        @customizations << combo unless added
       end
 
       private

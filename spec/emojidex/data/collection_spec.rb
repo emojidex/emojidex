@@ -138,4 +138,41 @@ describe Emojidex::Data::Collection do
                                     Emojidex::Data::Extended.new.emoji.count
     end
   end
+
+  describe 'combinations and customizations' do
+    it 'has emoji with combinations' do
+      expect(collection.emoji[:woman].combinations.length).to eq(1)
+    end
+
+    it 'has emoji with customizations/customizations are merged' do
+      expect(collection.emoji[:family].customizations.length).to eq(1)
+      expect(collection.emoji[:family].customizations.first.components).to eq(
+        [
+          [
+            'man', 'woman'
+          ],
+          [
+            'woman', 'woman(bk)', 'woman(br)', 'woman(p)', 'woman(wh)', 'woman(ye)',
+            'man', 'man(p)', 'man(ye)', 'man(bk)', 'man(br)', 'man(wh)',
+            ''
+          ],
+          [
+       
+            'boy', 'boy(p)', 'boy(ye)', 'boy(bk)', 'boy(br)', 'boy(wh)',
+            'girl', 'girl(p)', 'girl(ye)', 'girl(bk)', 'girl(br)', 'girl(wh)',
+            ''
+          ],
+          [
+            'girl', 'girl(p)', 'girl(ye)', 'girl(bk)', 'girl(br)', 'girl(wh)',
+            'boy', 'boy(p)', 'boy(ye)', 'boy(bk)', 'boy(br)', 'boy(wh)',
+            ''
+          ],
+          [
+            'baby', 'baby(p)', 'baby(ye)', 'baby(bk)', 'baby(br)', 'baby(wh)',
+            ''
+          ]
+        ]
+      )
+    end
+  end
 end

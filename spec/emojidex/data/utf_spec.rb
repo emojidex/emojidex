@@ -57,8 +57,8 @@ describe Emojidex::Data::UTF do
   describe 'emoji[#code].variants' do
     it 'has collected variants for an emoji' do
       expect(utf.emoji[:ice_skate].variants).to be_empty
-      expect(utf.emoji[:persevere].variants).to include(:"persevere(p)")
-      expect(utf.emoji[:"persevere(p)"].base).to be(:persevere)
+      expect(utf.emoji[:persevere].variants).to include(:'persevere(p)')
+      expect(utf.emoji[:'persevere(p)'].base).to be(:persevere)
     end
   end
 

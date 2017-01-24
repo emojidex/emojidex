@@ -12,6 +12,9 @@ module Emojidex
           moji.combinations.each do |combo|
             combo.checksums = get_combo_checksums(moji, combo, formats, sizes)
           end
+          moji.customizations.each do |combo|
+            combo.checksums = get_combo_checksums(moji, combo, formats, sizes)
+          end
         end
       end
 

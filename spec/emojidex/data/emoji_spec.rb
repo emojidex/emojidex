@@ -12,20 +12,20 @@ describe Emojidex::Data::Emoji do
   let(:combination_info) do
     [
       {
-        base: "star",
+        base: 'star',
         component_layer_order: [2, 0, 1, 3],
         components: [
-          ["a", "b", "c"],
-          ["d", "e", ""],
-          ["g", "h", ""]
+          ['a', 'b', 'c'],
+          ['d', 'e', ''],
+          ['g', 'h', '']
         ]
       },
       {
-        base: "moon",
+        base: 'moon',
         components: [
-          ["a", "b", "c"],
-          ["d", "e", ""],
-          ["g", "h", ""]
+          ['a', 'b', 'c'],
+          ['d', 'e', ''],
+          ['g', 'h', '']
         ]
       }
     ]
@@ -83,12 +83,12 @@ describe Emojidex::Data::Emoji do
       expect(emoji.combinations.first).to be_an_instance_of(Emojidex::Data::Combination)
       expect(emoji.combinations[0].component_layer_order).to eq([2, 0, 1, 3])
       expect(emoji.combinations[1].component_layer_order).to eq([0, 1, 2, 3])
-      expect(emoji.combinations[0].base).to eq("star")
-      expect(emoji.combinations[0].components[0]).to eq(["shooting_star"])
-      expect(emoji.combinations[0].components[2]).to eq(["d", "e", ""])
+      expect(emoji.combinations[0].base).to eq('star')
+      expect(emoji.combinations[0].components[0]).to eq(['shooting_star'])
+      expect(emoji.combinations[0].components[2]).to eq(['d', 'e', ''])
       expect(emoji.combinations[0].checksums[0]).to eq(
         {
-          "shooting_star" => {
+          'shooting_star' => {
             svg:nil,
             png: {
               ldpi: nil,
