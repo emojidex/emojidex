@@ -21,7 +21,7 @@ module Emojidex
         cdn: {
           host: 'cdn.emojidex.com',
           prefix: '/emoji/',
-          protocol: 'http'
+          protocol: 'https'
         },
         closed_net: false
       }
