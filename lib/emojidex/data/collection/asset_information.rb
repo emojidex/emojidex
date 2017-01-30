@@ -45,7 +45,7 @@ module Emojidex
           sizes.keys.each do |size|
             for i in 0..(combo.components.length - 1)
               combo.components[i].each do |component|
-                sums[i][component][:png] = _checksum_for_file("#{@raster_source_path}/#{size}/#{combo.base}/#{i}/#{component}.png")
+                sums[i][component][:png][size] = _checksum_for_file("#{@raster_source_path}/#{size}/#{combo.base}/#{i}/#{component}.png")
               end
             end
           end
