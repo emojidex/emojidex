@@ -30,12 +30,10 @@ module Emojidex
       end
 
       def to_json(options = {})
-        truncated_components = @components.dup
-        truncated_components.shift
         {
           base: @base,
           component_layer_order: @component_layer_order,
-          components: truncated_components,
+          components: @components,
           checksums: @checksums
         }.to_json
       end
