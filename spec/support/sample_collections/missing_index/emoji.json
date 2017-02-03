@@ -31,6 +31,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["man"],
           [
             "woman", "woman(wh)", "woman(p)", "woman(ye)", "woman(br)", "woman(bk)",
             "man", "man(wh)", "man(p)", "man(ye)", "man(br)", "man(bk)",
@@ -65,6 +66,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["man(wh)"],
           [
             "woman", "woman(wh)", "woman(p)", "woman(ye)", "woman(br)", "woman(bk)",
             "man", "man(wh)", "man(p)", "man(ye)", "man(br)", "man(bk)",
@@ -99,6 +101,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["man(p)"],
           [
             "woman", "woman(wh)", "woman(p)", "woman(ye)", "woman(br)", "woman(bk)",
             "man", "man(wh)", "man(p)", "man(ye)", "man(br)", "man(bk)",
@@ -133,6 +136,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["man(ye)"],
           [
             "woman", "woman(wh)", "woman(p)", "woman(ye)", "woman(br)", "woman(bk)",
             "man", "man(wh)", "man(p)", "man(ye)", "man(br)", "man(bk)",
@@ -167,6 +171,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["man(br)"],
           [
             "woman", "woman(wh)", "woman(p)", "woman(ye)", "woman(br)", "woman(bk)",
             "man", "man(wh)", "man(p)", "man(ye)", "man(br)", "man(bk)",
@@ -201,6 +206,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["man(bk)"],
           [
             "woman", "woman(wh)", "woman(p)", "woman(ye)", "woman(br)", "woman(bk)",
             "man", "man(wh)", "man(p)", "man(ye)", "man(br)", "man(bk)",
@@ -235,6 +241,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["woman"],
           [
             "man", "man(p)", "man(ye)", "man(bk)", "man(br)", "man(wh)",
             "woman", "woman(bk)", "woman(br)", "woman(p)", "woman(wh)", "woman(ye)",
@@ -270,6 +277,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["woman(wh)"],
           [
             "man", "man(p)", "man(ye)", "man(bk)", "man(br)", "man(wh)",
             "woman", "woman(bk)", "woman(br)", "woman(p)", "woman(wh)", "woman(ye)",
@@ -305,6 +313,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["woman(p)"],
           [
             "man", "man(p)", "man(ye)", "man(bk)", "man(br)", "man(wh)",
             "woman", "woman(bk)", "woman(br)", "woman(p)", "woman(wh)", "woman(ye)",
@@ -340,6 +349,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["woman(ye)"],
           [
             "man", "man(p)", "man(ye)", "man(bk)", "man(br)", "man(wh)",
             "woman", "woman(bk)", "woman(br)", "woman(p)", "woman(wh)", "woman(ye)",
@@ -375,6 +385,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["woman(br)"],
           [
             "man", "man(p)", "man(ye)", "man(bk)", "man(br)", "man(wh)",
             "woman", "woman(bk)", "woman(br)", "woman(p)", "woman(wh)", "woman(ye)",
@@ -410,6 +421,7 @@
         "base": "family",
         "component_layer_order": [0, 1, 2, 3, 4],
         "components": [
+          ["woman(bk)"],
           [
             "man", "man(p)", "man(ye)", "man(bk)", "man(br)", "man(wh)",
             "woman", "woman(bk)", "woman(br)", "woman(p)", "woman(wh)", "woman(ye)",

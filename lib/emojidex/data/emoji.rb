@@ -1,5 +1,5 @@
 require_relative '../../emojidex'
-require_relative 'emoji/combination_information'
+require_relative 'emoji/component_set_information'
 require_relative 'emoji/asset_information'
 
 module Emojidex
@@ -21,7 +21,7 @@ module Emojidex
                     :unicode, :tags, :emoticon, :variants, :base,
                     :r18
 
-      include Emojidex::Data::EmojiCombinationInformation
+      include Emojidex::Data::EmojiComponentSetInformation
       include Emojidex::Data::EmojiAssetInformation
 
       def initialize(details = {})

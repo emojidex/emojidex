@@ -4,7 +4,7 @@ require_relative '../../defaults'
 module Emojidex
   module Data
     # Asset information for emoji
-    module EmojiCombinationAssetInformation
+    module EmojiComponentSetAssetInformation
       attr_accessor :checksums, :paths, :remote_checksums
 
       def init_asset_info(details = {})

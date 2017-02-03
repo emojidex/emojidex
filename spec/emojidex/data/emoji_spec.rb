@@ -80,7 +80,7 @@ describe Emojidex::Data::Emoji do
   describe '.fill_combinations' do
     it 'fills the combinations array with combination object instances' do
       emoji.fill_combinations(combination_info)
-      expect(emoji.combinations.first).to be_an_instance_of(Emojidex::Data::Combination)
+      expect(emoji.combinations.first).to be_an_instance_of(Emojidex::Data::ComponentSet)
       expect(emoji.combinations[0].component_layer_order).to eq([2, 0, 1, 3])
       expect(emoji.combinations[1].component_layer_order).to eq([0, 1, 2, 3])
       expect(emoji.combinations[0].base).to eq('star')

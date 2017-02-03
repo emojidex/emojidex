@@ -1,10 +1,10 @@
 require_relative '../../defaults'
-require_relative 'combination'
+require_relative 'component_set'
 
 module Emojidex
   module Data
     # Combination information for emoji
-    module EmojiCombinationInformation
+    module EmojiComponentSetInformation
       attr_accessor :combinations, :customizations
 
       def init_combination_info(details)
@@ -21,7 +21,7 @@ module Emojidex
 
       def add_combination(combination_info)
         _check_and_init_combinations
-        @combinations << Combination.new(@code, combination_info) 
+        @combinations << ComponentSet.new(@code, combination_info) 
       end
 
       def add_customization(combo)

@@ -1,15 +1,15 @@
-require_relative 'combination_asset_information.rb'
+require_relative 'component_set_asset_information.rb'
 
 module Emojidex
   module Data
     # Combination information container
-    class Combination
+    class ComponentSet
       # * base: the named base that this combination belongs to
       # * combinations: combinations starting with this emoji; base/components/component order
       # * cutomizations: emoji which start customization of this emoji (this is combination base)
       attr_accessor :base, :component_layer_order, :components
 
-      include Emojidex::Data::EmojiCombinationAssetInformation
+      include Emojidex::Data::EmojiComponentSetAssetInformation
 
       def initialize(code, combination_info, details = {})
         @base = combination_info[:base]
