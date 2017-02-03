@@ -152,26 +152,26 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji[:family].customizations.first.components).to eq(
         [
           [
-            'man', 'woman'
+            'man', 'man(wh)', 'man(p)', 'man(ye)', 'man(br)', 'man(bk)',
+            'woman', 'woman(wh)', 'woman(p)', 'woman(ye)', 'woman(br)', 'woman(bk)'
           ],
           [
-            'woman', 'woman(bk)', 'woman(br)', 'woman(p)', 'woman(wh)', 'woman(ye)',
-            'man', 'man(p)', 'man(ye)', 'man(bk)', 'man(br)', 'man(wh)',
+            'woman', 'woman(wh)', 'woman(p)', 'woman(ye)', 'woman(br)', 'woman(bk)',
+            'man', 'man(wh)', 'man(p)', 'man(ye)', 'man(br)', 'man(bk)',
             ''
           ],
           [
-       
-            'boy', 'boy(p)', 'boy(ye)', 'boy(bk)', 'boy(br)', 'boy(wh)',
-            'girl', 'girl(p)', 'girl(ye)', 'girl(bk)', 'girl(br)', 'girl(wh)',
+            'boy', 'boy(wh)', 'boy(p)', 'boy(ye)', 'boy(br)', 'boy(bk)',
+            'girl', 'girl(wh)', 'girl(p)', 'girl(ye)', 'girl(br)', 'girl(bk)',
             ''
           ],
           [
-            'girl', 'girl(p)', 'girl(ye)', 'girl(bk)', 'girl(br)', 'girl(wh)',
-            'boy', 'boy(p)', 'boy(ye)', 'boy(bk)', 'boy(br)', 'boy(wh)',
+            'girl', 'girl(wh)', 'girl(p)', 'girl(ye)', 'girl(br)', 'girl(bk)',
+            'boy', 'boy(wh)', 'boy(p)', 'boy(ye)', 'boy(br)', 'boy(bk)',
             ''
           ],
           [
-            'baby', 'baby(p)', 'baby(ye)', 'baby(bk)', 'baby(br)', 'baby(wh)',
+            'baby', 'baby(wh)', 'baby(p)', 'baby(ye)', 'baby(br)', 'baby(bk)',
             ''
           ]
         ]

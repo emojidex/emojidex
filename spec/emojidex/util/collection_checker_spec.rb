@@ -39,7 +39,7 @@ describe Emojidex::Util::CollectionChecker do
       checker = Emojidex::Util::CollectionChecker.new(col_good, sizes: [:px64])
 
       expect(checker).to be_an_instance_of(Emojidex::Util::CollectionChecker)
-      expect(checker.index_only.size).to eq(7)
+      expect(checker.index_only.size).to eq(17)
       expect(checker.asset_only).to be_empty
     end
 
@@ -47,11 +47,10 @@ describe Emojidex::Util::CollectionChecker do
       checker = Emojidex::Util::CollectionChecker.new(col_missing_assets, sizes: @sizes)
 
       expect(checker.asset_only).to be_empty
-      expect(checker.index_only.size).to eq(5)
+      expect(checker.index_only.size).to eq(3)
       expect(checker.index_only).to eq(
         nut_and_bolt: ['nut_and_bolt.svg'], purple_heart: ['px32/purple_heart.png'],
-        family: ['family.svg', 'px32/family.png'],
-        man: ['man.svg', 'px32/man.png'], woman: ['woman.svg', 'px32/woman.png']
+        family: ['family.svg', 'px32/family.png']
       )
     end
 

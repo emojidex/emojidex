@@ -178,7 +178,7 @@ module Emojidex
       def associate_customizations
         @emoji.values.each do |emoji_obj|
           emoji_obj.combinations.each do |combo|
-            @emoji[combo.base.to_sym].add_customization(combo)
+            @emoji[combo.base.to_sym].add_customization(combo) if @emoji.include? combo.base.to_sym
           end
         end
       end
