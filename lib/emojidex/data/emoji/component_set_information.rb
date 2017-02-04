@@ -30,8 +30,8 @@ module Emojidex
         @customizations.each do |customization|
           if (customization.base == combo.base) &&
               (customization.component_layer_order == combo.component_layer_order)
-            for i in 0..(customization.components.length - 1)
-              customization.components[i] = customization.components[i] | combo.components[i]
+            customization.components.each_with_index do |components, i|
+              customization.components[i] = components | combo.components[i]
             end
             added = true
           end

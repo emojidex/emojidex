@@ -14,9 +14,7 @@ module Emojidex
       def initialize(code, combination_info, details = {})
         @base = combination_info[:base]
 
-        @components = []
-        @components << [Emojidex.escape_code(code.to_s)]
-        combination_info[:components].each { |component_set| @components << component_set }
+        @components = combination_info[:components]
         if combination_info.include? :component_layer_order
           @component_layer_order = combination_info[:component_layer_order]
         else

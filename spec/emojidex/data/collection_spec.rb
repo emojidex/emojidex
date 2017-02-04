@@ -9,7 +9,8 @@ require 'emojidex/data/extended'
 describe Emojidex::Data::Collection do
   let(:collection) do
     Emojidex::Data::Collection.new(local_load_path: './spec/support/sample_collections/good',
-                                   cache_path: tmp_cache_path)
+                                   cache_path: tmp_cache_path
+                                  )
   end
   before(:each) { clear_tmp_cache }
 
@@ -56,7 +57,9 @@ describe Emojidex::Data::Collection do
 
   describe '.find_by_code_ja' do
     it 'finds and returns an emoji by Japanese code' do
-      expect(collection.find_by_code_ja('ハート(紫)')).to be_an_instance_of(Emojidex::Data::Emoji)
+      expect(collection.find_by_code_ja('ハート(紫)')).to(
+        be_an_instance_of(Emojidex::Data::Emoji)
+      )
     end
   end
 
@@ -105,9 +108,11 @@ describe Emojidex::Data::Collection do
       expect(collection.emoji.values.first.checksums[:png][:px64]).to be_nil
       expect(collection.emoji.values.first.checksum?(:png, :px64)).to be_nil
       expect(collection.emoji[:woman].combinations.first.checksums[0]['woman'][:svg]).to eq(
-        'e57575cd16e916b65adf415385752416')
+        'e57575cd16e916b65adf415385752416'
+      )
       expect(collection.emoji[:family].customizations.first.checksums[0]['woman'][:svg]).to eq(
-        collection.emoji[:woman].combinations.first.checksums[0]['woman'][:svg])
+        collection.emoji[:woman].combinations.first.checksums[0]['woman'][:svg]
+      )
     end
   end
 
@@ -149,31 +154,40 @@ describe Emojidex::Data::Collection do
 
     it 'has emoji with customizations/customizations are merged' do
       expect(collection.emoji[:family].customizations.length).to eq(1)
-      expect(collection.emoji[:family].customizations.first.components).to eq(
+      expect(collection.emoji[:family].customizations.first.components.length).to eq(
+        collection.emoji[:family].customizations.first.component_layer_order.length
+      )
+      expect(collection.emoji[:family].customizations.first.components[0]).to eq(
         [
-          [
-            'man', 'man(wh)', 'man(p)', 'man(ye)', 'man(br)', 'man(bk)',
-            'woman', 'woman(wh)', 'woman(p)', 'woman(ye)', 'woman(br)', 'woman(bk)'
-          ],
-          [
-            'woman', 'woman(wh)', 'woman(p)', 'woman(ye)', 'woman(br)', 'woman(bk)',
-            'man', 'man(wh)', 'man(p)', 'man(ye)', 'man(br)', 'man(bk)',
-            ''
-          ],
-          [
-            'boy', 'boy(wh)', 'boy(p)', 'boy(ye)', 'boy(br)', 'boy(bk)',
-            'girl', 'girl(wh)', 'girl(p)', 'girl(ye)', 'girl(br)', 'girl(bk)',
-            ''
-          ],
-          [
-            'girl', 'girl(wh)', 'girl(p)', 'girl(ye)', 'girl(br)', 'girl(bk)',
-            'boy', 'boy(wh)', 'boy(p)', 'boy(ye)', 'boy(br)', 'boy(bk)',
-            ''
-          ],
-          [
-            'baby', 'baby(wh)', 'baby(p)', 'baby(ye)', 'baby(br)', 'baby(bk)',
-            ''
-          ]
+          'man', 'man(wh)', 'man(p)', 'man(ye)', 'man(br)', 'man(bk)',
+          'woman', 'woman(wh)', 'woman(p)', 'woman(ye)', 'woman(br)', 'woman(bk)'
+        ]
+      )
+      expect(collection.emoji[:family].customizations.first.components[1]).to eq(
+        [
+          'woman', 'woman(wh)', 'woman(p)', 'woman(ye)', 'woman(br)', 'woman(bk)',
+          'man', 'man(wh)', 'man(p)', 'man(ye)', 'man(br)', 'man(bk)',
+          ''
+        ]
+      )
+      expect(collection.emoji[:family].customizations.first.components[2]).to eq(
+        [
+          'boy', 'boy(wh)', 'boy(p)', 'boy(ye)', 'boy(br)', 'boy(bk)',
+          'girl', 'girl(wh)', 'girl(p)', 'girl(ye)', 'girl(br)', 'girl(bk)',
+          ''
+        ]
+      )
+      expect(collection.emoji[:family].customizations.first.components[3]).to eq(
+        [
+          'girl', 'girl(wh)', 'girl(p)', 'girl(ye)', 'girl(br)', 'girl(bk)',
+          'boy', 'boy(wh)', 'boy(p)', 'boy(ye)', 'boy(br)', 'boy(bk)',
+          ''
+        ]
+      )
+      expect(collection.emoji[:family].customizations.first.components[4]).to eq(
+        [
+          'baby', 'baby(wh)', 'baby(p)', 'baby(ye)', 'baby(br)', 'baby(bk)',
+          ''
         ]
       )
     end
