@@ -37,6 +37,7 @@ module Emojidex
         if formats.include? :svg
           for i in 0..(combo.components.length - 1)
             combo.components[i].each do |component|
+              next if component == ''
               sums[i][component][:svg] = _checksum_for_file("#{@vector_source_path}/#{combo.base}/#{i}/#{component}.svg")
             end
           end
@@ -45,6 +46,7 @@ module Emojidex
           sizes.keys.each do |size|
             for i in 0..(combo.components.length - 1)
               combo.components[i].each do |component|
+                next if component == ''
                 sums[i][component][:png][size] = _checksum_for_file("#{@raster_source_path}/#{size}/#{combo.base}/#{i}/#{component}.png")
               end
             end

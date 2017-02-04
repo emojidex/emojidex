@@ -18,6 +18,7 @@ module Emojidex
         @components.each do |component_set|
           component_group = {}
           component_set.each do |single_component|
+            next if single_component == ''
             component_group[single_component] = {}
             component_group[single_component][:svg] = nil
             component_group[single_component][:png] = {}
