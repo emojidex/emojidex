@@ -1,4 +1,5 @@
 require 'faraday'
+require 'faraday_middleware'
 require 'typhoeus'
 require 'typhoeus/adapters/faraday'
 require 'json'
@@ -61,6 +62,7 @@ module Emojidex
           conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.5,
                         backoff_factor: 2
           # conn.response :logger
+          conn.use FaradayMiddleware::FollowRedirects, limit: 5
           conn.adapter :typhoeus #Faraday.default_adapter
         end
         _kludge_windows if Gem.win_platform?
