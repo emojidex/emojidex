@@ -1,6 +1,8 @@
 require_relative '../defaults'
+require_relative 'transactor'
 require_relative 'collection'
 require_relative '../../emojidex'
+require_relative '../client'
 
 module Emojidex
   module Service
@@ -60,6 +62,20 @@ module Emojidex
         _do_search(opts)
       end
 
+      # Looks directly for an emoji with the exact code provided, returning
+      # only the emoji object if found, and nil if not. The find method is unique
+      # in the Search module as it is the only method that doesn't actually search,
+      # it just looks up the code directly.
+      # The only options you can specify are :username and :auth_token for if you
+      # are not initializing a User within the client but still want to return R-18
+      # emoji for users that have them enabled.
+      def self.find(code, opts = {})
+        res = Emojidex::Service::Transactor.get("emoji/#{Emojidex.escape_code(code)}",
+                                 _check_auth(opts));
+        return nil if res.include? :error
+        Emojidex::Data::Emoji.new(res)
+      end
+
       private
 
       def self._sanitize_opts(opts)
@@ -70,6 +86,7 @@ module Emojidex
 
       def self._do_search(opts)
         opts = _sanitize_opts(opts)
+        opts = _check_auth(opts)
         opts[:endpoint] = 'search/emoji'
         begin
           col = Emojidex::Service::Collection.new(opts)
@@ -81,8 +98,8 @@ module Emojidex
 
       def self._check_auth(opts)
         if !(opts.include? :auth_token) && Emojidex::Client.USER.authorized?
-          opts[:username] = Emojidex::Client::USER.username
-          opts[:auth_token] = Emojidex::Client::USER.auth_token
+          opts[:username] = Emojidex::Client.USER.username
+          opts[:auth_token] = Emojidex::Client.USER.auth_token
         end
 
         opts

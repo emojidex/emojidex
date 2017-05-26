@@ -11,7 +11,7 @@ module Emojidex
     # API transaction utility
     class Transactor
       @@connection = nil
-      @@retries = 10
+      #@@retries = 10
 
       @@settings = {
         api: {
@@ -29,7 +29,7 @@ module Emojidex
 
       def self.get(endpoint, params = {})
         response = connect.get(
-          "#{api_url}#{endpoint}", params)
+          "#{api_url}#{URI.encode(endpoint)}", params)
 
         _status_raiser(response)
         _datafy_json(response.body)
@@ -59,8 +59,8 @@ module Emojidex
         return @@connection if @@connection
         @@connection = Faraday.new do |conn|
           conn.request :url_encoded
-          conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.5,
-                        backoff_factor: 2
+          #conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.5,
+          #              backoff_factor: 2
           # conn.response :logger
           conn.use FaradayMiddleware::FollowRedirects, limit: 5
           conn.adapter :typhoeus #Faraday.default_adapter

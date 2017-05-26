@@ -83,4 +83,25 @@ describe Emojidex::Service::Search do
       end
     end
   end
+
+  describe '.find' do
+    it 'returns the emoji object for the code provided' do
+      res = Emojidex::Service::Search.find('stuck out tongue winking eye(p)')
+      expect(res).to be_a(Emojidex::Data::Emoji)
+      expect(res.moji).to eq('😜🏼')
+
+      res = Emojidex::Service::Search.find('stuck_out_tongue_winking_eye(p)')
+      expect(res).to be_a(Emojidex::Data::Emoji)
+      expect(res.moji).to eq('😜🏼')
+
+      res = Emojidex::Service::Search.find('あっかんべー(桃)')
+      expect(res).to be_a(Emojidex::Data::Emoji)
+      expect(res.moji).to eq('😜🏼')
+    end
+
+    it 'returns nil if the code does not exist' do
+      res = Emojidex::Service::Search.find('safdasdfsfsdafdssadfsdfsd')
+      expect(res).to be(nil)
+    end
+  end
 end
