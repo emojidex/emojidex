@@ -3,6 +3,7 @@ require 'faraday_middleware'
 require 'typhoeus'
 require 'typhoeus/adapters/faraday'
 require 'json'
+require 'msgpack'
 require_relative '../../emojidex'
 require_relative 'error'
 
@@ -30,7 +31,6 @@ module Emojidex
       def self.get(endpoint, params = {})
         response = connect.get(
           "#{api_url}#{URI.encode(endpoint)}", params)
-
         _status_raiser(response)
         _datafy_json(response.body)
       end
@@ -62,6 +62,7 @@ module Emojidex
           #conn.request :retry, max: @@retries, interval: 0.05, interval_randomness: 0.5,
           #              backoff_factor: 2
           # conn.response :logger
+          conn.headers['Accept'] = 'application/msgpack'
           conn.use FaradayMiddleware::FollowRedirects, limit: 5
           conn.adapter :typhoeus #Faraday.default_adapter
         end
@@ -94,13 +95,13 @@ module Emojidex
 
       def self._extract_status_line(response)
         data = _datafy_json(response.body)
-        status_line = (data.key?(:status) ? data[:status] : '')
-        status_line
+        data.fetch(:status, '')
       end
 
       def self._datafy_json(body)
         begin
-          data = JSON.parse(body, symbolize_names: true)
+          body = MessagePack.unpack(body)
+          data = JSON.parse(body.to_json, symbolize_names: true)
         rescue JSON::ParserError
           raise Error::InvalidJSON, 'could not parse JSON'
         end

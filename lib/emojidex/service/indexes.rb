@@ -47,7 +47,7 @@ module Emojidex
       #   the emoji short codes in the locale [language] specified (defaults to english).
       def self.moji_codes(locale = Emojidex::Defaults.lang)
         begin
-          res = Emojidex::Service::Transactor.get('moji_codes', locale: locale)
+          res = Emojidex::Service::Transactor.get('moji_codes.msgpack', locale: locale)
         rescue
           return { moji_string: '', moji_array: [], moji_index: {} }
         end
