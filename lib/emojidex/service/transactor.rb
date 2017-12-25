@@ -53,6 +53,9 @@ module Emojidex
 
       def self.download(file_subpath)
         connect.get(URI.escape("#{cdn_url}#{file_subpath.tr(' ', '_')}"))
+      rescue Faraday::ConnectionFailed
+        _kludge_certs
+        connect.get(URI.escape("#{cdn_url}#{file_subpath.tr(' ', '_')}"))
       end
 
       def self.connect
@@ -66,7 +69,7 @@ module Emojidex
           conn.use FaradayMiddleware::FollowRedirects, limit: 5
           conn.adapter :typhoeus #Faraday.default_adapter
         end
-        _kludge_windows if Gem.win_platform?
+        _kludge_certs if Gem.win_platform?
         @@connection
       end
 
@@ -108,7 +111,7 @@ module Emojidex
         data
       end
 
-      def self._kludge_windows
+      def self._kludge_certs
         cert_loc = "#{__dir__}/cacert.pem"
         unless File.exist? cert_loc
           response = @@connection.get('http://curl.haxx.se/ca/cacert.pem')
