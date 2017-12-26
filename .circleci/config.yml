@@ -4,14 +4,14 @@ jobs:
     docker:
        - image: circleci/ruby:2.4.1
 
-    working_directory: ~/repo
+    working_directory: ~/emojidex
 
     steps:
       - checkout
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+          - v1-dependencies-{{ checksum "Gemfile" }}
           - v1-dependencies-
 
       - run:
@@ -22,7 +22,7 @@ jobs:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+          key: v1-dependencies-{{ checksum "Gemfile" }}
 
       - run:
           name: run tests
