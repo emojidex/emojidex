@@ -94,7 +94,7 @@ emoji << Emojidex::Data::Extended.new
 ```
 
 *Warning*  
-Off-line usage is limited to open-source projects. If you are using this gem without 
+Off-line usage is limited to open-source and licensed projects. If you are using this gem without 
 connecting to the emojidex service and your project is not open-source a commercial license 
 is required. Please contact info at emojidex dot com for details.
 
